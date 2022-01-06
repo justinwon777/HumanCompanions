@@ -16,7 +16,7 @@ public final class EntityInit {
     public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITIES, Companions.MOD_ID);
 
     public static final RegistryObject<EntityType<CompanionEntity>> CompanionEntity =
-            ENTITIES.register("companion", () -> EntityType.Builder.of(CompanionEntity::new, MobCategory.AMBIENT)
+            ENTITIES.register("companion", () -> EntityType.Builder.of(CompanionEntity::new, MobCategory.MISC)
                     .sized(1f, 2f)
                     .build(new ResourceLocation(Companions.MOD_ID, "companion").toString()));
 }

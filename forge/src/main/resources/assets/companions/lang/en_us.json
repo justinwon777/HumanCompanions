@@ -1,3 +1,4 @@
 {
-  "entity.companions.companion": "Companion"
+  "entity.companions.knight": "Knight",
+  "entity.companions.archer": "Archer"
 }

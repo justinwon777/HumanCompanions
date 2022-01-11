@@ -5,7 +5,8 @@ This mod adds new human companions that can help you on your journey.
 ## Features
 
 - Knight and archer companions
-- Find them in villages or structures
+- Find them in villages or their houses in the wild
+- Give them food to have them join you
 - Will fight for you and can carry items
 
 ## Todo for release

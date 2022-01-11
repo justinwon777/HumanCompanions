@@ -9,9 +9,12 @@ This mod adds new human companions that can help you on your journey.
 - Give them food to have them join you
 - Will fight for you and can carry items
 
+## Current status
+Playable with some bugs
+
 ## Todo for release
 
-- [ ] Create structures for them
+- [ ] Figure out village spawn or create houses for them
 - [ ] Disable friendly fire
 - [ ] Fix armor not unequipping
 - [ ] Fix armor not taking damage

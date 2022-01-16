@@ -27,3 +27,7 @@ Playable with some bugs
 - [ ] Add new skins
 - [ ] Add voices
 - [ ] Wizard companion
+
+## Helping out
+
+If you wanna help contribute, I'm open to it, so reach out to me.

@@ -78,8 +78,10 @@ public class AvoidCreeperGoal<T extends LivingEntity> extends Goal {
 
     public void start() {
         TextComponent text = new TextComponent("Creeper!");
-        this.mob.getOwner().sendMessage(new TranslatableComponent("chat.type.text", this.mob.getDisplayName(), text),
+        if (this.mob.isTame()) {
+            this.mob.getOwner().sendMessage(new TranslatableComponent("chat.type.text", this.mob.getDisplayName(), text),
                     this.mob.getUUID());
+        }
         this.pathNav.moveTo(this.path, this.walkSpeedModifier);
     }
 

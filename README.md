@@ -30,4 +30,4 @@ Playable with some bugs
 
 ## Helping out
 
-If you wanna help contribute, I'm open to it, so reach out to me.
+If you wanna help contribute, that'd be great, so contact me on discord at Penglen#9566

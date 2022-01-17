@@ -46,7 +46,6 @@ public class AbstractCompanionEntity extends TamableAnimal {
         this.goalSelector.addGoal(5, new LookAtPlayerGoal(this, Player.class, 6.0F));
         this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
         this.goalSelector.addGoal(7, new OpenDoorGoal(this, true));
-        this.goalSelector.addGoal(8, new StrollThroughVillageGoal(this, 200));
         this.goalSelector.addGoal(9, new LowHealthGoal(this));
         this.targetSelector.addGoal(1, new OwnerHurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new OwnerHurtTargetGoal(this));

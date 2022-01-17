@@ -3,6 +3,7 @@ package com.github.justin.companions.entity;
 import com.github.justin.companions.core.EntityInit;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -22,19 +23,32 @@ import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.item.*;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 
 public class AbstractCompanionEntity extends TamableAnimal {
-    private static final Ingredient FOOD_ITEMS = Ingredient.of(Items.CARROT, Items.POTATO, Items.BEETROOT, Items.COOKED_BEEF, Items.COOKED_COD, Items.COOKED_CHICKEN, Items.COOKED_MUTTON, Items.COOKED_RABBIT, Items.COOKED_PORKCHOP, Items.COOKED_SALMON, Items.MELON);
     public SimpleContainer inventory = new SimpleContainer(27);
+    public static final TextComponent[] tameFail = new TextComponent[]{
+            new TextComponent("I need more food."),
+            new TextComponent("Is that all you got?"),
+            new TextComponent("I'm still hungry."),
+            new TextComponent("Can I have some more?"),
+            new TextComponent("I'm going to need a bit more."),
+            new TextComponent("That's not enough."),
+    };
+    public static final TextComponent[] notTamed = new TextComponent[]{
+            new TextComponent("Do you have any food?"),
+            new TextComponent("I'm hungry"),
+            new TextComponent("I'm starving"),
+            new TextComponent("Have you seen any food around here?"),
+            new TextComponent("I could use some food"),
+            new TextComponent("I wish I had some food"),
+    };
 
     public AbstractCompanionEntity(EntityType<? extends TamableAnimal> entityType, Level level) {
         super(entityType, level);
         this.setTame(false);
         ((GroundPathNavigation)this.getNavigation()).setCanOpenDoors(true);
         this.getNavigation().setCanFloat(true);
-//        this.setCanPickUpLoot(true);
     }
 
     @Override
@@ -67,15 +81,22 @@ public class AbstractCompanionEntity extends TamableAnimal {
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
         Item item = itemstack.getItem();
-        if (!this.level.isClientSide) {
+        if (!this.level.isClientSide && hand == InteractionHand.MAIN_HAND) {
             if (!this.isTame()) {
-                if (itemstack.is(Items.COOKED_BEEF)) {
-                    this.tame(player);
-                    player.sendMessage(new TextComponent("Companion added"), this.getUUID());
-
+                if (itemstack.isEdible()) {
+                    if (this.random.nextInt(5) == 0) {
+                        this.tame(player);
+                        player.sendMessage(new TextComponent("Companion added"), this.getUUID());
+                    } else {
+                        player.sendMessage(new TranslatableComponent("chat.type.text", this.getDisplayName(),
+                                        tameFail[this.random.nextInt(tameFail.length)]), this.getUUID());
+                    }
+                } else {
+                    player.sendMessage(new TranslatableComponent("chat.type.text", this.getDisplayName(),
+                            notTamed[this.random.nextInt(notTamed.length)]), this.getUUID());
                 }
             } else {
-                if (this.isFood(itemstack)) {
+                if (itemstack.isEdible()) {
                     if (this.getHealth() < this.getMaxHealth()) {
                         if (!player.getAbilities().instabuild) {
                             itemstack.shrink(1);
@@ -89,8 +110,7 @@ public class AbstractCompanionEntity extends TamableAnimal {
                 } else {
                     this.openGui((ServerPlayer) player);
                 }
-
-            return InteractionResult.SUCCESS;
+                return InteractionResult.SUCCESS;
             }
             return InteractionResult.SUCCESS;
         }
@@ -170,12 +190,6 @@ public class AbstractCompanionEntity extends TamableAnimal {
             this.inventory.fromTag(tag.getList("inventory", 10));
         }
     }
-
-    public boolean isFood(ItemStack p_30440_) {
-        Item item = p_30440_.getItem();
-        return item.isEdible();
-    }
-
 
     public boolean hurt(DamageSource p_34288_, float p_34289_) {
         return super.hurt(p_34288_, p_34289_);

@@ -1,4 +1,4 @@
-# Companions Mod
+# Companions Mod (Forge 1.18.1)
 
 This mod adds new human companions that can help you on your journey.
 

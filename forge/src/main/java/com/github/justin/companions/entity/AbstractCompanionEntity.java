@@ -1,6 +1,7 @@
 package com.github.justin.companions.entity;
 
 import com.github.justin.companions.core.EntityInit;
+import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
@@ -16,10 +17,14 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtTargetGoal;
 import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
+import net.minecraft.world.entity.monster.AbstractSkeleton;
 import net.minecraft.world.entity.monster.Creeper;
+import net.minecraft.world.entity.monster.Spider;
+import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.item.*;
@@ -27,6 +32,8 @@ import net.minecraft.world.level.Level;
 
 public class AbstractCompanionEntity extends TamableAnimal {
     public SimpleContainer inventory = new SimpleContainer(27);
+    public final NonNullList<ItemStack> armor = NonNullList.withSize(4, ItemStack.EMPTY);
+    public static final int[] ALL_ARMOR_SLOTS = new int[]{0, 1, 2, 3};
     public static final TextComponent[] tameFail = new TextComponent[]{
             new TextComponent("I need more food."),
             new TextComponent("Is that all you got?"),
@@ -64,6 +71,12 @@ public class AbstractCompanionEntity extends TamableAnimal {
         this.targetSelector.addGoal(1, new OwnerHurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new OwnerHurtTargetGoal(this));
         this.targetSelector.addGoal(3, (new HurtByTargetGoal(this)).setAlertOthers());
+//        this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, AbstractSkeleton.class, false));
+//        this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, Zombie.class, false));
+//        this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, Spider.class, false));
+
+
+
     }
 
     public static AttributeSupplier.Builder createAttributes() {
@@ -133,44 +146,56 @@ public class AbstractCompanionEntity extends TamableAnimal {
                     case HEAD:
                         if (head.isEmpty()) {
                             this.setItemSlot(EquipmentSlot.HEAD, itemstack);
+                            this.armor.set(3, itemstack);
                         } else {
                             if (((ArmorItem) itemstack.getItem()).getDefense() > ((ArmorItem) head.getItem()).getDefense()) {
                                 this.setItemSlot(EquipmentSlot.HEAD, itemstack);
+                                this.armor.set(3, itemstack);
                             } else if (((ArmorItem) itemstack.getItem()).getMaterial() == ArmorMaterials.NETHERITE && ((ArmorItem) head.getItem()).getMaterial() != ArmorMaterials.NETHERITE) {
                                 this.setItemSlot(EquipmentSlot.HEAD, itemstack);
+                                this.armor.set(3, itemstack);
                             }
                         }
                         break;
                     case CHEST:
                         if (chest.isEmpty()) {
                             this.setItemSlot(EquipmentSlot.CHEST, itemstack);
+                            this.armor.set(2, itemstack);
                         } else {
                             if (((ArmorItem) itemstack.getItem()).getDefense() > ((ArmorItem) chest.getItem()).getDefense()) {
                                 this.setItemSlot(EquipmentSlot.CHEST, itemstack);
+                                this.armor.set(2, itemstack);
                             } else if (((ArmorItem) itemstack.getItem()).getMaterial() == ArmorMaterials.NETHERITE && ((ArmorItem) chest.getItem()).getMaterial() != ArmorMaterials.NETHERITE) {
                                 this.setItemSlot(EquipmentSlot.CHEST, itemstack);
+                                this.armor.set(2, itemstack);
                             }
                         }
                         break;
                     case LEGS:
                         if (legs.isEmpty()) {
                             this.setItemSlot(EquipmentSlot.LEGS, itemstack);
+                            this.armor.set(1, itemstack);
                         } else {
                             if (((ArmorItem) itemstack.getItem()).getDefense() > ((ArmorItem) legs.getItem()).getDefense()) {
                                 this.setItemSlot(EquipmentSlot.LEGS, itemstack);
+                                this.armor.set(1, itemstack);
                             } else if (((ArmorItem) itemstack.getItem()).getMaterial() == ArmorMaterials.NETHERITE && ((ArmorItem) legs.getItem()).getMaterial() != ArmorMaterials.NETHERITE) {
                                 this.setItemSlot(EquipmentSlot.LEGS, itemstack);
+                                this.armor.set(1, itemstack);
                             }
                         }
                         break;
                     case FEET:
                         if (feet.isEmpty()) {
                             this.setItemSlot(EquipmentSlot.FEET, itemstack);
+                            this.armor.set(0, itemstack);
                         } else {
                             if (((ArmorItem) itemstack.getItem()).getDefense() > ((ArmorItem) feet.getItem()).getDefense()) {
                                 this.setItemSlot(EquipmentSlot.FEET, itemstack);
+                                this.armor.set(0, itemstack);
                             } else if (((ArmorItem) itemstack.getItem()).getMaterial() == ArmorMaterials.NETHERITE && ((ArmorItem) feet.getItem()).getMaterial() != ArmorMaterials.NETHERITE) {
                                 this.setItemSlot(EquipmentSlot.FEET, itemstack);
+                                this.armor.set(0, itemstack);
                             }
                         }
                         break;
@@ -192,7 +217,27 @@ public class AbstractCompanionEntity extends TamableAnimal {
     }
 
     public boolean hurt(DamageSource p_34288_, float p_34289_) {
+        hurtArmor(p_34288_, p_34289_, ALL_ARMOR_SLOTS);
         return super.hurt(p_34288_, p_34289_);
+    }
+
+    public void hurtArmor(DamageSource p_150073_, float p_150074_, int[] p_150075_) {
+        if (!(p_150074_ <= 0.0F)) {
+            p_150074_ /= 4.0F;
+            if (p_150074_ < 1.0F) {
+                p_150074_ = 1.0F;
+            }
+
+            for(int i : p_150075_) {
+                ItemStack itemstack = this.armor.get(i);
+                if ((!p_150073_.isFire() || !itemstack.getItem().isFireResistant()) && itemstack.getItem() instanceof ArmorItem) {
+                    itemstack.hurtAndBreak((int)p_150074_, this, (p_35997_) -> {
+                        p_35997_.broadcastBreakEvent(EquipmentSlot.byTypeAndIndex(EquipmentSlot.Type.ARMOR, i));
+                    });
+                }
+            }
+
+        }
     }
 
 //    protected void reassessTameGoals() {

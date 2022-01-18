@@ -61,8 +61,8 @@ public class AbstractCompanionEntity extends TamableAnimal {
         this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
         this.goalSelector.addGoal(7, new OpenDoorGoal(this, true));
         this.goalSelector.addGoal(9, new LowHealthGoal(this));
-        this.targetSelector.addGoal(1, new OwnerHurtByTargetGoal(this));
-        this.targetSelector.addGoal(2, new OwnerHurtTargetGoal(this));
+        this.targetSelector.addGoal(1, new CustomOwnerHurtByTargetGoal(this));
+        this.targetSelector.addGoal(2, new CustomOwnerHurtTargetGoal(this));
         this.targetSelector.addGoal(3, (new HurtByTargetGoal(this)).setAlertOthers());
     }
 
@@ -197,6 +197,13 @@ public class AbstractCompanionEntity extends TamableAnimal {
     }
 
     public boolean hurt(DamageSource p_34288_, float p_34289_) {
+        if (p_34288_.getEntity() instanceof TamableAnimal) {
+            if (this.isTame() && ((TamableAnimal) p_34288_.getEntity()).isTame()) {
+                if (this.getOwner().is(((TamableAnimal) p_34288_.getEntity()).getOwner())) {
+                    return false;
+                }
+            }
+        }
         hurtArmor(p_34288_, p_34289_);
         return super.hurt(p_34288_, p_34289_);
     }

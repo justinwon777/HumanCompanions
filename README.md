@@ -15,8 +15,6 @@ Playable with some bugs
 ## Todo for release
 
 - [ ] Disable friendly fire
-- [ ] Fix armor not unequipping
-- [ ] Fix armor not taking damage
 
 ## Future plans
 

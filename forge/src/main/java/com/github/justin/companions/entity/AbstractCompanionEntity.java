@@ -27,7 +27,6 @@ import net.minecraft.world.level.Level;
 
 public class AbstractCompanionEntity extends TamableAnimal {
     public SimpleContainer inventory = new SimpleContainer(27);
-    public static final int[] ALL_ARMOR_SLOTS = new int[]{0, 1, 2, 3};
     public static final TextComponent[] tameFail = new TextComponent[]{
             new TextComponent("I need more food."),
             new TextComponent("Is that all you got?"),
@@ -217,6 +216,19 @@ public class AbstractCompanionEntity extends TamableAnimal {
                 }
             }
 
+        }
+    }
+
+    public void die(DamageSource source) {
+        this.dropAllDeathLoot(source);
+    }
+
+    protected void dropEquipment() {
+        for (int i = 0; i < this.inventory.getContainerSize(); ++i) {
+            ItemStack itemstack = this.inventory.getItem(i);
+            if (!itemstack.isEmpty()) {
+                this.spawnAtLocation(itemstack);
+            }
         }
     }
 }

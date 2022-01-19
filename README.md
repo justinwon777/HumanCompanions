@@ -6,7 +6,7 @@ This mod adds new human companions that can help you on your journey. Currently 
 ## Features
 
 - Knight and archer companions
-- Find them in the wild, probably by their house
+- Find them in the wild by their house
 - Give them food to have them join you
 - Will fight for you and can carry items
 
@@ -19,7 +19,11 @@ They live in the following biomes: forest, plains, sunflower plains, flower fore
 
 You can find them in their houses that look like this: <img src="https://github.com/justinwon777/Companions/blob/main/house.png" alt="house" width="400">
 
+Give them something edible and they might join you as a companion.
 
+Once they join you, you can access their inventory with right click.
+
+Give them armor and weapons and they will automatically equip the best one in their inventory. For weapons, knights can only use swords, and archers can only use bows (arrows not needed).
 
 ## Helping out
 

@@ -1,5 +1,6 @@
 package com.github.justin.companions.entity;
 
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.TamableAnimal;
@@ -29,6 +30,12 @@ public class KnightEntity extends AbstractCompanionEntity{
                 }
             }
         }
+    }
+
+    public void readAdditionalSaveData(CompoundTag tag) {
+        super.readAdditionalSaveData(tag);
+        this.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
+        checkSword();
     }
 
     public void tick() {

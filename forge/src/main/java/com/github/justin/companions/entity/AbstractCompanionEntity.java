@@ -84,6 +84,7 @@ public class AbstractCompanionEntity extends TamableAnimal {
         if (!this.level.isClientSide && hand == InteractionHand.MAIN_HAND) {
             if (!this.isTame()) {
                 if (itemstack.isEdible()) {
+                    itemstack.shrink(1);
                     if (this.random.nextInt(4) == 0) {
                         this.tame(player);
                         player.sendMessage(new TextComponent("Companion added"), this.getUUID());
@@ -227,7 +228,7 @@ public class AbstractCompanionEntity extends TamableAnimal {
     }
 
     public void die(DamageSource source) {
-        this.dropAllDeathLoot(source);
+        super.die(source);
     }
 
     protected void dropEquipment() {

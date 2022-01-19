@@ -1,5 +1,6 @@
 package com.github.justin.companions.entity;
 
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -56,5 +57,11 @@ public class ArcherEntity extends AbstractCompanionEntity implements RangedAttac
 
     protected AbstractArrow getArrow(ItemStack p_32156_, float p_32157_) {
         return ProjectileUtil.getMobArrow(this, p_32156_, p_32157_);
+    }
+
+    public void readAdditionalSaveData(CompoundTag tag) {
+        super.readAdditionalSaveData(tag);
+        this.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
+        checkBow();
     }
 }

@@ -33,7 +33,7 @@ credits="justinwon777" #optional
 # A text field displayed in the mod UI
 authors="justinwon777" #optional
 # The description text for the mod (multi line!) (#mandatory)
-displayURL="https://github.com/justinwon777/HumanCompanions"
+displayURL="https://www.curseforge.com/minecraft/mc-mods/human-companions"
 description='''
 This mod adds human companions that can help you on your journey.
 '''

@@ -19,15 +19,15 @@ They live in the following biomes: forest, plains, sunflower plains, flower fore
 
 You can find them in their houses that look like this: <img src="https://github.com/justinwon777/Companions/blob/main/house.png" alt="house" width="400">
 
-Give them something edible and they might join you as a companion.
+- Give them something edible and they might join you as a companion.
 
-Once they join you, you can access their inventory with right click.
+- Once they join you, you can access their inventory with right click.
 
-Give them armor and weapons and they will automatically equip the best one in their inventory. For weapons, knights can only use swords, and archers can only use bows (arrows not needed).
+- Give them armor and weapons and they will automatically equip the best one in their inventory. For weapons, knights can only use swords, and archers can only use bows (arrows not needed).
 
-They will follow you around the same way a wolf does. They will attack mobs that hurt you or you hurt, except creepers. They will give a warning if a creeper is nearby and run away.
+- They will follow you around the same way a wolf does. They will attack mobs that hurt you or you hurt, except creepers. They will give a warning if a creeper is nearby and run away.
 
-If they are below half health, they will tell you and you can give them food to heal.
+- If they are below half health, they will tell you and you can give them food to heal.
 
 ## Helping out
 

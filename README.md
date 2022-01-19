@@ -10,6 +10,12 @@ This mod adds new human companions that can help you on your journey. Currently 
 - Give them food to have them join you
 - Will fight for you and can carry items
 
+## The Basics
+
+This is a knight: ![alt text](https://github.com/justinwon777/Companions/blob/main/knight.png)
+This is an archer: ![alt text](https://github.com/justinwon777/Companions/blob/main/archer.png)
+You can find them in their houses in the wild that look like this: ![alt text](https://github.com/justinwon777/Companions/blob/main/house.png)
+
 
 ## Helping out
 

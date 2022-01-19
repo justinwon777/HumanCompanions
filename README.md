@@ -16,7 +16,7 @@ This is a knight: <img src="https://github.com/justinwon777/Companions/blob/main
 
 This is an archer: <img src="https://github.com/justinwon777/Companions/blob/main/archer.png" alt="archer" width="150">
 
-You can find them in their houses in the wild that look like this: ![alt text](https://github.com/justinwon777/Companions/blob/main/house.png)
+You can find them in their houses in the wild that look like this: <img src="https://github.com/justinwon777/Companions/blob/main/house.png" alt="house" width="400">
 
 
 ## Helping out

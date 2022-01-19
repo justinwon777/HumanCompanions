@@ -15,7 +15,9 @@ This mod adds new human companions that can help you on your journey. Currently 
 <img src="https://github.com/justinwon777/Companions/blob/main/models.png" alt="models" width="300">
 Archer (left), Knight (right)
 
-You can find them in their houses that look like this: <img src="https://github.com/justinwon777/Companions/blob/main/house.png" alt="house" width="400">
+You can find them in their houses that look like this:
+
+<img src="https://github.com/justinwon777/Companions/blob/main/house.png" alt="house" width="400">
 
 - They live in the following biomes: forest, plains, sunflower plains, flower forest, and meadow.
 

@@ -1,4 +1,4 @@
-![alt text](https://github.com/justinwon777/Companions/companions.png)
+![alt text](https://github.com/justinwon777/Companions/blob/main/companions.png)
 # About
 
 This mod adds new human companions that can help you on your journey. Currently available for Forge 1.18.1 only.

@@ -12,8 +12,8 @@ This mod adds new human companions that can help you on your journey. Currently 
 
 ## The Basics
 
-This is a knight: <img src="https://github.com/justinwon777/Companions/blob/main/knight.png" alt="knight" width="150">
-This is an archer: <img src="https://github.com/justinwon777/Companions/blob/main/archer.png" alt="archer" width="150">
+<img src="https://github.com/justinwon777/Companions/blob/main/knight.png" alt="knight" width="400">
+Archer (left), Knight (right)
 
 You can find them in their houses in the wild that look like this: <img src="https://github.com/justinwon777/Companions/blob/main/house.png" alt="house" width="400">
 

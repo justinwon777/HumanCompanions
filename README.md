@@ -1,6 +1,7 @@
-# Companions Mod (Forge 1.18.1)
+![alt text](https://github.com/justinwon777/Companions/companions.png)
+# About
 
-This mod adds new human companions that can help you on your journey.
+This mod adds new human companions that can help you on your journey. Currently available for Forge 1.18.1 only.
 
 ## Features
 

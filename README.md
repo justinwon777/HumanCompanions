@@ -10,7 +10,7 @@ This mod adds new human companions that can help you on your journey. Currently 
 - Give them food to have them join you
 - Will fight for you and can carry items
 
-## The Basics
+## Quick Guide
 
 Archer (left), Knight (right)
 

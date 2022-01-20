@@ -52,7 +52,8 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
-        this.goalSelector.addGoal(1, new AvoidCreeperGoal(this, Creeper.class, 10.0F, 1.5D, 1.5D));
+        this.goalSelector.addGoal(1, new SitWhenOrderedToGoal(this));
+        this.goalSelector.addGoal(2, new AvoidCreeperGoal(this, Creeper.class, 10.0F, 1.5D, 1.5D));
         this.goalSelector.addGoal(3, new FollowOwnerGoal(this, 1.0D, 10.0F, 2.0F, false));
         this.goalSelector.addGoal(4, new WaterAvoidingRandomStrollGoal(this, 1.0D));
         this.goalSelector.addGoal(5, new LookAtPlayerGoal(this, Player.class, 6.0F));
@@ -95,7 +96,19 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
                             notTamed[this.random.nextInt(notTamed.length)]), this.getUUID());
                 }
             } else {
-                if (itemstack.isEdible()) {
+                if(player.isShiftKeyDown()) {
+                    if (!this.isOrderedToSit()) {
+                        this.setOrderedToSit(true);
+                        TextComponent text = new TextComponent("I'll stay here.");
+                        player.sendMessage(new TranslatableComponent("chat.type.text", this.getDisplayName(),
+                                text), this.getUUID());
+                    } else {
+                        this.setOrderedToSit(false);
+                        TextComponent text = new TextComponent("I'll follow you.");
+                        player.sendMessage(new TranslatableComponent("chat.type.text", this.getDisplayName(),
+                                text), this.getUUID());
+                    }
+                } else if (itemstack.isEdible()) {
                     if (this.getHealth() < this.getMaxHealth()) {
                         if (!player.getAbilities().instabuild) {
                             itemstack.shrink(1);

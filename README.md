@@ -29,6 +29,10 @@ You can find them in their houses that look like this:
 - If they are below half health, they will tell you and you can give them food to heal.
 - You could do "/locate humancompanions:companion_house" to find a house quickly.
 
+## Known Issues
+
+When a companion dies, sometimes it drops a duplicate of an item or doesn't drop an item in its inventory at all.
+
 ## Helping out
 
 If you wanna help contribute, that'd be great, so contact me on discord at Penglen#9566

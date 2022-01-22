@@ -75,15 +75,57 @@ public class HumanCompanions {
             HashMap<StructureFeature<?>, HashMultimap<ConfiguredStructureFeature<?, ?>, ResourceKey<Biome>>> StructureToMultiMap =
                     new HashMap<>();
 
-            ImmutableSet<ResourceKey<Biome>> overworldBiomes = ImmutableSet.<ResourceKey<Biome>>builder()
-                    .add(Biomes.FOREST)
+            ImmutableSet<ResourceKey<Biome>> oakBiomes = ImmutableSet.<ResourceKey<Biome>>builder()
                     .add(Biomes.PLAINS)
                     .add(Biomes.SUNFLOWER_PLAINS)
-                    .add(Biomes.FLOWER_FOREST)
                     .add(Biomes.MEADOW)
+                    .add(Biomes.JUNGLE)
+                    .add(Biomes.SPARSE_JUNGLE)
+                    .add(Biomes.BAMBOO_JUNGLE)
                     .build();
-            overworldBiomes.forEach(biomeKey -> associateBiomeToConfiguredStructure(StructureToMultiMap,
-                    ConfiguredStructures.Configured_Companion_House, biomeKey));
+
+            ImmutableSet<ResourceKey<Biome>> oakAndBirchBiomes = ImmutableSet.<ResourceKey<Biome>>builder()
+                    .add(Biomes.FOREST)
+                    .add(Biomes.FLOWER_FOREST)
+                    .build();
+
+            ImmutableSet<ResourceKey<Biome>> birchBiomes = ImmutableSet.<ResourceKey<Biome>>builder()
+                    .add(Biomes.BIRCH_FOREST)
+                    .add(Biomes.OLD_GROWTH_BIRCH_FOREST)
+                    .build();
+
+            ImmutableSet<ResourceKey<Biome>> sandstoneBiomes = ImmutableSet.<ResourceKey<Biome>>builder()
+                    .add(Biomes.DESERT)
+                    .build();
+
+            ImmutableSet<ResourceKey<Biome>> acaciaBiomes = ImmutableSet.<ResourceKey<Biome>>builder()
+                    .add(Biomes.SAVANNA)
+                    .add(Biomes.SAVANNA_PLATEAU)
+                    .add(Biomes.WINDSWEPT_SAVANNA)
+                    .build();
+
+            ImmutableSet<ResourceKey<Biome>> spruceBiomes = ImmutableSet.<ResourceKey<Biome>>builder()
+                    .add(Biomes.SNOWY_PLAINS)
+                    .add(Biomes.SNOWY_TAIGA)
+                    .add(Biomes.GROVE)
+                    .add(Biomes.WINDSWEPT_FOREST)
+                    .add(Biomes.TAIGA)
+                    .add(Biomes.OLD_GROWTH_PINE_TAIGA)
+                    .add(Biomes.OLD_GROWTH_SPRUCE_TAIGA)
+                    .build();
+
+            oakBiomes.forEach(biomeKey -> associateBiomeToConfiguredStructure(StructureToMultiMap,
+                    ConfiguredStructures.Configured_Oak_House, biomeKey));
+            oakAndBirchBiomes.forEach(biomeKey -> associateBiomeToConfiguredStructure(StructureToMultiMap,
+                    ConfiguredStructures.Configured_Oak_Birch_House, biomeKey));
+            birchBiomes.forEach(biomeKey -> associateBiomeToConfiguredStructure(StructureToMultiMap,
+                    ConfiguredStructures.Configured_Birch_House, biomeKey));
+            acaciaBiomes.forEach(biomeKey -> associateBiomeToConfiguredStructure(StructureToMultiMap,
+                    ConfiguredStructures.Configured_Acacia_House, biomeKey));
+            spruceBiomes.forEach(biomeKey -> associateBiomeToConfiguredStructure(StructureToMultiMap,
+                    ConfiguredStructures.Configured_Spruce_House, biomeKey));
+            sandstoneBiomes.forEach(biomeKey -> associateBiomeToConfiguredStructure(StructureToMultiMap,
+                    ConfiguredStructures.Configured_Sandstone_House, biomeKey));
 
             ImmutableMap.Builder<StructureFeature<?>, ImmutableMultimap<ConfiguredStructureFeature<?, ?>, ResourceKey<Biome>>> tempStructureToMultiMap = ImmutableMap.builder();
             worldStructureConfig.configuredStructures.entrySet().stream().filter(entry -> !StructureToMultiMap.containsKey(entry.getKey())).forEach(tempStructureToMultiMap::put);

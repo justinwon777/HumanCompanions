@@ -1,10 +1,7 @@
 package com.github.justin.humancompanions.world;
 
-import com.github.justin.humancompanions.HumanCompanions;
 import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.NoiseColumn;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.GenerationStep;
@@ -47,29 +44,11 @@ public class CompanionHouseStructure extends StructureFeature<JigsawConfiguratio
             return Optional.empty();
         }
 
-        JigsawConfiguration newConfig = new JigsawConfiguration(
-                () -> context.registryAccess().ownedRegistryOrThrow(Registry.TEMPLATE_POOL_REGISTRY)
-                        .get(new ResourceLocation(HumanCompanions.MOD_ID, "pool")),
-                1
-        );
-
-        PieceGeneratorSupplier.Context<JigsawConfiguration> newContext = new PieceGeneratorSupplier.Context<>(
-                context.chunkGenerator(),
-                context.biomeSource(),
-                context.seed(),
-                context.chunkPos(),
-                newConfig,
-                context.heightAccessor(),
-                context.validBiome(),
-                context.structureManager(),
-                context.registryAccess()
-        );
-
         BlockPos blockpos = context.chunkPos().getMiddleBlockPosition(0);
 
         Optional<PieceGenerator<JigsawConfiguration>> structurePiecesGenerator =
                 JigsawPlacement.addPieces(
-                        newContext,
+                        context,
                         PoolElementStructurePiece::new,
                         blockpos,
                         false,

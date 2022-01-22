@@ -16,11 +16,10 @@ Archer (left), Knight (right)
 
 <img src="https://github.com/justinwon777/HumanCompanions/blob/main/models.png" alt="models" width="300">
 
-You can find them in their houses that look like this:
+They live in a wide variety of biomes in houses like these:
 
-<img src="https://github.com/justinwon777/HumanCompanions/blob/main/house.png" alt="house" width="400">
+<img src="https://github.com/justinwon777/HumanCompanions/blob/main/houses.png" alt="house" width="900">
 
-- They live in the following biomes: forest, plains, sunflower plains, flower forest, and meadow.
 - Give them something edible and they might join you as a companion.
 - Once they join you, you can access their inventory with right click.
 - You can rename them with tags.

@@ -1,20 +1,23 @@
 package com.github.justinwon777.humancompanions.entity;
 
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.IRangedAttackMob;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.*;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.entity.projectile.ProjectileHelper;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.BowItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
+
+import javax.annotation.Nullable;
 
 public class ArcherEntity extends AbstractHumanCompanionEntity implements IRangedAttackMob {
 
@@ -77,6 +80,14 @@ public class ArcherEntity extends AbstractHumanCompanionEntity implements IRange
         super.readAdditionalSaveData(tag);
         this.setItemSlot(EquipmentSlotType.MAINHAND, ItemStack.EMPTY);
         checkBow();
+    }
+
+    public ILivingEntityData finalizeSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn,
+                                           SpawnReason reason, @Nullable ILivingEntityData spawnDataIn,
+                                           @Nullable CompoundNBT dataTag) {
+        this.inventory.setItem(4, Items.BOW.getDefaultInstance());
+        checkBow();
+        return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
     }
 }
 

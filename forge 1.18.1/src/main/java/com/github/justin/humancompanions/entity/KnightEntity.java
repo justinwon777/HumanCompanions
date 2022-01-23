@@ -1,13 +1,16 @@
 package com.github.justin.humancompanions.entity;
 
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
+
+import javax.annotation.Nullable;
 
 public class KnightEntity extends AbstractHumanCompanionEntity {
 
@@ -42,5 +45,29 @@ public class KnightEntity extends AbstractHumanCompanionEntity {
         checkArmor();
         checkSword();
         super.tick();
+    }
+
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn,
+                                        MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn,
+                                        @Nullable CompoundTag dataTag) {
+
+        ItemStack itemstack = getSpawnSword();
+        if(!itemstack.isEmpty()) {
+            this.inventory.setItem(4, itemstack);
+            checkSword();
+        }
+
+        return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
+    }
+
+    public ItemStack getSpawnSword() {
+        float materialFloat = this.random.nextFloat();
+        if(materialFloat < 0.5F) {
+            return Items.WOODEN_SWORD.getDefaultInstance();
+        } else if(materialFloat < 0.90F) {
+            return Items.STONE_SWORD.getDefaultInstance();
+        } else {
+            return Items.IRON_SWORD.getDefaultInstance();
+        }
     }
 }

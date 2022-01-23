@@ -6,10 +6,7 @@ import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.SimpleContainer;
-import net.minecraft.world.SimpleMenuProvider;
+import net.minecraft.world.*;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -21,10 +18,16 @@ import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
+
+import javax.annotation.Nullable;
 
 public class AbstractHumanCompanionEntity extends TamableAnimal {
     public SimpleContainer inventory = new SimpleContainer(27);
+    public EquipmentSlot[] armorTypes = new EquipmentSlot[]{EquipmentSlot.FEET, EquipmentSlot.LEGS,
+            EquipmentSlot.CHEST, EquipmentSlot.HEAD};
     public static final TextComponent[] tameFail = new TextComponent[]{
             new TextComponent("I need more food."),
             new TextComponent("Is that all you got?"),
@@ -69,7 +72,7 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
         return Mob.createMobAttributes()
                 .add(Attributes.MAX_HEALTH, 20.0D)
                 .add(Attributes.ATTACK_DAMAGE, 1.0D)
-                .add(Attributes.MOVEMENT_SPEED, 0.33D);
+                .add(Attributes.MOVEMENT_SPEED, 0.32D);
     }
 
     @Override
@@ -245,7 +248,7 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
     protected void dropEquipment() {
         for (int i = 0; i < this.inventory.getContainerSize(); ++i) {
             ItemStack itemstack = this.inventory.getItem(i);
-            if (!itemstack.isEmpty()) {
+            if (!itemstack.isEmpty() && !EnchantmentHelper.hasVanishingCurse(itemstack)) {
                 this.spawnAtLocation(itemstack);
             }
         }
@@ -266,5 +269,60 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
             }
         }
         return super.doHurtTarget(entity);
+    }
+
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn,
+                                        MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn,
+                                        @Nullable CompoundTag dataTag) {
+        for (int i = 0; i < 4; i++) {
+            EquipmentSlot armorType = armorTypes[i];
+            ItemStack itemstack = getSpawnArmor(armorType);
+            if(!itemstack.isEmpty()) {
+                this.inventory.setItem(i, itemstack);
+                checkArmor();
+            }
+        }
+        return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
+    }
+
+    public ItemStack getSpawnArmor(EquipmentSlot armorType) {
+        float materialFloat = this.random.nextFloat();
+        if (materialFloat <= 0.4F) {
+            return ItemStack.EMPTY;
+        } else if(materialFloat < 0.70F) {
+            switch(armorType) {
+                case HEAD:
+                    return Items.LEATHER_HELMET.getDefaultInstance();
+                case CHEST:
+                    return Items.LEATHER_CHESTPLATE.getDefaultInstance();
+                case LEGS:
+                    return Items.LEATHER_LEGGINGS.getDefaultInstance();
+                case FEET:
+                    return Items.LEATHER_BOOTS.getDefaultInstance();
+            }
+        } else if(materialFloat < 0.90F) {
+            switch(armorType) {
+                case HEAD:
+                    return Items.CHAINMAIL_HELMET.getDefaultInstance();
+                case CHEST:
+                    return Items.CHAINMAIL_CHESTPLATE.getDefaultInstance();
+                case LEGS:
+                    return Items.CHAINMAIL_LEGGINGS.getDefaultInstance();
+                case FEET:
+                    return Items.CHAINMAIL_BOOTS.getDefaultInstance();
+            }
+        } else {
+            switch(armorType) {
+                case HEAD:
+                    return Items.IRON_HELMET.getDefaultInstance();
+                case CHEST:
+                    return Items.IRON_CHESTPLATE.getDefaultInstance();
+                case LEGS:
+                    return Items.IRON_LEGGINGS.getDefaultInstance();
+                case FEET:
+                    return Items.IRON_BOOTS.getDefaultInstance();
+            }
+        }
+        return ItemStack.EMPTY;
     }
 }

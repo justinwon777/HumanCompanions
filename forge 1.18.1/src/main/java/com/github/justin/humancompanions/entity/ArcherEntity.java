@@ -4,17 +4,19 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.goal.RangedBowAttackGoal;
 import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
+
+import javax.annotation.Nullable;
 
 public class ArcherEntity extends AbstractHumanCompanionEntity implements RangedAttackMob {
 
@@ -77,5 +79,13 @@ public class ArcherEntity extends AbstractHumanCompanionEntity implements Ranged
         super.readAdditionalSaveData(tag);
         this.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
         checkBow();
+    }
+
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn,
+                                        MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn,
+                                        @Nullable CompoundTag dataTag) {
+        this.inventory.setItem(4, Items.BOW.getDefaultInstance());
+        checkBow();
+        return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
     }
 }

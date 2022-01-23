@@ -68,8 +68,8 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
     public static AttributeSupplier.Builder createAttributes() {
         return Mob.createMobAttributes()
                 .add(Attributes.MAX_HEALTH, 20.0D)
-                .add(Attributes.ATTACK_DAMAGE, 2.0D)
-                .add(Attributes.MOVEMENT_SPEED, 0.3D);
+                .add(Attributes.ATTACK_DAMAGE, 1.0D)
+                .add(Attributes.MOVEMENT_SPEED, 0.33D);
     }
 
     @Override
@@ -249,5 +249,22 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
                 this.spawnAtLocation(itemstack);
             }
         }
+    }
+
+    public boolean doHurtTarget(Entity entity) {
+        ItemStack itemstack = this.getMainHandItem();
+        if (!this.level.isClientSide && !itemstack.isEmpty() && entity instanceof LivingEntity) {
+            itemstack.hurtAndBreak(1, this, (p_43296_) -> {
+                p_43296_.broadcastBreakEvent(EquipmentSlot.MAINHAND);
+            });
+            if (this.getMainHandItem().isEmpty()) {
+                TextComponent broken = new TextComponent("My sword broke!");
+                if (this.isTame()) {
+                    this.getOwner().sendMessage(new TranslatableComponent("chat.type.text", this.getDisplayName(),
+                            broken), this.getUUID());
+                }
+            }
+        }
+        return super.doHurtTarget(entity);
     }
 }

@@ -1,6 +1,8 @@
 package com.github.justin.humancompanions.entity;
 
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -53,6 +55,18 @@ public class ArcherEntity extends AbstractHumanCompanionEntity implements Ranged
         abstractarrow.shoot(d0, d1 + d3 * (double)0.2F, d2, 1.6F, (float)(14 - this.level.getDifficulty().getId() * 4));
         this.playSound(SoundEvents.SKELETON_SHOOT, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
         this.level.addFreshEntity(abstractarrow);
+        if (!this.level.isClientSide) {
+            this.getMainHandItem().hurtAndBreak(1, this, (p_43296_) -> {
+                p_43296_.broadcastBreakEvent(EquipmentSlot.MAINHAND);
+            });
+            if (this.getMainHandItem().isEmpty()) {
+                TextComponent broken = new TextComponent("My bow broke!");
+                if (this.isTame()) {
+                    this.getOwner().sendMessage(new TranslatableComponent("chat.type.text", this.getDisplayName(),
+                            broken), this.getUUID());
+                }
+            }
+        }
     }
 
     protected AbstractArrow getArrow(ItemStack p_32156_, float p_32157_) {

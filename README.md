@@ -1,7 +1,7 @@
 ![Logo](https://github.com/justinwon777/HumanCompanions/blob/main/companions.png)
 # About
 
-This mod adds new human companions that can help you on your journey. Currently available for Forge 1.18.1 only.
+This mod adds new human companions that can help you on your journey. Currently available for Forge 1.16.5 and 1.18.1.
 
 ## Features
 

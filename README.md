@@ -1,4 +1,5 @@
 ![Logo](https://github.com/justinwon777/HumanCompanions/blob/main/companions.png)
+[CurseForge Link](https://www.curseforge.com/minecraft/mc-mods/human-companions)
 # About
 
 This mod adds new human companions that can help you on your journey. Currently available for Forge 1.18.1 only.

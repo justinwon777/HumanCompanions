@@ -2,7 +2,7 @@
 [![Downloads](http://cf.way2muchnoise.eu/full_570319_downloads.svg)](https://www.curseforge.com/minecraft/mc-mods/human-companions)
 # About
 
-This mod adds new human companions that can help you on your journey. Currently available for Forge 1.18.1 only.
+This mod adds new human companions that can help you on your journey. Currently available for Forge 1.16.5 and 1.18.1.
 
 ## Features
 

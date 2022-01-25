@@ -14,7 +14,7 @@ This mod adds new human companions that can help you on your journey. Currently 
 
 Companions can have different looks. Some are shown here:
 
-<img src="https://github.com/justinwon777/HumanCompanions/blob/main/models.png" alt="models" width="800">
+<img src="https://github.com/justinwon777/HumanCompanions/blob/main/models.png" alt="models" width="600">
 
 They live in a wide variety of biomes in houses like these:
 

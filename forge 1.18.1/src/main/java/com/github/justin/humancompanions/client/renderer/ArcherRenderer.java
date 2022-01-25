@@ -1,6 +1,5 @@
 package com.github.justin.humancompanions.client.renderer;
 
-import com.github.justin.humancompanions.HumanCompanions;
 import com.github.justin.humancompanions.entity.AbstractHumanCompanionEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.model.HumanoidModel;
@@ -11,9 +10,8 @@ import net.minecraft.client.renderer.entity.HumanoidMobRenderer;
 import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
 import net.minecraft.resources.ResourceLocation;
 
+
 public class ArcherRenderer extends HumanoidMobRenderer<AbstractHumanCompanionEntity, PlayerModel<AbstractHumanCompanionEntity>> {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(HumanCompanions.MOD_ID, "textures/entities" +
-            "/archer.png");
 
     public ArcherRenderer(Context context) {
         super(context, new PlayerModel(context.bakeLayer(ModelLayers.PLAYER), false), 0.5f);
@@ -22,9 +20,10 @@ public class ArcherRenderer extends HumanoidMobRenderer<AbstractHumanCompanionEn
                 new HumanoidModel(context.bakeLayer(ModelLayers.PLAYER_OUTER_ARMOR))));
         }
 
+
     @Override
     public ResourceLocation getTextureLocation(AbstractHumanCompanionEntity entity) {
-        return TEXTURE;
+        return entity.getResourceLocation();
     }
 
     protected void scale(AbstractHumanCompanionEntity p_117798_, PoseStack p_117799_, float p_117800_) {

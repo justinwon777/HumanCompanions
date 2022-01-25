@@ -1,7 +1,7 @@
 ![Logo](https://github.com/justinwon777/HumanCompanions/blob/main/companions.png)
 # About
 
-This mod adds new human companions that can help you on your journey. Currently available for Forge 1.16.5 and 1.18.1.
+This mod adds new human companions that can help you on your journey. Currently available for Forge 1.18.1 only.
 
 ## Features
 
@@ -31,7 +31,8 @@ They live in a wide variety of biomes in houses like these:
 
 ## Known Issues
 
-When a companion dies, sometimes it drops a duplicate of an item or doesn't drop an item in its inventory at all.
+- When a companion dies, sometimes it drops a duplicate of an item or doesn't drop an item in its inventory at all.
+- Archers sometimes shoot at nothing after killing a mob, will fix itself if it gets a new target
 
 ## Helping out
 

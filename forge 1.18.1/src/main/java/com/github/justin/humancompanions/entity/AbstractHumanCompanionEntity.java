@@ -4,6 +4,10 @@ import com.github.justin.humancompanions.core.EntityInit;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.*;
@@ -25,25 +29,12 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import javax.annotation.Nullable;
 
 public class AbstractHumanCompanionEntity extends TamableAnimal {
+
+    private static final EntityDataAccessor<Integer> DATA_TYPE_ID = SynchedEntityData.defineId(AbstractHumanCompanionEntity.class,
+            EntityDataSerializers.INT);
     public SimpleContainer inventory = new SimpleContainer(27);
     public EquipmentSlot[] armorTypes = new EquipmentSlot[]{EquipmentSlot.FEET, EquipmentSlot.LEGS,
             EquipmentSlot.CHEST, EquipmentSlot.HEAD};
-    public static final TextComponent[] tameFail = new TextComponent[]{
-            new TextComponent("I need more food."),
-            new TextComponent("Is that all you got?"),
-            new TextComponent("I'm still hungry."),
-            new TextComponent("Can I have some more?"),
-            new TextComponent("I'm going to need a bit more."),
-            new TextComponent("That's not enough."),
-    };
-    public static final TextComponent[] notTamed = new TextComponent[]{
-            new TextComponent("Do you have any food?"),
-            new TextComponent("I'm hungry"),
-            new TextComponent("I'm starving"),
-            new TextComponent("Have you seen any food around here?"),
-            new TextComponent("I could use some food"),
-            new TextComponent("I wish I had some food"),
-    };
 
     public AbstractHumanCompanionEntity(EntityType<? extends TamableAnimal> entityType, Level level) {
         super(entityType, level);
@@ -75,6 +66,39 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
                 .add(Attributes.MOVEMENT_SPEED, 0.32D);
     }
 
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn,
+                                        MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn,
+                                        @Nullable CompoundTag dataTag) {
+        this.setCompanionSkin(this.random.nextInt(CompanionData.maleSkins.length));
+        this.setCustomName(new TextComponent(CompanionData.getRandomName()));
+        for (int i = 0; i < 4; i++) {
+            EquipmentSlot armorType = armorTypes[i];
+            ItemStack itemstack = getSpawnArmor(armorType);
+            if(!itemstack.isEmpty()) {
+                this.inventory.setItem(i, itemstack);
+                checkArmor();
+            }
+        }
+        return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
+    }
+
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(DATA_TYPE_ID, 1);
+    }
+
+    public ResourceLocation getResourceLocation() {
+        return CompanionData.maleSkins[getCompanionSkin()];
+    }
+
+    public int getCompanionSkin() {
+        return this.entityData.get(DATA_TYPE_ID);
+    }
+
+    public void setCompanionSkin(int skinIndex) {
+        this.entityData.set(DATA_TYPE_ID, skinIndex);
+    }
+
     @Override
     public AgeableMob getBreedOffspring(ServerLevel level, AgeableMob parent) {
         return EntityInit.KnightEntity.get().create(level);
@@ -92,11 +116,11 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
                         player.sendMessage(new TextComponent("Companion added"), this.getUUID());
                     } else {
                         player.sendMessage(new TranslatableComponent("chat.type.text", this.getDisplayName(),
-                                        tameFail[this.random.nextInt(tameFail.length)]), this.getUUID());
+                                CompanionData.tameFail[this.random.nextInt(CompanionData.tameFail.length)]), this.getUUID());
                     }
                 } else {
                     player.sendMessage(new TranslatableComponent("chat.type.text", this.getDisplayName(),
-                            notTamed[this.random.nextInt(notTamed.length)]), this.getUUID());
+                            CompanionData.notTamed[this.random.nextInt(CompanionData.notTamed.length)]), this.getUUID());
                 }
             } else {
                 if(player.isShiftKeyDown()) {
@@ -118,7 +142,7 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
                         }
                         this.heal((float)item.getFoodProperties().getNutrition());
                         TextComponent text =
-                                new TextComponent("Health: " + this.getHealth() + "/" + this.getMaxHealth());
+                                new TextComponent(this.getName().getString() + "'s health: " + this.getHealth() + "/" + this.getMaxHealth());
                         player.sendMessage(text, this.getUUID());
                         return InteractionResult.SUCCESS;
                     }
@@ -197,10 +221,12 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
     public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
         tag.put("inventory", this.inventory.createTag());
+        tag.putInt("skin", this.getCompanionSkin());
     }
 
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
+        this.setCompanionSkin(tag.getInt("skin"));
         if (tag.contains("inventory", 9)) {
             this.inventory.fromTag(tag.getList("inventory", 10));
         }
@@ -269,20 +295,6 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
             }
         }
         return super.doHurtTarget(entity);
-    }
-
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn,
-                                        MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn,
-                                        @Nullable CompoundTag dataTag) {
-        for (int i = 0; i < 4; i++) {
-            EquipmentSlot armorType = armorTypes[i];
-            ItemStack itemstack = getSpawnArmor(armorType);
-            if(!itemstack.isEmpty()) {
-                this.inventory.setItem(i, itemstack);
-                checkArmor();
-            }
-        }
-        return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
     }
 
     public ItemStack getSpawnArmor(EquipmentSlot armorType) {

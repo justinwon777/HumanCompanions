@@ -50,7 +50,6 @@ public class KnightEntity extends AbstractHumanCompanionEntity {
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn,
                                         MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn,
                                         @Nullable CompoundTag dataTag) {
-
         ItemStack itemstack = getSpawnSword();
         if(!itemstack.isEmpty()) {
             this.inventory.setItem(4, itemstack);

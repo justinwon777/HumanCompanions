@@ -6,7 +6,6 @@ import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.ai.goal.RangedBowAttackGoal;
 import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
@@ -22,7 +21,7 @@ public class ArcherEntity extends AbstractHumanCompanionEntity implements Ranged
 
     public ArcherEntity(EntityType<? extends TamableAnimal> entityType, Level level) {
         super(entityType, level);
-        this.goalSelector.addGoal(2, new RangedBowAttackGoal<>(this, 1.0D, 1, 15.0F));
+        this.goalSelector.addGoal(2, new ArcherRangedBowAttackGoal<>(this, 1.0D, 5, 15.0F));
 
     }
 

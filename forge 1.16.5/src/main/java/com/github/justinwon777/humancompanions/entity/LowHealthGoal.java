@@ -2,24 +2,26 @@ package com.github.justinwon777.humancompanions.entity;
 
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.passive.TameableEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
 public class LowHealthGoal extends Goal {
-    protected final TameableEntity mob;
+    protected final AbstractHumanCompanionEntity mob;
     int startTick = 0;
-    StringTextComponent text = new StringTextComponent("My health is low!");
+    StringTextComponent text = new StringTextComponent("I need food!");
+    ItemStack food = ItemStack.EMPTY;
 
-    public LowHealthGoal(TameableEntity entity) {
+    public LowHealthGoal(AbstractHumanCompanionEntity entity) {
         this.mob = entity;
     }
 
     public boolean canUse() {
         if (this.mob.getHealth() < 10 && this.mob.isTame()) {
-            return true;
-        } else {
-            return false;
+            food = mob.checkFood();
+            return food.isEmpty();
         }
+        return false;
     }
 
     public void start() {

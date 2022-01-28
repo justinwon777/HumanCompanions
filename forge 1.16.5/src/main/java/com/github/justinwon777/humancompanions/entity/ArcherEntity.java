@@ -23,7 +23,7 @@ public class ArcherEntity extends AbstractHumanCompanionEntity implements IRange
 
     public ArcherEntity(EntityType<? extends TameableEntity> entityType, World level) {
         super(entityType, level);
-        this.goalSelector.addGoal(2, new ArcherBowAttackGoal<>(this, 1.0D, 1, 15.0F));
+        this.goalSelector.addGoal(2, new ArcherBowAttackGoal<>(this, 1.0D, 5, 15.0F));
 
     }
 

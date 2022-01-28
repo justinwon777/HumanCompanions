@@ -1,14 +1,15 @@
-package com.github.justinwon777.humancompanions.entity;
+package com.github.justin.humancompanions.entity;
 
-import net.minecraft.entity.IRangedAttackMob;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.projectile.ProjectileHelper;
-import net.minecraft.item.BowItem;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.monster.RangedAttackMob;
+import net.minecraft.world.entity.projectile.ProjectileUtil;
+import net.minecraft.world.item.BowItem;
 
 import java.util.EnumSet;
 
-public class ArcherBowAttackGoal<T extends ArcherEntity & IRangedAttackMob> extends Goal{
+public class ArcherRangedBowAttackGoal<T extends ArcherEntity & RangedAttackMob> extends Goal {
     private final T mob;
     private final double speedModifier;
     private int attackIntervalMin;
@@ -19,16 +20,17 @@ public class ArcherBowAttackGoal<T extends ArcherEntity & IRangedAttackMob> exte
     private boolean strafingBackwards;
     private int strafingTime = -1;
 
-    public ArcherBowAttackGoal(T p_i47515_1_, double p_i47515_2_, int p_i47515_4_, float p_i47515_5_) {
-        this.mob = p_i47515_1_;
-        this.speedModifier = p_i47515_2_;
-        this.attackIntervalMin = p_i47515_4_;
-        this.attackRadiusSqr = p_i47515_5_ * p_i47515_5_;
+
+    public ArcherRangedBowAttackGoal(T p_25792_, double p_25793_, int p_25794_, float p_25795_) {
+        this.mob = p_25792_;
+        this.speedModifier = p_25793_;
+        this.attackIntervalMin = p_25794_;
+        this.attackRadiusSqr = p_25795_ * p_25795_;
         this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
     }
 
-    public void setMinAttackInterval(int p_189428_1_) {
-        this.attackIntervalMin = p_189428_1_;
+    public void setMinAttackInterval(int p_25798_) {
+        this.attackIntervalMin = p_25798_;
     }
 
     public boolean canUse() {
@@ -40,7 +42,7 @@ public class ArcherBowAttackGoal<T extends ArcherEntity & IRangedAttackMob> exte
     }
 
     protected boolean isHoldingBow() {
-        return this.mob.isHolding(item -> item instanceof BowItem);
+        return this.mob.isHolding(is -> is.getItem() instanceof BowItem);
     }
 
     public boolean canContinueToUse() {
@@ -60,11 +62,15 @@ public class ArcherBowAttackGoal<T extends ArcherEntity & IRangedAttackMob> exte
         this.mob.stopUsingItem();
     }
 
+    public boolean requiresUpdateEveryTick() {
+        return true;
+    }
+
     public void tick() {
         LivingEntity livingentity = this.mob.getTarget();
         if (livingentity != null) {
             double d0 = this.mob.distanceToSqr(livingentity.getX(), livingentity.getY(), livingentity.getZ());
-            boolean flag = this.mob.getSensing().canSee(livingentity);
+            boolean flag = this.mob.getSensing().hasLineOfSight(livingentity);
             boolean flag1 = this.seeTime > 0;
             if (flag != flag1) {
                 this.seeTime = 0;
@@ -121,7 +127,7 @@ public class ArcherBowAttackGoal<T extends ArcherEntity & IRangedAttackMob> exte
                     }
                 }
             } else if (--this.attackTime <= 0 && this.seeTime >= -60) {
-                this.mob.startUsingItem(ProjectileHelper.getWeaponHoldingHand(this.mob, item -> item instanceof BowItem));
+                this.mob.startUsingItem(ProjectileUtil.getWeaponHoldingHand(this.mob, item -> item instanceof BowItem));
             }
 
         }

@@ -32,6 +32,8 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
 
     private static final EntityDataAccessor<Integer> DATA_TYPE_ID = SynchedEntityData.defineId(AbstractHumanCompanionEntity.class,
             EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Boolean> EATING = SynchedEntityData.defineId(AbstractHumanCompanionEntity.class,
+            EntityDataSerializers.BOOLEAN);
     public SimpleContainer inventory = new SimpleContainer(27);
     public EquipmentSlot[] armorTypes = new EquipmentSlot[]{EquipmentSlot.FEET, EquipmentSlot.LEGS,
             EquipmentSlot.CHEST, EquipmentSlot.HEAD};
@@ -39,6 +41,7 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
     public AbstractHumanCompanionEntity(EntityType<? extends TamableAnimal> entityType, Level level) {
         super(entityType, level);
         this.setTame(false);
+//        this.setCanPickUpLoot(true);
         ((GroundPathNavigation)this.getNavigation()).setCanOpenDoors(true);
         this.getNavigation().setCanFloat(true);
     }
@@ -46,6 +49,7 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
+        this.goalSelector.addGoal(0, new EatGoal(this));
         this.goalSelector.addGoal(1, new SitWhenOrderedToGoal(this));
         this.goalSelector.addGoal(2, new AvoidCreeperGoal(this, Creeper.class, 10.0F, 1.5D, 1.5D));
         this.goalSelector.addGoal(3, new FollowOwnerGoal(this, 1.3D, 8.0F, 2.0F, false));
@@ -85,6 +89,7 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(DATA_TYPE_ID, 1);
+        this.entityData.define(EATING, false);
     }
 
     public ResourceLocation getResourceLocation() {
@@ -222,11 +227,13 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
         super.addAdditionalSaveData(tag);
         tag.put("inventory", this.inventory.createTag());
         tag.putInt("skin", this.getCompanionSkin());
+        tag.putBoolean("Eating", this.isEating());
     }
 
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
         this.setCompanionSkin(tag.getInt("skin"));
+        this.setEating(tag.getBoolean("Eating"));
         if (tag.contains("inventory", 9)) {
             this.inventory.fromTag(tag.getList("inventory", 10));
         }
@@ -336,5 +343,34 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
             }
         }
         return ItemStack.EMPTY;
+    }
+
+    @Override
+    public ItemStack eat(Level world, ItemStack stack) {
+        if (stack.isEdible()) {
+            this.heal(stack.getItem().getFoodProperties().getNutrition());
+        }
+        super.eat(world, stack);
+        return stack;
+    }
+
+    public ItemStack checkFood() {
+        for (int i = 0; i < this.inventory.getContainerSize(); ++i) {
+            ItemStack itemstack = this.inventory.getItem(i);
+            if (itemstack.isEdible()) {
+                if ((float)itemstack.getItem().getFoodProperties().getNutrition() + this.getHealth() <= 20) {
+                    return itemstack;
+                }
+            }
+        }
+        return ItemStack.EMPTY;
+    }
+
+    public boolean isEating() {
+        return this.entityData.get(EATING);
+    }
+
+    public void setEating(boolean eating) {
+        this.entityData.set(EATING, eating);
     }
 }

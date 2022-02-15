@@ -1,6 +1,7 @@
 package com.github.justin.humancompanions;
 
 import com.github.justin.humancompanions.core.ConfiguredStructures;
+import com.github.justin.humancompanions.core.ContainerInit;
 import com.github.justin.humancompanions.core.EntityInit;
 import com.github.justin.humancompanions.core.StructureInit;
 import com.google.common.collect.HashMultimap;
@@ -47,6 +48,7 @@ public class HumanCompanions {
         IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         EntityInit.ENTITIES.register(eventBus);
+        ContainerInit.CONTAINERS.register(eventBus);
         StructureInit.DEFERRED_REGISTRY_STRUCTURE.register(eventBus);
         eventBus.addListener(this::setup);
 

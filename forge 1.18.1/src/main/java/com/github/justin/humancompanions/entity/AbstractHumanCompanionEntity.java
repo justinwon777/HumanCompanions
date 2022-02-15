@@ -1,5 +1,6 @@
 package com.github.justin.humancompanions.entity;
 
+import com.github.justin.humancompanions.container.CompanionContainer;
 import com.github.justin.humancompanions.core.EntityInit;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.TextComponent;
@@ -25,6 +26,7 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraftforge.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 
@@ -162,7 +164,8 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
     }
 
     public void openGui(ServerPlayer player) {
-        player.openMenu(new SimpleMenuProvider((p_53124_, p_53125_, p_53126_) -> ChestMenu.threeRows(p_53124_, p_53125_, this.inventory), this.getDisplayName()));
+        NetworkHooks.openGui(player,
+                new SimpleMenuProvider(CompanionContainer.getServerContainer(this), this.getName()));
     }
 
     public void checkArmor() {

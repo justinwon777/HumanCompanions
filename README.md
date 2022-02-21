@@ -17,7 +17,7 @@ Companions can have different looks. Some are shown here:
 
 <img src="https://github.com/justinwon777/HumanCompanions/blob/main/models.png" alt="models" width="600">
 
-They live in a wide variety of biomes in houses like these:
+They live in a wide variety of biomes in houses like these (plus more!):
 
 <img src="https://github.com/justinwon777/HumanCompanions/blob/main/houses.png" alt="house" width="800">
 
@@ -27,7 +27,8 @@ They live in a wide variety of biomes in houses like these:
 - Shift+right click to toggle "sit", making them stay in place.
 - Give them armor and weapons and they will automatically equip the best one in their inventory. For weapons, knights can only use swords, and archers can only use bows (arrows not needed).
 - They will follow you around the same way a wolf does. They will attack mobs that hurt you or you hurt, except creepers. They will give a warning if a creeper is nearby and run away.
-- Put food in their inventory and they will eat to heal themselves, or you can manually heal them by right clicking on them with food.
+- Put food in their inventory and they will eat to heal themselves.
+- Toggle "Hunt" and "Alert" modes in their inventory to control their behavior.
 - You could do "/locate humancompanions:companion_house" to find a house quickly.
 
 ## Known Issues

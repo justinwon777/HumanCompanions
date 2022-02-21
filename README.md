@@ -19,7 +19,7 @@ Companions can have different looks. Some are shown here:
 
 They live in a wide variety of biomes in houses like these:
 
-<img src="https://github.com/justinwon777/HumanCompanions/blob/main/houses.png" alt="house" width="600">
+<img src="https://github.com/justinwon777/HumanCompanions/blob/main/houses.png" alt="house" width="800">
 
 - Give them something edible and they might join you as a companion.
 - Once they join you, you can access their inventory with right click.

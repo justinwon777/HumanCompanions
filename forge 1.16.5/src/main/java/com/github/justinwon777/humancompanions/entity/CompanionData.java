@@ -1,12 +1,56 @@
 package com.github.justinwon777.humancompanions.entity;
 
 import com.github.justinwon777.humancompanions.HumanCompanions;
+import net.minecraft.entity.monster.*;
+import net.minecraft.entity.passive.*;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
 
 import java.util.Random;
 
 public class CompanionData {
+
+    public static Class<?>[] alertMobs = new Class<?>[]{
+            BlazeEntity.class,
+            CaveSpiderEntity.class,
+            DrownedEntity.class,
+            ElderGuardianEntity.class,
+            EndermanEntity.class,
+            EndermiteEntity.class,
+            EvokerEntity.class,
+            GhastEntity.class,
+            GiantEntity.class,
+            GuardianEntity.class,
+            HoglinEntity.class,
+            HuskEntity.class,
+            IllusionerEntity.class,
+            MagmaCubeEntity.class,
+            PhantomEntity.class,
+            PillagerEntity.class,
+            ShulkerEntity.class,
+            SilverfishEntity.class,
+            SkeletonEntity.class,
+            SlimeEntity.class,
+            SpiderEntity.class,
+            StrayEntity.class,
+            VexEntity.class,
+            VindicatorEntity.class,
+            WitchEntity.class,
+            WitherSkeletonEntity.class,
+            ZoglinEntity.class,
+            ZombieEntity.class,
+            ZombieVillagerEntity.class,
+            ZombifiedPiglinEntity.class
+    };
+
+    public static Class<?>[] huntMobs = new Class<?>[]{
+            ChickenEntity.class,
+            CowEntity.class,
+            MooshroomEntity.class,
+            PigEntity.class,
+            RabbitEntity.class,
+            SheepEntity.class
+    };
 
     public static ResourceLocation[] maleSkins = new ResourceLocation[]{
             new ResourceLocation(HumanCompanions.MOD_ID, "textures/entities/medieval-man-hugh.png"),
@@ -57,6 +101,17 @@ public class CompanionData {
         String firstName = maleFirstNames[rand.nextInt(maleFirstNames.length)];
         String lastName = lastNames[rand.nextInt(lastNames.length)];
         return firstName + " " + lastName;
+    }
+
+    public static String getRandomCompanionType() {
+        Random rand = new Random();
+        int type = rand.nextInt(2);
+        if (type == 0) {
+            return "knight";
+        }
+        else {
+            return "archer";
+        }
     }
 
     public static String[] maleFirstNames = new String[] {

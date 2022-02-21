@@ -27,7 +27,7 @@ public class StructureInit {
     public static void setupStructures() {
         setupMapSpacingAndLand(
                 COMPANION_HOUSE.get(),
-                new StructureSeparationSettings(17,
+                new StructureSeparationSettings(19,
                         15,
                         1234567890),
                 true);

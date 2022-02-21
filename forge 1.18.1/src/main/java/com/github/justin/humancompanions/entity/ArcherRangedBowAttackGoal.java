@@ -9,7 +9,7 @@ import net.minecraft.world.item.BowItem;
 
 import java.util.EnumSet;
 
-public class ArcherRangedBowAttackGoal<T extends ArcherEntity & RangedAttackMob> extends Goal {
+public class ArcherRangedBowAttackGoal<T extends HumanCompanionEntity & RangedAttackMob> extends Goal {
     private final T mob;
     private final double speedModifier;
     private int attackIntervalMin;
@@ -27,10 +27,6 @@ public class ArcherRangedBowAttackGoal<T extends ArcherEntity & RangedAttackMob>
         this.attackIntervalMin = p_25794_;
         this.attackRadiusSqr = p_25795_ * p_25795_;
         this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
-    }
-
-    public void setMinAttackInterval(int p_25798_) {
-        this.attackIntervalMin = p_25798_;
     }
 
     public boolean canUse() {

@@ -3,10 +3,55 @@ package com.github.justin.humancompanions.entity;
 import com.github.justin.humancompanions.HumanCompanions;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.animal.*;
+import net.minecraft.world.entity.monster.*;
+import net.minecraft.world.entity.monster.hoglin.Hoglin;
 
 import java.util.Random;
 
 public class CompanionData {
+
+    public static Class<?>[] alertMobs = new Class<?>[]{
+            Blaze.class,
+            CaveSpider.class,
+            Drowned.class,
+            ElderGuardian.class,
+            EnderMan.class,
+            Endermite.class,
+            Evoker.class,
+            Ghast.class,
+            Giant.class,
+            Guardian.class,
+            Hoglin.class,
+            Husk.class,
+            Illusioner.class,
+            MagmaCube.class,
+            Phantom.class,
+            Pillager.class,
+            Shulker.class,
+            Silverfish.class,
+            Skeleton.class,
+            Slime.class,
+            Spider.class,
+            Stray.class,
+            Vex.class,
+            Vindicator.class,
+            Witch.class,
+            WitherSkeleton.class,
+            Zoglin.class,
+            Zombie.class,
+            ZombieVillager.class,
+            ZombifiedPiglin.class
+    };
+
+    public static Class<?>[] huntMobs = new Class<?>[]{
+            Chicken.class,
+            Cow.class,
+            MushroomCow.class,
+            Pig.class,
+            Rabbit.class,
+            Sheep.class
+    };
 
     public static ResourceLocation[] maleSkins = new ResourceLocation[]{
             new ResourceLocation(HumanCompanions.MOD_ID, "textures/entities/medieval-man-hugh.png"),
@@ -58,6 +103,17 @@ public class CompanionData {
         String firstName = maleFirstNames[rand.nextInt(maleFirstNames.length)];
         String lastName = lastNames[rand.nextInt(lastNames.length)];
         return firstName + " " + lastName;
+    }
+
+    public static String getRandomCompanionType() {
+        Random rand = new Random();
+        int type = rand.nextInt(2);
+        if (type == 0) {
+            return "knight";
+        }
+        else {
+            return "archer";
+        }
     }
 
     public static String[] maleFirstNames = new String[] {

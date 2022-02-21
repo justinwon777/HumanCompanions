@@ -1,9 +1,9 @@
 package com.github.justinwon777.humancompanions;
 
-import com.github.justinwon777.humancompanions.client.renderer.ArcherRenderer;
-import com.github.justinwon777.humancompanions.client.renderer.KnightRenderer;
+import com.github.justinwon777.humancompanions.client.renderer.HumanCompanionRenderer;
 import com.github.justinwon777.humancompanions.core.ConfiguredStructures;
 import com.github.justinwon777.humancompanions.core.EntityInit;
+import com.github.justinwon777.humancompanions.core.PacketHandler;
 import com.github.justinwon777.humancompanions.core.StructureInit;
 import com.mojang.serialization.Codec;
 import net.minecraft.util.RegistryKey;
@@ -47,6 +47,7 @@ public class HumanCompanions
         IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
         EntityInit.ENTITIES.register(eventBus);
         StructureInit.DEFERRED_REGISTRY_STRUCTURE.register(eventBus);
+        PacketHandler.register();
         eventBus.addListener(this::setup);
         eventBus.addListener(this::doClientStuff);
 
@@ -64,8 +65,7 @@ public class HumanCompanions
     }
 
     private void doClientStuff(final FMLClientSetupEvent event) {
-        RenderingRegistry.registerEntityRenderingHandler(EntityInit.KnightEntity.get(), KnightRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(EntityInit.ArcherEntity.get(), ArcherRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntityInit.HumanCompanionEntity.get(), HumanCompanionRenderer::new);
     }
 
     public void biomeModification(final BiomeLoadingEvent event) {
@@ -82,6 +82,8 @@ public class HumanCompanions
             event.getGeneration().getStructures().add(() -> ConfiguredStructures.Configured_Acacia_House);
         } else if (key.compareTo(Biomes.SNOWY_TAIGA) == 0 || key.compareTo(Biomes.SNOWY_TAIGA_HILLS) == 0 || key.compareTo(Biomes.SNOWY_TAIGA_MOUNTAINS) == 0 || key.compareTo(Biomes.TAIGA) == 0 || key.compareTo(Biomes.TAIGA_HILLS) == 0 || key.compareTo(Biomes.TAIGA_MOUNTAINS) == 0 || key.compareTo(Biomes.GIANT_SPRUCE_TAIGA) == 0 || key.compareTo(Biomes.GIANT_SPRUCE_TAIGA_HILLS) == 0 || key.compareTo(Biomes.GIANT_TREE_TAIGA) == 0 || key.compareTo(Biomes.GIANT_TREE_TAIGA_HILLS) == 0) {
             event.getGeneration().getStructures().add(() -> ConfiguredStructures.Configured_Spruce_House);
+        } else if (key.compareTo(Biomes.DARK_FOREST) == 0 || key.compareTo(Biomes.DARK_FOREST_HILLS) == 0) {
+            event.getGeneration().getStructures().add(() -> ConfiguredStructures.Configured_DarkOak_House);
         }
     }
 

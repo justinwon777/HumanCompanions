@@ -1,9 +1,7 @@
 package com.github.justinwon777.humancompanions.core;
 
 import com.github.justinwon777.humancompanions.HumanCompanions;
-//import com.github.justinwon777.humancompanions.entity.ArcherEntity;
-import com.github.justinwon777.humancompanions.entity.ArcherEntity;
-import com.github.justinwon777.humancompanions.entity.KnightEntity;
+import com.github.justinwon777.humancompanions.entity.HumanCompanionEntity;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.ResourceLocation;
@@ -17,13 +15,9 @@ public final class EntityInit {
 
     public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITIES, HumanCompanions.MOD_ID);
 
-    public static final RegistryObject<EntityType<KnightEntity>> KnightEntity =
-            ENTITIES.register("knight", () -> EntityType.Builder.of(KnightEntity::new, EntityClassification.AMBIENT)
+    public static final RegistryObject<EntityType<HumanCompanionEntity>> HumanCompanionEntity =
+            ENTITIES.register("companion", () -> EntityType.Builder.of(HumanCompanionEntity::new,
+                            EntityClassification.AMBIENT)
                     .sized(0.6F, 1.8F)
-                    .build(new ResourceLocation(HumanCompanions.MOD_ID, "knight").toString()));
-
-    public static final RegistryObject<EntityType<ArcherEntity>> ArcherEntity =
-            ENTITIES.register("archer", () -> EntityType.Builder.of(ArcherEntity::new, EntityClassification.AMBIENT)
-                    .sized(0.6F, 1.8F)
-                    .build(new ResourceLocation(HumanCompanions.MOD_ID, "archer").toString()));
+                    .build(new ResourceLocation(HumanCompanions.MOD_ID, "companion").toString()));
 }

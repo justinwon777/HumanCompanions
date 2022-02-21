@@ -1,9 +1,6 @@
 package com.github.justin.humancompanions;
 
-import com.github.justin.humancompanions.core.ConfiguredStructures;
-import com.github.justin.humancompanions.core.ContainerInit;
-import com.github.justin.humancompanions.core.EntityInit;
-import com.github.justin.humancompanions.core.StructureInit;
+import com.github.justin.humancompanions.core.*;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMultimap;
@@ -48,8 +45,8 @@ public class HumanCompanions {
         IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         EntityInit.ENTITIES.register(eventBus);
-        ContainerInit.CONTAINERS.register(eventBus);
         StructureInit.DEFERRED_REGISTRY_STRUCTURE.register(eventBus);
+        PacketHandler.register();
         eventBus.addListener(this::setup);
 
         IEventBus forgeBus = MinecraftForge.EVENT_BUS;
@@ -116,6 +113,10 @@ public class HumanCompanions {
                     .add(Biomes.OLD_GROWTH_SPRUCE_TAIGA)
                     .build();
 
+            ImmutableSet<ResourceKey<Biome>> darkOakBiomes = ImmutableSet.<ResourceKey<Biome>>builder()
+                    .add(Biomes.DARK_FOREST)
+                    .build();
+
             oakBiomes.forEach(biomeKey -> associateBiomeToConfiguredStructure(StructureToMultiMap,
                     ConfiguredStructures.Configured_Oak_House, biomeKey));
             oakAndBirchBiomes.forEach(biomeKey -> associateBiomeToConfiguredStructure(StructureToMultiMap,
@@ -128,6 +129,8 @@ public class HumanCompanions {
                     ConfiguredStructures.Configured_Spruce_House, biomeKey));
             sandstoneBiomes.forEach(biomeKey -> associateBiomeToConfiguredStructure(StructureToMultiMap,
                     ConfiguredStructures.Configured_Sandstone_House, biomeKey));
+            darkOakBiomes.forEach(biomeKey -> associateBiomeToConfiguredStructure(StructureToMultiMap,
+                    ConfiguredStructures.Configured_DarkOak_House, biomeKey));
 
             ImmutableMap.Builder<StructureFeature<?>, ImmutableMultimap<ConfiguredStructureFeature<?, ?>, ResourceKey<Biome>>> tempStructureToMultiMap = ImmutableMap.builder();
             worldStructureConfig.configuredStructures.entrySet().stream().filter(entry -> !StructureToMultiMap.containsKey(entry.getKey())).forEach(tempStructureToMultiMap::put);

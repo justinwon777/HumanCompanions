@@ -6,12 +6,12 @@ import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.item.ItemStack;
 
 public class LowHealthGoal extends Goal {
-    protected final AbstractHumanCompanionEntity mob;
+    protected final HumanCompanionEntity mob;
     int startTick = 0;
     TextComponent text = new TextComponent("I need food!");
     ItemStack food = ItemStack.EMPTY;
 
-    public LowHealthGoal (AbstractHumanCompanionEntity entity) {
+    public LowHealthGoal (HumanCompanionEntity entity) {
         this.mob = entity;
     }
 
@@ -26,16 +26,20 @@ public class LowHealthGoal extends Goal {
 
     public void start() {
         startTick = this.mob.tickCount;
-        this.mob.getOwner().sendMessage(new TranslatableComponent("chat.type.text", this.mob.getDisplayName(), text),
-                this.mob.getUUID());
+        if (this.mob.getOwner() != null) {
+            this.mob.getOwner().sendMessage(new TranslatableComponent("chat.type.text", this.mob.getDisplayName(), text),
+                    this.mob.getUUID());
+        }
     }
 
     public void tick() {
         if ((this.mob.tickCount - startTick) % (15 * 20) == 0 && this.mob.tickCount > startTick) {
-            this.mob.getOwner().sendMessage(new TranslatableComponent("chat.type.text", this.mob.getDisplayName(),
-                            text),
-                    this.mob.getUUID());
+            if (this.mob.getOwner() != null) {
+                this.mob.getOwner().sendMessage(new TranslatableComponent("chat.type.text", this.mob.getDisplayName(),
+                                text),
+                        this.mob.getUUID());
             }
+        }
 
     }
 }

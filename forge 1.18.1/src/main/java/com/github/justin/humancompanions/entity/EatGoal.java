@@ -6,10 +6,10 @@ import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.item.ItemStack;
 
 public class EatGoal extends Goal {
-    protected final AbstractHumanCompanionEntity companion;
+    protected final HumanCompanionEntity companion;
     ItemStack food = ItemStack.EMPTY;
 
-    public EatGoal(AbstractHumanCompanionEntity entity) {
+    public EatGoal(HumanCompanionEntity entity) {
         this.companion = entity;
     }
 

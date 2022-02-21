@@ -20,38 +20,71 @@ public class ConfiguredStructures {
     public static final JigsawPattern ACACIA_POOL;
     public static final JigsawPattern SANDSTONE_POOL;
     public static final JigsawPattern SPRUCE_POOL;
+    public static final JigsawPattern DARKOAK_POOL;
     static {
         OAK_POOL = JigsawPatternRegistry.register(new JigsawPattern(new ResourceLocation(HumanCompanions.MOD_ID, "pool"),
                 new ResourceLocation("empty"), ImmutableList.of(
-                Pair.of(JigsawPiece.legacy(HumanCompanions.MOD_ID + ":knight_oak_house"), 1),
-                Pair.of(JigsawPiece.legacy(HumanCompanions.MOD_ID + ":archer_oak_house"), 1)
+                Pair.of(JigsawPiece.legacy(HumanCompanions.MOD_ID + ":medieval_mixed1"), 1),
+                Pair.of(JigsawPiece.legacy(HumanCompanions.MOD_ID + ":medieval_mixed2"), 1),
+                Pair.of(JigsawPiece.legacy(HumanCompanions.MOD_ID + ":medieval_mixed3"), 1),
+                Pair.of(JigsawPiece.legacy(HumanCompanions.MOD_ID + ":medieval_mixed_double"), 1),
+                Pair.of(JigsawPiece.legacy(HumanCompanions.MOD_ID + ":medieval_oak_double"), 1),
+                Pair.of(JigsawPiece.legacy(HumanCompanions.MOD_ID + ":cabin"), 1),
+                Pair.of(JigsawPiece.legacy(HumanCompanions.MOD_ID + ":cabin2"), 1),
+                Pair.of(JigsawPiece.legacy(HumanCompanions.MOD_ID + ":medieval_triple"), 1),
+                Pair.of(JigsawPiece.legacy(HumanCompanions.MOD_ID + ":oak_house"), 2)
         ), JigsawPattern.PlacementBehaviour.RIGID));
         OAK_BIRCH_POOL = JigsawPatternRegistry.register(new JigsawPattern(new ResourceLocation(HumanCompanions.MOD_ID, "pool"),
                 new ResourceLocation("empty"), ImmutableList.of(
-                Pair.of(JigsawPiece.legacy(HumanCompanions.MOD_ID + ":knight_oak_house"), 1),
-                Pair.of(JigsawPiece.legacy(HumanCompanions.MOD_ID + ":archer_oak_house"), 1),
-                Pair.of(JigsawPiece.legacy(HumanCompanions.MOD_ID + ":knight_birch_house"), 1),
-                Pair.of(JigsawPiece.legacy(HumanCompanions.MOD_ID + ":archer_birch_house"), 1)
+                Pair.of(JigsawPiece.legacy(HumanCompanions.MOD_ID + ":medieval_mixed1"), 1),
+                Pair.of(JigsawPiece.legacy(HumanCompanions.MOD_ID + ":medieval_mixed2"), 1),
+                Pair.of(JigsawPiece.legacy(HumanCompanions.MOD_ID + ":medieval_mixed3"), 1),
+                Pair.of(JigsawPiece.legacy(HumanCompanions.MOD_ID + ":medieval_mixed_double"), 1),
+                Pair.of(JigsawPiece.legacy(HumanCompanions.MOD_ID + ":medieval_oak_double"), 1),
+                Pair.of(JigsawPiece.legacy(HumanCompanions.MOD_ID + ":medieval_birch_double"), 1),
+                Pair.of(JigsawPiece.legacy(HumanCompanions.MOD_ID + ":oak_house"), 2),
+                Pair.of(JigsawPiece.legacy(HumanCompanions.MOD_ID + ":birch_house"), 2)
         ), JigsawPattern.PlacementBehaviour.RIGID));
         BIRCH_POOL = JigsawPatternRegistry.register(new JigsawPattern(new ResourceLocation(HumanCompanions.MOD_ID, "pool"),
                 new ResourceLocation("empty"), ImmutableList.of(
-                Pair.of(JigsawPiece.legacy(HumanCompanions.MOD_ID + ":knight_birch_house"), 1),
-                Pair.of(JigsawPiece.legacy(HumanCompanions.MOD_ID + ":archer_birch_house"), 1)
+                Pair.of(JigsawPiece.legacy(HumanCompanions.MOD_ID + ":medieval_mixed1"), 1),
+                Pair.of(JigsawPiece.legacy(HumanCompanions.MOD_ID + ":medieval_mixed2"), 1),
+                Pair.of(JigsawPiece.legacy(HumanCompanions.MOD_ID + ":medieval_mixed3"), 1),
+                Pair.of(JigsawPiece.legacy(HumanCompanions.MOD_ID + ":medieval_mixed_double"), 1),
+                Pair.of(JigsawPiece.legacy(HumanCompanions.MOD_ID + ":medieval_birch_double"), 1),
+                Pair.of(JigsawPiece.legacy(HumanCompanions.MOD_ID + ":birch_house"), 2)
         ), JigsawPattern.PlacementBehaviour.RIGID));
         ACACIA_POOL = JigsawPatternRegistry.register(new JigsawPattern(new ResourceLocation(HumanCompanions.MOD_ID, "pool"),
                 new ResourceLocation("empty"), ImmutableList.of(
-                Pair.of(JigsawPiece.legacy(HumanCompanions.MOD_ID + ":knight_acacia_house"), 1),
-                Pair.of(JigsawPiece.legacy(HumanCompanions.MOD_ID + ":archer_acacia_house"), 1)
+                Pair.of(JigsawPiece.legacy(HumanCompanions.MOD_ID + ":medieval_mixed1"), 1),
+                Pair.of(JigsawPiece.legacy(HumanCompanions.MOD_ID + ":medieval_mixed2"), 1),
+                Pair.of(JigsawPiece.legacy(HumanCompanions.MOD_ID + ":medieval_mixed3"), 1),
+                Pair.of(JigsawPiece.legacy(HumanCompanions.MOD_ID + ":medieval_mixed_double"), 1),
+                Pair.of(JigsawPiece.legacy(HumanCompanions.MOD_ID + ":medieval_acacia_double"), 1),
+                Pair.of(JigsawPiece.legacy(HumanCompanions.MOD_ID + ":acacia_house"), 1)
         ), JigsawPattern.PlacementBehaviour.RIGID));
         SPRUCE_POOL = JigsawPatternRegistry.register(new JigsawPattern(new ResourceLocation(HumanCompanions.MOD_ID, "pool"),
                 new ResourceLocation("empty"), ImmutableList.of(
-                Pair.of(JigsawPiece.legacy(HumanCompanions.MOD_ID + ":knight_spruce_house"), 1),
-                Pair.of(JigsawPiece.legacy(HumanCompanions.MOD_ID + ":archer_spruce_house"), 1)
+                Pair.of(JigsawPiece.legacy(HumanCompanions.MOD_ID + ":medieval_mixed1"), 1),
+                Pair.of(JigsawPiece.legacy(HumanCompanions.MOD_ID + ":medieval_mixed2"), 1),
+                Pair.of(JigsawPiece.legacy(HumanCompanions.MOD_ID + ":medieval_mixed3"), 1),
+                Pair.of(JigsawPiece.legacy(HumanCompanions.MOD_ID + ":medieval_mixed_double"), 1),
+                Pair.of(JigsawPiece.legacy(HumanCompanions.MOD_ID + ":medieval_spruce_darkoak"), 3),
+                Pair.of(JigsawPiece.legacy(HumanCompanions.MOD_ID + ":cabin"), 3),
+                Pair.of(JigsawPiece.legacy(HumanCompanions.MOD_ID + ":cabin2"), 3),
+                Pair.of(JigsawPiece.legacy(HumanCompanions.MOD_ID + ":medieval_triple"), 1),
+                Pair.of(JigsawPiece.legacy(HumanCompanions.MOD_ID + ":medieval_spruce_double"), 1),
+                Pair.of(JigsawPiece.legacy(HumanCompanions.MOD_ID + ":spruce_house"), 2)
         ), JigsawPattern.PlacementBehaviour.RIGID));
         SANDSTONE_POOL = JigsawPatternRegistry.register(new JigsawPattern(new ResourceLocation(HumanCompanions.MOD_ID, "pool"),
                 new ResourceLocation("empty"), ImmutableList.of(
-                Pair.of(JigsawPiece.legacy(HumanCompanions.MOD_ID + ":knight_sandstone_house"), 1),
-                Pair.of(JigsawPiece.legacy(HumanCompanions.MOD_ID + ":archer_sandstone_house"), 1)
+                Pair.of(JigsawPiece.legacy(HumanCompanions.MOD_ID + ":fortified_desert"), 1),
+                Pair.of(JigsawPiece.legacy(HumanCompanions.MOD_ID + ":sandstone_house"), 1)
+        ), JigsawPattern.PlacementBehaviour.RIGID));
+        DARKOAK_POOL = JigsawPatternRegistry.register(new JigsawPattern(new ResourceLocation(HumanCompanions.MOD_ID, "pool"),
+                new ResourceLocation("empty"), ImmutableList.of(
+                Pair.of(JigsawPiece.legacy(HumanCompanions.MOD_ID + ":medieval_spruce_darkoak"), 3),
+                Pair.of(JigsawPiece.legacy(HumanCompanions.MOD_ID + ":medieval_spruce_double"), 1)
         ), JigsawPattern.PlacementBehaviour.RIGID));
     }
     public static StructureFeature<?, ?> Configured_Oak_House = StructureInit.COMPANION_HOUSE.get()
@@ -66,6 +99,8 @@ public class ConfiguredStructures {
             .configured(new VillageConfig(() -> SANDSTONE_POOL, 1));
     public static StructureFeature<?, ?> Configured_Spruce_House = StructureInit.COMPANION_HOUSE.get()
             .configured(new VillageConfig(() -> SPRUCE_POOL, 1));
+    public static StructureFeature<?, ?> Configured_DarkOak_House = StructureInit.COMPANION_HOUSE.get()
+            .configured(new VillageConfig(() -> DARKOAK_POOL, 1));
 
     public static void registerConfiguredStructures() {
         Registry<StructureFeature<?, ?>> registry = WorldGenRegistries.CONFIGURED_STRUCTURE_FEATURE;
@@ -81,11 +116,14 @@ public class ConfiguredStructures {
                 Configured_Sandstone_House);
         Registry.register(registry, new ResourceLocation(HumanCompanions.MOD_ID, "configured_companion_house"),
                 Configured_Spruce_House);
+        Registry.register(registry, new ResourceLocation(HumanCompanions.MOD_ID, "configured_companion_house"),
+                Configured_DarkOak_House);
         FlatGenerationSettings.STRUCTURE_FEATURES.put(StructureInit.COMPANION_HOUSE.get(), Configured_Oak_House);
         FlatGenerationSettings.STRUCTURE_FEATURES.put(StructureInit.COMPANION_HOUSE.get(), Configured_Oak_Birch_House);
         FlatGenerationSettings.STRUCTURE_FEATURES.put(StructureInit.COMPANION_HOUSE.get(), Configured_Birch_House);
         FlatGenerationSettings.STRUCTURE_FEATURES.put(StructureInit.COMPANION_HOUSE.get(), Configured_Acacia_House);
         FlatGenerationSettings.STRUCTURE_FEATURES.put(StructureInit.COMPANION_HOUSE.get(), Configured_Sandstone_House);
         FlatGenerationSettings.STRUCTURE_FEATURES.put(StructureInit.COMPANION_HOUSE.get(), Configured_Spruce_House);
+        FlatGenerationSettings.STRUCTURE_FEATURES.put(StructureInit.COMPANION_HOUSE.get(), Configured_DarkOak_House);
     }
 }

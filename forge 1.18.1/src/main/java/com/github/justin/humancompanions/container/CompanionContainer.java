@@ -1,13 +1,9 @@
 package com.github.justin.humancompanions.container;
 
-import com.github.justin.humancompanions.entity.AbstractHumanCompanionEntity;
 import net.minecraft.world.Container;
-import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.MenuConstructor;
-import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 
@@ -15,16 +11,8 @@ public class CompanionContainer extends AbstractContainerMenu {
     private final Container container;
     private final int containerRows;
 
-    public static MenuConstructor getServerContainer(AbstractHumanCompanionEntity entity) {
-        return (id, playerInv, player) -> new CompanionContainer( id, playerInv, entity.inventory);
-    }
-
-    public CompanionContainer(int p_39230_, Inventory p_39231_) {
-        this(p_39230_, p_39231_, new SimpleContainer(27));
-    };
-
     public CompanionContainer(int p_39230_, Inventory p_39231_, Container p_39232_) {
-        super(MenuType.GENERIC_9x3, p_39230_);
+        super(null, p_39230_);
         checkContainerSize(p_39232_, 3 * 9);
         this.container = p_39232_;
         this.containerRows = 3;

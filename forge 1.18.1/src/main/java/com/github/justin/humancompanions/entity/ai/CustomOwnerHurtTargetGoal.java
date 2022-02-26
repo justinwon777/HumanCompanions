@@ -1,4 +1,4 @@
-package com.github.justin.humancompanions.entity;
+package com.github.justin.humancompanions.entity.ai;
 
 import java.util.EnumSet;
 import net.minecraft.world.entity.LivingEntity;
@@ -6,6 +6,7 @@ import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.target.TargetGoal;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
+import net.minecraft.world.entity.monster.Creeper;
 
 public class CustomOwnerHurtTargetGoal extends TargetGoal {
     private final TamableAnimal tameAnimal;
@@ -31,6 +32,8 @@ public class CustomOwnerHurtTargetGoal extends TargetGoal {
                             return false;
                         }
                     }
+                } else if (this.ownerLastHurt instanceof Creeper) {
+                    return false;
                 }
                 int i = livingentity.getLastHurtMobTimestamp();
                 return i != this.timestamp && this.canAttack(this.ownerLastHurt, TargetingConditions.DEFAULT) && this.tameAnimal.wantsToAttack(this.ownerLastHurt, livingentity);

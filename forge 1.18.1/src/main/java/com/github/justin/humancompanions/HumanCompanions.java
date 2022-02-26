@@ -30,6 +30,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.lwjgl.system.CallbackI;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -82,27 +83,22 @@ public class HumanCompanions {
                     .add(Biomes.SPARSE_JUNGLE)
                     .add(Biomes.BAMBOO_JUNGLE)
                     .build();
-
             ImmutableSet<ResourceKey<Biome>> oakAndBirchBiomes = ImmutableSet.<ResourceKey<Biome>>builder()
                     .add(Biomes.FOREST)
                     .add(Biomes.FLOWER_FOREST)
                     .build();
-
             ImmutableSet<ResourceKey<Biome>> birchBiomes = ImmutableSet.<ResourceKey<Biome>>builder()
                     .add(Biomes.BIRCH_FOREST)
                     .add(Biomes.OLD_GROWTH_BIRCH_FOREST)
                     .build();
-
             ImmutableSet<ResourceKey<Biome>> sandstoneBiomes = ImmutableSet.<ResourceKey<Biome>>builder()
                     .add(Biomes.DESERT)
                     .build();
-
             ImmutableSet<ResourceKey<Biome>> acaciaBiomes = ImmutableSet.<ResourceKey<Biome>>builder()
                     .add(Biomes.SAVANNA)
                     .add(Biomes.SAVANNA_PLATEAU)
                     .add(Biomes.WINDSWEPT_SAVANNA)
                     .build();
-
             ImmutableSet<ResourceKey<Biome>> spruceBiomes = ImmutableSet.<ResourceKey<Biome>>builder()
                     .add(Biomes.SNOWY_PLAINS)
                     .add(Biomes.SNOWY_TAIGA)
@@ -112,9 +108,13 @@ public class HumanCompanions {
                     .add(Biomes.OLD_GROWTH_PINE_TAIGA)
                     .add(Biomes.OLD_GROWTH_SPRUCE_TAIGA)
                     .build();
-
             ImmutableSet<ResourceKey<Biome>> darkOakBiomes = ImmutableSet.<ResourceKey<Biome>>builder()
                     .add(Biomes.DARK_FOREST)
+                    .build();
+            ImmutableSet<ResourceKey<Biome>> terracottaBiomes = ImmutableSet.<ResourceKey<Biome>>builder()
+                    .add(Biomes.BADLANDS)
+                    .add(Biomes.ERODED_BADLANDS)
+                    .add(Biomes.WOODED_BADLANDS)
                     .build();
 
             oakBiomes.forEach(biomeKey -> associateBiomeToConfiguredStructure(StructureToMultiMap,
@@ -131,6 +131,8 @@ public class HumanCompanions {
                     ConfiguredStructures.Configured_Sandstone_House, biomeKey));
             darkOakBiomes.forEach(biomeKey -> associateBiomeToConfiguredStructure(StructureToMultiMap,
                     ConfiguredStructures.Configured_DarkOak_House, biomeKey));
+            terracottaBiomes.forEach(biomeKey -> associateBiomeToConfiguredStructure(StructureToMultiMap,
+                    ConfiguredStructures.Configured_Terracotta_House, biomeKey));
 
             ImmutableMap.Builder<StructureFeature<?>, ImmutableMultimap<ConfiguredStructureFeature<?, ?>, ResourceKey<Biome>>> tempStructureToMultiMap = ImmutableMap.builder();
             worldStructureConfig.configuredStructures.entrySet().stream().filter(entry -> !StructureToMultiMap.containsKey(entry.getKey())).forEach(tempStructureToMultiMap::put);

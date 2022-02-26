@@ -1,4 +1,5 @@
 {
-  "entity.humancompanions.companion": "Companion",
+  "entity.humancompanions.knight": "Knight",
+  "entity.humancompanions.archer": "Archer",
   "container.humancompanions.companion_inventory": "Companion Inventory"
 }

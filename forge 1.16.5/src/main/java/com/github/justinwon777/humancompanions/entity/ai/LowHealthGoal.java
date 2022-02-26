@@ -1,17 +1,18 @@
-package com.github.justinwon777.humancompanions.entity;
+package com.github.justinwon777.humancompanions.entity.ai;
 
+import com.github.justinwon777.humancompanions.entity.AbstractHumanCompanionEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
 public class LowHealthGoal extends Goal {
-    protected final HumanCompanionEntity mob;
+    protected final AbstractHumanCompanionEntity mob;
     int startTick = 0;
     StringTextComponent text = new StringTextComponent("I need food!");
     ItemStack food = ItemStack.EMPTY;
 
-    public LowHealthGoal(HumanCompanionEntity entity) {
+    public LowHealthGoal(AbstractHumanCompanionEntity entity) {
         this.mob = entity;
     }
 

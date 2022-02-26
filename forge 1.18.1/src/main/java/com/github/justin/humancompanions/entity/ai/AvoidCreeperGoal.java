@@ -1,4 +1,4 @@
-package com.github.justin.humancompanions.entity;
+package com.github.justin.humancompanions.entity.ai;
 
 import java.util.EnumSet;
 import java.util.function.Predicate;

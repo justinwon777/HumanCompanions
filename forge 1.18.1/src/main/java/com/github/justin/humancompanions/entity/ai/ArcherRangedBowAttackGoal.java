@@ -1,15 +1,15 @@
-package com.github.justin.humancompanions.entity;
+package com.github.justin.humancompanions.entity.ai;
 
+import com.github.justin.humancompanions.entity.AbstractHumanCompanionEntity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.BowItem;
 
 import java.util.EnumSet;
 
-public class ArcherRangedBowAttackGoal<T extends HumanCompanionEntity & RangedAttackMob> extends Goal {
+public class ArcherRangedBowAttackGoal<T extends AbstractHumanCompanionEntity & RangedAttackMob> extends Goal {
     private final T mob;
     private final double speedModifier;
     private int attackIntervalMin;
@@ -33,7 +33,7 @@ public class ArcherRangedBowAttackGoal<T extends HumanCompanionEntity & RangedAt
         if (mob.isEating()) {
             return false;
         } else {
-            return this.mob.getTarget() == null ? false : this.isHoldingBow();
+            return this.mob.getTarget() != null && this.isHoldingBow();
         }
     }
 

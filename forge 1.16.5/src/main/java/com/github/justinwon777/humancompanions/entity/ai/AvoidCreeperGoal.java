@@ -1,4 +1,4 @@
-package com.github.justinwon777.humancompanions.entity;
+package com.github.justinwon777.humancompanions.entity.ai;
 
 import net.minecraft.entity.EntityPredicate;
 import net.minecraft.entity.LivingEntity;

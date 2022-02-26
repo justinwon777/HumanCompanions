@@ -20,6 +20,8 @@ public class ConfiguredStructures {
     public static final StructureTemplatePool SANDSTONE_POOL;
     public static final StructureTemplatePool SPRUCE_POOL;
     public static final StructureTemplatePool DARKOAK_POOL;
+    public static final StructureTemplatePool TERRACOTTA_POOL;
+    public static final StructureTemplatePool COMPANIONS_POOL;
 
     static {
         OAK_POOL = Pools.register(new StructureTemplatePool(new ResourceLocation(HumanCompanions.MOD_ID, "pool"),
@@ -79,13 +81,28 @@ public class ConfiguredStructures {
         ), StructureTemplatePool.Projection.RIGID));
         SANDSTONE_POOL = Pools.register(new StructureTemplatePool(new ResourceLocation(HumanCompanions.MOD_ID, "pool"),
                 new ResourceLocation("empty"), ImmutableList.of(
-                Pair.of(StructurePoolElement.legacy(HumanCompanions.MOD_ID + ":fortified_desert"), 1),
-                Pair.of(StructurePoolElement.legacy(HumanCompanions.MOD_ID + ":sandstone_house"), 1)
+                Pair.of(StructurePoolElement.legacy(HumanCompanions.MOD_ID + ":fortified_desert"), 2),
+                Pair.of(StructurePoolElement.legacy(HumanCompanions.MOD_ID + ":sandstone_house"), 2),
+                Pair.of(StructurePoolElement.legacy(HumanCompanions.MOD_ID + ":desert"), 2),
+                Pair.of(StructurePoolElement.legacy(HumanCompanions.MOD_ID + ":desert_double"), 1)
         ), StructureTemplatePool.Projection.RIGID));
         DARKOAK_POOL = Pools.register(new StructureTemplatePool(new ResourceLocation(HumanCompanions.MOD_ID, "pool"),
                 new ResourceLocation("empty"), ImmutableList.of(
                 Pair.of(StructurePoolElement.legacy(HumanCompanions.MOD_ID + ":medieval_spruce_darkoak"), 3),
                 Pair.of(StructurePoolElement.legacy(HumanCompanions.MOD_ID + ":medieval_spruce_double"), 1)
+        ), StructureTemplatePool.Projection.RIGID));
+        TERRACOTTA_POOL = Pools.register(new StructureTemplatePool(new ResourceLocation(HumanCompanions.MOD_ID, "pool"),
+                new ResourceLocation("empty"), ImmutableList.of(
+                Pair.of(StructurePoolElement.legacy(HumanCompanions.MOD_ID + ":terracotta1"), 2),
+                Pair.of(StructurePoolElement.legacy(HumanCompanions.MOD_ID + ":terracotta2"), 2),
+                Pair.of(StructurePoolElement.legacy(HumanCompanions.MOD_ID + ":terracotta_double"), 1)
+        ), StructureTemplatePool.Projection.RIGID));
+        COMPANIONS_POOL = Pools.register(new StructureTemplatePool(new ResourceLocation(HumanCompanions.MOD_ID,
+                "companions"),
+                new ResourceLocation("empty"), ImmutableList.of(
+                Pair.of(StructurePoolElement.legacy(HumanCompanions.MOD_ID + ":companions/knight"), 1),
+                Pair.of(StructurePoolElement.legacy(HumanCompanions.MOD_ID + ":companions/archer"), 1),
+                Pair.of(StructurePoolElement.legacy(HumanCompanions.MOD_ID + ":companions/arbalist"), 1)
         ), StructureTemplatePool.Projection.RIGID));
     }
     public static ConfiguredStructureFeature<?, ?> Configured_Oak_House = StructureInit.COMPANION_HOUSE.get()
@@ -102,6 +119,8 @@ public class ConfiguredStructures {
             .configured(new JigsawConfiguration(() -> SPRUCE_POOL, 1));
     public static ConfiguredStructureFeature<?, ?> Configured_DarkOak_House = StructureInit.COMPANION_HOUSE.get()
             .configured(new JigsawConfiguration(() -> SPRUCE_POOL, 1));
+    public static ConfiguredStructureFeature<?, ?> Configured_Terracotta_House = StructureInit.COMPANION_HOUSE.get()
+            .configured(new JigsawConfiguration(() -> TERRACOTTA_POOL, 1));
 
     public static void registerConfiguredStructures() {
         Registry<ConfiguredStructureFeature<?, ?>> registry = BuiltinRegistries.CONFIGURED_STRUCTURE_FEATURE;
@@ -119,5 +138,7 @@ public class ConfiguredStructures {
                 Configured_Spruce_House);
         Registry.register(registry, new ResourceLocation(HumanCompanions.MOD_ID, "configured_companion_house"),
                 Configured_DarkOak_House);
+        Registry.register(registry, new ResourceLocation(HumanCompanions.MOD_ID, "configured_companion_house"),
+                Configured_Terracotta_House);
     }
 }

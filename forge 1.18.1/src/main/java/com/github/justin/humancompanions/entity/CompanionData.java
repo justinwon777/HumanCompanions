@@ -107,13 +107,14 @@ public class CompanionData {
 
     public static String getRandomCompanionType() {
         Random rand = new Random();
-        int type = rand.nextInt(2);
-        if (type == 0) {
-            return "knight";
+        int type = rand.nextInt(3);
+        String typeString = null;
+        switch (type) {
+            case 0 -> typeString = "knight";
+            case 1 -> typeString = "archer";
+            case 2 -> typeString = "arbalist";
         }
-        else {
-            return "archer";
-        }
+        return typeString;
     }
 
     public static String[] maleFirstNames = new String[] {

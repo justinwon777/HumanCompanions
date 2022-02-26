@@ -1,6 +1,6 @@
 package com.github.justinwon777.humancompanions.networking;
 
-import com.github.justinwon777.humancompanions.entity.HumanCompanionEntity;
+import com.github.justinwon777.humancompanions.entity.AbstractHumanCompanionEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
@@ -35,8 +35,8 @@ public class SetAlertPacket {
                     ServerPlayerEntity player = context.get().getSender();
                     if (player != null && player.level instanceof ServerWorld) {
                         Entity entity = player.level.getEntity(msg.getEntityId());
-                        if (entity instanceof HumanCompanionEntity) {
-                            HumanCompanionEntity companion = (HumanCompanionEntity) entity;
+                        if (entity instanceof AbstractHumanCompanionEntity) {
+                            AbstractHumanCompanionEntity companion = (AbstractHumanCompanionEntity) entity;
                             companion.setAlert(!companion.isAlert());
                             if (companion.isAlert()) {
                                 companion.addAlertGoals();

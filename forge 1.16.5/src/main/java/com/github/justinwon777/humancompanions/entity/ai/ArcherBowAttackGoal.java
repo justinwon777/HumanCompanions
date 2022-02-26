@@ -1,5 +1,6 @@
-package com.github.justinwon777.humancompanions.entity;
+package com.github.justinwon777.humancompanions.entity.ai;
 
+import com.github.justinwon777.humancompanions.entity.AbstractHumanCompanionEntity;
 import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
@@ -8,7 +9,7 @@ import net.minecraft.item.BowItem;
 
 import java.util.EnumSet;
 
-public class ArcherBowAttackGoal<T extends HumanCompanionEntity & IRangedAttackMob> extends Goal{
+public class ArcherBowAttackGoal<T extends AbstractHumanCompanionEntity & IRangedAttackMob> extends Goal{
     private final T mob;
     private final double speedModifier;
     private int attackIntervalMin;
@@ -31,7 +32,7 @@ public class ArcherBowAttackGoal<T extends HumanCompanionEntity & IRangedAttackM
         if (mob.isEating()) {
             return false;
         } else {
-            return this.mob.getTarget() == null ? false : this.isHoldingBow();
+            return this.mob.getTarget() != null && this.isHoldingBow();
         }
     }
 

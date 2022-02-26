@@ -1,7 +1,9 @@
 package com.github.justinwon777.humancompanions.core;
 
 import com.github.justinwon777.humancompanions.HumanCompanions;
-import com.github.justinwon777.humancompanions.entity.HumanCompanionEntity;
+import com.github.justinwon777.humancompanions.entity.Arbalist;
+import com.github.justinwon777.humancompanions.entity.Archer;
+import com.github.justinwon777.humancompanions.entity.Knight;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.ResourceLocation;
@@ -15,9 +17,18 @@ public final class EntityInit {
 
     public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITIES, HumanCompanions.MOD_ID);
 
-    public static final RegistryObject<EntityType<HumanCompanionEntity>> HumanCompanionEntity =
-            ENTITIES.register("companion", () -> EntityType.Builder.of(HumanCompanionEntity::new,
-                            EntityClassification.AMBIENT)
+    public static final RegistryObject<EntityType<Knight>> Knight =
+            ENTITIES.register("knight", () -> EntityType.Builder.of(Knight::new, EntityClassification.AMBIENT)
                     .sized(0.6F, 1.8F)
-                    .build(new ResourceLocation(HumanCompanions.MOD_ID, "companion").toString()));
+                    .build(new ResourceLocation(HumanCompanions.MOD_ID, "knight").toString()));
+
+    public static final RegistryObject<EntityType<Archer>> Archer =
+            ENTITIES.register("archer", () -> EntityType.Builder.of(Archer::new, EntityClassification.AMBIENT)
+                    .sized(0.6F, 1.8F)
+                    .build(new ResourceLocation(HumanCompanions.MOD_ID, "archer").toString()));
+
+    public static final RegistryObject<EntityType<Arbalist>> Arbalist =
+            ENTITIES.register("arbalist", () -> EntityType.Builder.of(Arbalist::new, EntityClassification.AMBIENT)
+                    .sized(0.6F, 1.8F)
+                    .build(new ResourceLocation(HumanCompanions.MOD_ID, "arbalist").toString()));
 }

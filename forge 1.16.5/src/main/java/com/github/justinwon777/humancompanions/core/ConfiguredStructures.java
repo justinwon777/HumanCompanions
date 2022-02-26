@@ -21,6 +21,8 @@ public class ConfiguredStructures {
     public static final JigsawPattern SANDSTONE_POOL;
     public static final JigsawPattern SPRUCE_POOL;
     public static final JigsawPattern DARKOAK_POOL;
+    public static final JigsawPattern TERRACOTTA_POOL;
+    public static final JigsawPattern COMPANIONS_POOL;
     static {
         OAK_POOL = JigsawPatternRegistry.register(new JigsawPattern(new ResourceLocation(HumanCompanions.MOD_ID, "pool"),
                 new ResourceLocation("empty"), ImmutableList.of(
@@ -78,13 +80,28 @@ public class ConfiguredStructures {
         ), JigsawPattern.PlacementBehaviour.RIGID));
         SANDSTONE_POOL = JigsawPatternRegistry.register(new JigsawPattern(new ResourceLocation(HumanCompanions.MOD_ID, "pool"),
                 new ResourceLocation("empty"), ImmutableList.of(
-                Pair.of(JigsawPiece.legacy(HumanCompanions.MOD_ID + ":fortified_desert"), 1),
-                Pair.of(JigsawPiece.legacy(HumanCompanions.MOD_ID + ":sandstone_house"), 1)
+                Pair.of(JigsawPiece.legacy(HumanCompanions.MOD_ID + ":fortified_desert"), 2),
+                Pair.of(JigsawPiece.legacy(HumanCompanions.MOD_ID + ":sandstone_house"), 2),
+                Pair.of(JigsawPiece.legacy(HumanCompanions.MOD_ID + ":desert"), 2),
+                Pair.of(JigsawPiece.legacy(HumanCompanions.MOD_ID + ":desert_double"), 2)
         ), JigsawPattern.PlacementBehaviour.RIGID));
         DARKOAK_POOL = JigsawPatternRegistry.register(new JigsawPattern(new ResourceLocation(HumanCompanions.MOD_ID, "pool"),
                 new ResourceLocation("empty"), ImmutableList.of(
                 Pair.of(JigsawPiece.legacy(HumanCompanions.MOD_ID + ":medieval_spruce_darkoak"), 3),
                 Pair.of(JigsawPiece.legacy(HumanCompanions.MOD_ID + ":medieval_spruce_double"), 1)
+        ), JigsawPattern.PlacementBehaviour.RIGID));
+        TERRACOTTA_POOL = JigsawPatternRegistry.register(new JigsawPattern(new ResourceLocation(HumanCompanions.MOD_ID, "pool"),
+                new ResourceLocation("empty"), ImmutableList.of(
+                Pair.of(JigsawPiece.legacy(HumanCompanions.MOD_ID + ":terracotta1"), 2),
+                Pair.of(JigsawPiece.legacy(HumanCompanions.MOD_ID + ":terracotta2"), 2),
+                Pair.of(JigsawPiece.legacy(HumanCompanions.MOD_ID + ":terracotta_double"), 1)
+        ), JigsawPattern.PlacementBehaviour.RIGID));
+        COMPANIONS_POOL = JigsawPatternRegistry.register(new JigsawPattern(new ResourceLocation(HumanCompanions.MOD_ID,
+                "companions"),
+                new ResourceLocation("empty"), ImmutableList.of(
+                Pair.of(JigsawPiece.legacy(HumanCompanions.MOD_ID + ":companions/knight"), 1),
+                Pair.of(JigsawPiece.legacy(HumanCompanions.MOD_ID + ":companions/archer"), 1),
+                Pair.of(JigsawPiece.legacy(HumanCompanions.MOD_ID + ":companions/arbalist"), 1)
         ), JigsawPattern.PlacementBehaviour.RIGID));
     }
     public static StructureFeature<?, ?> Configured_Oak_House = StructureInit.COMPANION_HOUSE.get()
@@ -101,6 +118,8 @@ public class ConfiguredStructures {
             .configured(new VillageConfig(() -> SPRUCE_POOL, 1));
     public static StructureFeature<?, ?> Configured_DarkOak_House = StructureInit.COMPANION_HOUSE.get()
             .configured(new VillageConfig(() -> DARKOAK_POOL, 1));
+    public static StructureFeature<?, ?> Configured_Terracotta_House = StructureInit.COMPANION_HOUSE.get()
+            .configured(new VillageConfig(() -> TERRACOTTA_POOL, 1));
 
     public static void registerConfiguredStructures() {
         Registry<StructureFeature<?, ?>> registry = WorldGenRegistries.CONFIGURED_STRUCTURE_FEATURE;
@@ -118,6 +137,8 @@ public class ConfiguredStructures {
                 Configured_Spruce_House);
         Registry.register(registry, new ResourceLocation(HumanCompanions.MOD_ID, "configured_companion_house"),
                 Configured_DarkOak_House);
+        Registry.register(registry, new ResourceLocation(HumanCompanions.MOD_ID, "configured_companion_house"),
+                Configured_Terracotta_House);
         FlatGenerationSettings.STRUCTURE_FEATURES.put(StructureInit.COMPANION_HOUSE.get(), Configured_Oak_House);
         FlatGenerationSettings.STRUCTURE_FEATURES.put(StructureInit.COMPANION_HOUSE.get(), Configured_Oak_Birch_House);
         FlatGenerationSettings.STRUCTURE_FEATURES.put(StructureInit.COMPANION_HOUSE.get(), Configured_Birch_House);
@@ -125,5 +146,6 @@ public class ConfiguredStructures {
         FlatGenerationSettings.STRUCTURE_FEATURES.put(StructureInit.COMPANION_HOUSE.get(), Configured_Sandstone_House);
         FlatGenerationSettings.STRUCTURE_FEATURES.put(StructureInit.COMPANION_HOUSE.get(), Configured_Spruce_House);
         FlatGenerationSettings.STRUCTURE_FEATURES.put(StructureInit.COMPANION_HOUSE.get(), Configured_DarkOak_House);
+        FlatGenerationSettings.STRUCTURE_FEATURES.put(StructureInit.COMPANION_HOUSE.get(), Configured_Terracotta_House);
     }
 }

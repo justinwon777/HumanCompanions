@@ -3,7 +3,7 @@ package com.github.justin.humancompanions.core;
 import com.github.justin.humancompanions.HumanCompanions;
 import com.github.justin.humancompanions.client.CompanionScreen;
 import com.github.justin.humancompanions.container.CompanionContainer;
-import com.github.justin.humancompanions.entity.HumanCompanionEntity;
+import com.github.justin.humancompanions.entity.AbstractHumanCompanionEntity;
 import com.github.justin.humancompanions.networking.OpenInventoryPacket;
 import com.github.justin.humancompanions.networking.SetAlertPacket;
 import com.github.justin.humancompanions.networking.SetHuntingPacket;
@@ -38,8 +38,8 @@ public class PacketHandler {
         Player player = Minecraft.getInstance().player;
         if (player != null) {
             Entity entity = player.level.getEntity(packet.getEntityId());
-            if (entity instanceof HumanCompanionEntity) {
-                HumanCompanionEntity companion = (HumanCompanionEntity) entity;
+            if (entity instanceof AbstractHumanCompanionEntity) {
+                AbstractHumanCompanionEntity companion = (AbstractHumanCompanionEntity) entity;
                 LocalPlayer clientplayerentity = Minecraft.getInstance().player;
                 CompanionContainer container = new CompanionContainer(packet.getId(), player.getInventory(), companion.inventory);
                 clientplayerentity.containerMenu = container;

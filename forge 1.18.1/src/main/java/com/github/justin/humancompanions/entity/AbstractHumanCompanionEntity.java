@@ -3,6 +3,7 @@ package com.github.justin.humancompanions.entity;
 import com.github.justin.humancompanions.container.CompanionContainer;
 import com.github.justin.humancompanions.core.EntityInit;
 import com.github.justin.humancompanions.core.PacketHandler;
+import com.github.justin.humancompanions.entity.ai.*;
 import com.github.justin.humancompanions.networking.OpenInventoryPacket;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.TextComponent;
@@ -13,7 +14,6 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.*;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
@@ -24,10 +24,7 @@ import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
 import net.minecraft.world.entity.monster.Creeper;
-import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.AbstractArrow;
-import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
@@ -40,19 +37,17 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HumanCompanionEntity extends TamableAnimal implements RangedAttackMob {
+public class AbstractHumanCompanionEntity extends TamableAnimal {
 
-    private static final EntityDataAccessor<Integer> DATA_TYPE_ID = SynchedEntityData.defineId(HumanCompanionEntity.class,
+    private static final EntityDataAccessor<Integer> DATA_TYPE_ID = SynchedEntityData.defineId(AbstractHumanCompanionEntity.class,
             EntityDataSerializers.INT);
-    private static final EntityDataAccessor<Boolean> EATING = SynchedEntityData.defineId(HumanCompanionEntity.class,
+    private static final EntityDataAccessor<Boolean> EATING = SynchedEntityData.defineId(AbstractHumanCompanionEntity.class,
             EntityDataSerializers.BOOLEAN);
-    private static final EntityDataAccessor<Boolean> ALERT = SynchedEntityData.defineId(HumanCompanionEntity.class,
+    private static final EntityDataAccessor<Boolean> ALERT = SynchedEntityData.defineId(AbstractHumanCompanionEntity.class,
             EntityDataSerializers.BOOLEAN);
-    private static final EntityDataAccessor<Boolean> HUNTING = SynchedEntityData.defineId(HumanCompanionEntity.class,
+    private static final EntityDataAccessor<Boolean> HUNTING = SynchedEntityData.defineId(AbstractHumanCompanionEntity.class,
             EntityDataSerializers.BOOLEAN);
-    private static final EntityDataAccessor<String > COMPANION_TYPE =
-            SynchedEntityData.defineId(HumanCompanionEntity.class,
-            EntityDataSerializers.STRING);
+
 
     public SimpleContainer inventory = new SimpleContainer(27);
     public EquipmentSlot[] armorTypes = new EquipmentSlot[]{EquipmentSlot.FEET, EquipmentSlot.LEGS,
@@ -60,7 +55,7 @@ public class HumanCompanionEntity extends TamableAnimal implements RangedAttackM
     public List<NearestAttackableTargetGoal> alertMobGoals = new ArrayList<>();
     public List<NearestAttackableTargetGoal> huntMobGoals = new ArrayList<>();
 
-    public HumanCompanionEntity(EntityType<? extends TamableAnimal> entityType, Level level) {
+    public AbstractHumanCompanionEntity(EntityType<? extends TamableAnimal> entityType, Level level) {
         super(entityType, level);
         this.setTame(false);
 //        this.setCanPickUpLoot(true);
@@ -80,8 +75,6 @@ public class HumanCompanionEntity extends TamableAnimal implements RangedAttackM
         this.goalSelector.addGoal(0, new EatGoal(this));
         this.goalSelector.addGoal(1, new SitWhenOrderedToGoal(this));
         this.goalSelector.addGoal(2, new AvoidCreeperGoal(this, Creeper.class, 10.0F, 1.5D, 1.5D));
-        this.goalSelector.addGoal(3, new ArcherRangedBowAttackGoal<>(this, 1.0D, 5, 15.0F));
-        this.goalSelector.addGoal(3, new KnightMeleeAttackGoal(this, 1.0D, true));
         this.goalSelector.addGoal(3, new FollowOwnerGoal(this, 1.3D, 8.0F, 2.0F, false));
         this.goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 1.0D));
         this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 6.0F));
@@ -106,7 +99,6 @@ public class HumanCompanionEntity extends TamableAnimal implements RangedAttackM
         this.entityData.define(EATING, false);
         this.entityData.define(ALERT, false);
         this.entityData.define(HUNTING, true);
-        this.entityData.define(COMPANION_TYPE, "none");
     }
 
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn,
@@ -114,7 +106,6 @@ public class HumanCompanionEntity extends TamableAnimal implements RangedAttackM
                                         @Nullable CompoundTag dataTag) {
         this.setCompanionSkin(this.random.nextInt(CompanionData.maleSkins.length));
         this.setCustomName(new TextComponent(CompanionData.getRandomName()));
-        this.setCompanionType(CompanionData.getRandomCompanionType());
 
         for (int i = 0; i < 4; i++) {
             EquipmentSlot armorType = armorTypes[i];
@@ -124,16 +115,6 @@ public class HumanCompanionEntity extends TamableAnimal implements RangedAttackM
             }
         }
         checkArmor();
-        if (this.getCompanionType().equals("archer")) {
-            this.inventory.setItem(4, Items.BOW.getDefaultInstance());
-            checkBow();
-        } else {
-            ItemStack itemstack = getSpawnSword();
-            if(!itemstack.isEmpty()) {
-                this.inventory.setItem(4, itemstack);
-                checkSword();
-            }
-        }
         return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
     }
 
@@ -144,7 +125,6 @@ public class HumanCompanionEntity extends TamableAnimal implements RangedAttackM
         tag.putBoolean("Eating", this.isEating());
         tag.putBoolean("Alert", this.isAlert());
         tag.putBoolean("Hunting", this.isHunting());
-        tag.putString("Type", this.getCompanionType());
     }
 
     public void readAdditionalSaveData(CompoundTag tag) {
@@ -153,7 +133,6 @@ public class HumanCompanionEntity extends TamableAnimal implements RangedAttackM
         this.setEating(tag.getBoolean("Eating"));
         this.setAlert(tag.getBoolean("Alert"));
         this.setHunting(tag.getBoolean("Hunting"));
-        this.setCompanionType(tag.getString("Type"));
         if (tag.getBoolean("Alert")) {
             this.addAlertGoals();
         }
@@ -168,27 +147,12 @@ public class HumanCompanionEntity extends TamableAnimal implements RangedAttackM
         this.setItemSlot(EquipmentSlot.CHEST, ItemStack.EMPTY);
         this.setItemSlot(EquipmentSlot.HEAD, ItemStack.EMPTY);
         this.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
-        if (getCompanionType().equals("archer")) {
-            checkBow();
-        } else {
-            checkSword();
-        }
         checkArmor();
     }
 
     @Override
     public AgeableMob getBreedOffspring(ServerLevel level, AgeableMob parent) {
-        return EntityInit.HumanCompanionEntity.get().create(level);
-    }
-
-    public void tick() {
-        checkArmor();
-        if (getCompanionType().equals("archer")) {
-            checkBow();
-        } else {
-            checkSword();
-        }
-        super.tick();
+        return EntityInit.Knight.get().create(level);
     }
 
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
@@ -312,34 +276,6 @@ public class HumanCompanionEntity extends TamableAnimal implements RangedAttackM
         }
     }
 
-    public void checkBow() {
-        ItemStack hand = this.getItemBySlot(EquipmentSlot.MAINHAND);
-        for (int i = 0; i < this.inventory.getContainerSize(); ++i) {
-            ItemStack itemstack = this.inventory.getItem(i);
-            if (itemstack.getItem() instanceof BowItem) {
-                if (hand.isEmpty()) {
-                    this.setItemSlot(EquipmentSlot.MAINHAND, itemstack);
-                }
-            }
-        }
-    }
-
-    public void checkSword() {
-        ItemStack hand = this.getItemBySlot(EquipmentSlot.MAINHAND);
-        for (int i = 0; i < this.inventory.getContainerSize(); ++i) {
-            ItemStack itemstack = this.inventory.getItem(i);
-            if (itemstack.getItem() instanceof SwordItem) {
-                if (hand.isEmpty()) {
-                    this.setItemSlot(EquipmentSlot.MAINHAND, itemstack);
-                } else if (itemstack.getItem() instanceof SwordItem && hand.getItem() instanceof SwordItem) {
-                    if (((SwordItem) itemstack.getItem()).getDamage() > ((SwordItem) hand.getItem()).getDamage()) {
-                        this.setItemSlot(EquipmentSlot.MAINHAND, itemstack);
-                    }
-                }
-            }
-        }
-    }
-
     public boolean hurt(DamageSource p_34288_, float p_34289_) {
         if (p_34288_.getEntity() instanceof TamableAnimal) {
             if (this.isTame() && ((TamableAnimal) p_34288_.getEntity()).isTame()) {
@@ -442,37 +378,6 @@ public class HumanCompanionEntity extends TamableAnimal implements RangedAttackM
     }
 
     @Override
-    public void performRangedAttack(LivingEntity p_32141_, float p_32142_) {
-        ItemStack itemstack = this.getProjectile(this.getItemInHand(ProjectileUtil.getWeaponHoldingHand(this, item -> item instanceof net.minecraft.world.item.BowItem)));
-        AbstractArrow abstractarrow = this.getArrow(itemstack, p_32142_);
-        if (this.getMainHandItem().getItem() instanceof net.minecraft.world.item.BowItem)
-            abstractarrow = ((net.minecraft.world.item.BowItem)this.getMainHandItem().getItem()).customArrow(abstractarrow);
-        double d0 = p_32141_.getX() - this.getX();
-        double d1 = p_32141_.getY(0.3333333333333333D) - abstractarrow.getY();
-        double d2 = p_32141_.getZ() - this.getZ();
-        double d3 = Math.sqrt(d0 * d0 + d2 * d2);
-        abstractarrow.shoot(d0, d1 + d3 * (double)0.2F, d2, 1.6F, (float)(14 - this.level.getDifficulty().getId() * 4));
-        this.playSound(SoundEvents.SKELETON_SHOOT, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
-        this.level.addFreshEntity(abstractarrow);
-        if (!this.level.isClientSide) {
-            this.getMainHandItem().hurtAndBreak(1, this, (p_43296_) -> {
-                p_43296_.broadcastBreakEvent(EquipmentSlot.MAINHAND);
-            });
-            if (this.getMainHandItem().isEmpty()) {
-                TextComponent broken = new TextComponent("My bow broke!");
-                if (this.isTame()) {
-                    this.getOwner().sendMessage(new TranslatableComponent("chat.type.text", this.getDisplayName(),
-                            broken), this.getUUID());
-                }
-            }
-        }
-    }
-
-    protected AbstractArrow getArrow(ItemStack p_32156_, float p_32157_) {
-        return ProjectileUtil.getMobArrow(this, p_32156_, p_32157_);
-    }
-
-    @Override
     public ItemStack eat(Level world, ItemStack stack) {
         if (stack.isEdible()) {
             this.heal(stack.getItem().getFoodProperties().getNutrition());
@@ -527,14 +432,6 @@ public class HumanCompanionEntity extends TamableAnimal implements RangedAttackM
 
     public void setHunting(boolean hunting) {
         this.entityData.set(HUNTING, hunting);
-    }
-
-    public void setCompanionType(String type) {
-        this.entityData.set(COMPANION_TYPE, type);
-    }
-
-    public String getCompanionType() {
-        return this.entityData.get(COMPANION_TYPE);
     }
 
     public void addAlertGoals() {

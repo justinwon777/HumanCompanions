@@ -27,8 +27,8 @@ public class StructureInit {
     public static void setupStructures() {
         setupMapSpacingAndLand(
                 COMPANION_HOUSE.get(),
-                new StructureFeatureConfiguration(19,
-                        15,
+                new StructureFeatureConfiguration(18,
+                        10,
                         1234567890),
                 true);
     }

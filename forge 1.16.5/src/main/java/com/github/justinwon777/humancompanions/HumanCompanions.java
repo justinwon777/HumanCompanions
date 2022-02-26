@@ -1,6 +1,6 @@
 package com.github.justinwon777.humancompanions;
 
-import com.github.justinwon777.humancompanions.client.renderer.HumanCompanionRenderer;
+import com.github.justinwon777.humancompanions.client.renderer.CompanionRenderer;
 import com.github.justinwon777.humancompanions.core.ConfiguredStructures;
 import com.github.justinwon777.humancompanions.core.EntityInit;
 import com.github.justinwon777.humancompanions.core.PacketHandler;
@@ -65,7 +65,9 @@ public class HumanCompanions
     }
 
     private void doClientStuff(final FMLClientSetupEvent event) {
-        RenderingRegistry.registerEntityRenderingHandler(EntityInit.HumanCompanionEntity.get(), HumanCompanionRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntityInit.Archer.get(), CompanionRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntityInit.Knight.get(), CompanionRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntityInit.Arbalist.get(), CompanionRenderer::new);
     }
 
     public void biomeModification(final BiomeLoadingEvent event) {
@@ -84,6 +86,8 @@ public class HumanCompanions
             event.getGeneration().getStructures().add(() -> ConfiguredStructures.Configured_Spruce_House);
         } else if (key.compareTo(Biomes.DARK_FOREST) == 0 || key.compareTo(Biomes.DARK_FOREST_HILLS) == 0) {
             event.getGeneration().getStructures().add(() -> ConfiguredStructures.Configured_DarkOak_House);
+        } else if (key.compareTo(Biomes.BADLANDS) == 0 || key.compareTo(Biomes.BADLANDS_PLATEAU) == 0 || key.compareTo(Biomes.MODIFIED_BADLANDS_PLATEAU) == 0 || key.compareTo(Biomes.MODIFIED_WOODED_BADLANDS_PLATEAU) == 0 || key.compareTo(Biomes.ERODED_BADLANDS) == 0 || key.compareTo(Biomes.WOODED_BADLANDS_PLATEAU) == 0) {
+            event.getGeneration().getStructures().add(() -> ConfiguredStructures.Configured_Terracotta_House);
         }
     }
 

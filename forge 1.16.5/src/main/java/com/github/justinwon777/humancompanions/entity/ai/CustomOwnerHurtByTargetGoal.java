@@ -1,4 +1,4 @@
-package com.github.justinwon777.humancompanions.entity;
+package com.github.justinwon777.humancompanions.entity.ai;
 
 import net.minecraft.entity.EntityPredicate;
 import net.minecraft.entity.LivingEntity;
@@ -8,14 +8,15 @@ import net.minecraft.entity.passive.TameableEntity;
 
 import java.util.EnumSet;
 
-public class CustomOwnerHurtTargetGoal extends TargetGoal {
+public class CustomOwnerHurtByTargetGoal extends TargetGoal {
+
     private final TameableEntity tameAnimal;
-    private LivingEntity ownerLastHurt;
+    private LivingEntity ownerLastHurtBy;
     private int timestamp;
 
-    public CustomOwnerHurtTargetGoal(TameableEntity p_26114_) {
-        super(p_26114_, false);
-        this.tameAnimal = p_26114_;
+    public CustomOwnerHurtByTargetGoal(TameableEntity p_26107_) {
+        super(p_26107_, false);
+        this.tameAnimal = p_26107_;
         this.setFlags(EnumSet.of(Goal.Flag.TARGET));
     }
 
@@ -25,16 +26,16 @@ public class CustomOwnerHurtTargetGoal extends TargetGoal {
             if (livingentity == null) {
                 return false;
             } else {
-                this.ownerLastHurt = livingentity.getLastHurtMob();
-                if (this.ownerLastHurt instanceof TameableEntity) {
-                    if (((TameableEntity) this.ownerLastHurt).isTame()) {
-                        if (((TameableEntity) this.ownerLastHurt).getOwner().is(this.tameAnimal.getOwner())) {
+                this.ownerLastHurtBy = livingentity.getLastHurtByMob();
+                if (this.ownerLastHurtBy instanceof TameableEntity) {
+                    if (((TameableEntity) this.ownerLastHurtBy).isTame()) {
+                        if (((TameableEntity) this.ownerLastHurtBy).getOwner().is(this.tameAnimal.getOwner())) {
                             return false;
                         }
                     }
                 }
-                int i = livingentity.getLastHurtMobTimestamp();
-                return i != this.timestamp && this.canAttack(this.ownerLastHurt, EntityPredicate.DEFAULT) && this.tameAnimal.wantsToAttack(this.ownerLastHurt, livingentity);
+                int i = livingentity.getLastHurtByMobTimestamp();
+                return i != this.timestamp && this.canAttack(this.ownerLastHurtBy, EntityPredicate.DEFAULT) && this.tameAnimal.wantsToAttack(this.ownerLastHurtBy, livingentity);
             }
         } else {
             return false;
@@ -42,10 +43,10 @@ public class CustomOwnerHurtTargetGoal extends TargetGoal {
     }
 
     public void start() {
-        this.mob.setTarget(this.ownerLastHurt);
+        this.mob.setTarget(this.ownerLastHurtBy);
         LivingEntity livingentity = this.tameAnimal.getOwner();
         if (livingentity != null) {
-            this.timestamp = livingentity.getLastHurtMobTimestamp();
+            this.timestamp = livingentity.getLastHurtByMobTimestamp();
         }
 
         super.start();

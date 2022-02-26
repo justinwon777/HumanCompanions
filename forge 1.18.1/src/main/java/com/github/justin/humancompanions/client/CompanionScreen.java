@@ -3,7 +3,7 @@ package com.github.justin.humancompanions.client;
 import com.github.justin.humancompanions.HumanCompanions;
 import com.github.justin.humancompanions.container.CompanionContainer;
 import com.github.justin.humancompanions.core.PacketHandler;
-import com.github.justin.humancompanions.entity.HumanCompanionEntity;
+import com.github.justin.humancompanions.entity.AbstractHumanCompanionEntity;
 import com.github.justin.humancompanions.networking.SetAlertPacket;
 import com.github.justin.humancompanions.networking.SetHuntingPacket;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -33,12 +33,12 @@ public class CompanionScreen extends AbstractContainerScreen<CompanionContainer>
     private static final ResourceLocation HUNTING_BUTTON = new ResourceLocation(HumanCompanions.MOD_ID, "textures" +
             "/huntingbutton.png");
     private final int containerRows;
-    private final HumanCompanionEntity companion;
+    private final AbstractHumanCompanionEntity companion;
     private CompanionButton alertButton;
     private CompanionButton huntingButton;
 
     public CompanionScreen(CompanionContainer p_98409_, Inventory p_98410_,
-                           HumanCompanionEntity companion) {
+                           AbstractHumanCompanionEntity companion) {
         super(p_98409_, p_98410_, companion.getName());
         this.companion = companion;
         this.passEvents = false;

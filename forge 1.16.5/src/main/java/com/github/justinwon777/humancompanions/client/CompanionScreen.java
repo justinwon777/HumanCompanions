@@ -3,7 +3,7 @@ package com.github.justinwon777.humancompanions.client;
 import com.github.justinwon777.humancompanions.HumanCompanions;
 import com.github.justinwon777.humancompanions.container.CompanionContainer;
 import com.github.justinwon777.humancompanions.core.PacketHandler;
-import com.github.justinwon777.humancompanions.entity.HumanCompanionEntity;
+import com.github.justinwon777.humancompanions.entity.AbstractHumanCompanionEntity;
 import com.github.justinwon777.humancompanions.networking.SetAlertPacket;
 import com.github.justinwon777.humancompanions.networking.SetHuntingPacket;
 import com.mojang.blaze3d.matrix.MatrixStack;
@@ -22,7 +22,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 
 @OnlyIn(Dist.CLIENT)
@@ -32,12 +31,12 @@ public class CompanionScreen extends ContainerScreen<CompanionContainer> impleme
     private static final ResourceLocation HUNTING_BUTTON = new ResourceLocation(HumanCompanions.MOD_ID, "textures" +
             "/huntingbutton.png");
     private final int containerRows;
-    private final HumanCompanionEntity companion;
+    private final AbstractHumanCompanionEntity companion;
     private CompanionButton alertButton;
     private CompanionButton huntingButton;
 
     public CompanionScreen(CompanionContainer p_98409_, PlayerInventory p_98410_,
-                           HumanCompanionEntity companion) {
+                           AbstractHumanCompanionEntity companion) {
         super(p_98409_, p_98410_, companion.getName());
         this.companion = companion;
         this.passEvents = false;

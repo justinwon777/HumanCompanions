@@ -14,8 +14,6 @@ import net.minecraft.entity.monster.CreeperEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.entity.projectile.AbstractArrowEntity;
-import net.minecraft.entity.projectile.ProjectileHelper;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.*;
@@ -25,7 +23,7 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.GroundPathNavigator;
 import net.minecraft.util.*;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.DifficultyInstance;
@@ -39,6 +37,7 @@ import net.minecraftforge.fml.network.PacketDistributor;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 public class AbstractHumanCompanionEntity extends TameableEntity{
@@ -50,11 +49,25 @@ public class AbstractHumanCompanionEntity extends TameableEntity{
             DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> HUNTING = EntityDataManager.defineId(AbstractHumanCompanionEntity.class,
             DataSerializers.BOOLEAN);
+    private static final DataParameter<Boolean> PATROLLING = EntityDataManager.defineId(AbstractHumanCompanionEntity.class,
+            DataSerializers.BOOLEAN);
+    private static final DataParameter<Boolean> FOLLOWING = EntityDataManager.defineId(AbstractHumanCompanionEntity.class,
+            DataSerializers.BOOLEAN);
+    private static final DataParameter<Boolean> GUARDING = EntityDataManager.defineId(AbstractHumanCompanionEntity.class,
+            DataSerializers.BOOLEAN);
+    private static final DataParameter<Optional<BlockPos>> PATROL_POS = EntityDataManager.defineId(AbstractHumanCompanionEntity.class,
+            DataSerializers.OPTIONAL_BLOCK_POS);
+    private static final DataParameter<Integer> PATROL_RADIUS = EntityDataManager.defineId(AbstractHumanCompanionEntity.class,
+            DataSerializers.INT);
+
     public Inventory inventory = new Inventory(27);
     public EquipmentSlotType[] armorTypes = new EquipmentSlotType[]{EquipmentSlotType.FEET, EquipmentSlotType.LEGS,
             EquipmentSlotType.CHEST, EquipmentSlotType.HEAD};
     public List<NearestAttackableTargetGoal> alertMobGoals = new ArrayList<>();
     public List<NearestAttackableTargetGoal> huntMobGoals = new ArrayList<>();
+    public PatrolGoal patrolGoal;
+    public MoveBackToPatrolGoal moveBackGoal;
+    public int tameIdx = 5;
 
     public AbstractHumanCompanionEntity(EntityType<? extends TameableEntity> entityType, World level) {
         super(entityType, level);
@@ -75,8 +88,9 @@ public class AbstractHumanCompanionEntity extends TameableEntity{
         this.goalSelector.addGoal(0, new EatGoal(this));
         this.goalSelector.addGoal(1, new SitGoal(this));
         this.goalSelector.addGoal(2, new AvoidCreeperGoal(this, CreeperEntity.class, 10.0F, 1.5D, 1.5D));
-        this.goalSelector.addGoal(3, new FollowOwnerGoal(this, 1.3D, 8.0F, 2.0F, false));
-        this.goalSelector.addGoal(5, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
+        this.goalSelector.addGoal(3, new MoveBackToGuardGoal(this));
+        this.goalSelector.addGoal(3, new CustomFollowOwnerGoal(this, 1.3D, 8.0F, 2.0F, false));
+        this.goalSelector.addGoal(5, new CustomWaterAvoidingRandomWalkingGoal(this, 1.0D));
         this.goalSelector.addGoal(6, new LookAtGoal(this, PlayerEntity.class, 6.0F));
         this.goalSelector.addGoal(7, new LookRandomlyGoal(this));
         this.goalSelector.addGoal(8, new OpenDoorGoal(this, true));
@@ -99,6 +113,11 @@ public class AbstractHumanCompanionEntity extends TameableEntity{
         this.entityData.define(EATING, false);
         this.entityData.define(ALERT, false);
         this.entityData.define(HUNTING, true);
+        this.entityData.define(PATROLLING, false);
+        this.entityData.define(FOLLOWING, false);
+        this.entityData.define(GUARDING, false);
+        this.entityData.define(PATROL_POS, Optional.empty());
+        this.entityData.define(PATROL_RADIUS, 10);
     }
 
     public ILivingEntityData finalizeSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn,
@@ -106,6 +125,13 @@ public class AbstractHumanCompanionEntity extends TameableEntity{
                                            @Nullable CompoundNBT dataTag) {
         this.setCompanionSkin(this.random.nextInt(CompanionData.maleSkins.length));
         this.setCustomName(new StringTextComponent(CompanionData.getRandomName()));
+        setPatrolPos(this.blockPosition());
+        setPatrolling(true);
+        setPatrolRadius(15);
+        patrolGoal = new PatrolGoal(this, 60, getPatrolRadius());
+        moveBackGoal = new MoveBackToPatrolGoal(this, getPatrolRadius());
+        this.goalSelector.addGoal(3, moveBackGoal);
+        this.goalSelector.addGoal(3, patrolGoal);
 
         for (int i = 0; i < 4; i++) {
             EquipmentSlotType armorType = armorTypes[i];
@@ -125,6 +151,14 @@ public class AbstractHumanCompanionEntity extends TameableEntity{
         tag.putBoolean("Eating", this.isEating());
         tag.putBoolean("Alert", this.isAlert());
         tag.putBoolean("Hunting", this.isHunting());
+        tag.putBoolean("Patrolling", this.isPatrolling());
+        tag.putBoolean("Following", this.isFollowing());
+        tag.putBoolean("Guarding", this.isGuarding());
+        tag.putInt("radius", this.getPatrolRadius());
+        if (this.getPatrolPos() != null) {
+            int[] patrolPos = {this.getPatrolPos().getX(), this.getPatrolPos().getY(), this.getPatrolPos().getZ()};
+            tag.putIntArray("patrol_pos", patrolPos);
+        }
     }
 
     public void readAdditionalSaveData(CompoundNBT tag) {
@@ -133,6 +167,10 @@ public class AbstractHumanCompanionEntity extends TameableEntity{
         this.setEating(tag.getBoolean("Eating"));
         this.setAlert(tag.getBoolean("Alert"));
         this.setHunting(tag.getBoolean("Hunting"));
+        this.setPatrolling(tag.getBoolean("Patrolling"));
+        this.setFollowing(tag.getBoolean("Following"));
+        this.setGuarding(tag.getBoolean("Guarding"));
+        this.setPatrolRadius(tag.getInt("radius"));
         if (tag.getBoolean("Alert")) {
             this.addAlertGoals();
         }
@@ -141,6 +179,16 @@ public class AbstractHumanCompanionEntity extends TameableEntity{
         }
         if (tag.contains("inventory", 9)) {
             this.inventory.fromTag(tag.getList("inventory", 10));
+        }
+        if (tag.contains("patrol_pos")) {
+            int[] positions = tag.getIntArray("patrol_pos");
+            setPatrolPos(new BlockPos(positions[0], positions[1], positions[2]));
+        }
+        if (tag.contains("radius")) {
+            patrolGoal = new PatrolGoal(this, 60, tag.getInt("radius"));
+            moveBackGoal = new MoveBackToPatrolGoal(this, tag.getInt("radius"));
+            this.goalSelector.addGoal(3, moveBackGoal);
+            this.goalSelector.addGoal(3, patrolGoal);
         }
         this.setItemSlot(EquipmentSlotType.FEET, ItemStack.EMPTY);
         this.setItemSlot(EquipmentSlotType.LEGS, ItemStack.EMPTY);
@@ -157,15 +205,23 @@ public class AbstractHumanCompanionEntity extends TameableEntity{
 
     public ActionResultType mobInteract(PlayerEntity player, Hand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
-        Item item = itemstack.getItem();
         if (!this.level.isClientSide && hand == Hand.MAIN_HAND) {
             if (!this.isTame()) {
                 if (itemstack.isEdible()) {
                     itemstack.shrink(1);
-                    if (this.random.nextInt(4) == 0) {
+                    if (this.random.nextInt(tameIdx) == 0) {
                         this.tame(player);
                         player.sendMessage(new StringTextComponent("Companion added"), this.getUUID());
+                        setPatrolPos(null);
+                        setPatrolling(false);
+                        setFollowing(true);
+                        setPatrolRadius(4);
+                        patrolGoal.radius = 4;
+                        moveBackGoal.radius = 4;
                     } else {
+                        if (tameIdx > 1) {
+                            tameIdx--;
+                        }
                         player.sendMessage(new TranslationTextComponent("chat.type.text", this.getDisplayName(),
                                 CompanionData.tameFail[this.random.nextInt(CompanionData.tameFail.length)]), this.getUUID());
                     }
@@ -182,7 +238,7 @@ public class AbstractHumanCompanionEntity extends TameableEntity{
                                 text), this.getUUID());
                     } else {
                         this.setOrderedToSit(false);
-                        StringTextComponent text = new StringTextComponent("I'll follow you.");
+                        StringTextComponent text = new StringTextComponent("I'll move around.");
                         player.sendMessage(new TranslationTextComponent("chat.type.text", this.getDisplayName(),
                                 text), this.getUUID());
                     }
@@ -389,6 +445,16 @@ public class AbstractHumanCompanionEntity extends TameableEntity{
         return ItemStack.EMPTY;
     }
 
+    @Nullable
+    public void setPatrolPos(BlockPos position) { this.entityData.set(PATROL_POS, Optional.ofNullable(position)); }
+
+    @Nullable
+    public BlockPos getPatrolPos() { return this.entityData.get(PATROL_POS).orElse(null); }
+
+    public void setPatrolRadius(int radius) { this.entityData.set(PATROL_RADIUS, radius); }
+
+    public int getPatrolRadius() { return this.entityData.get(PATROL_RADIUS); }
+
     public ResourceLocation getResourceLocation() {
         return CompanionData.maleSkins[getCompanionSkin()];
     }
@@ -413,6 +479,12 @@ public class AbstractHumanCompanionEntity extends TameableEntity{
         return this.entityData.get(HUNTING);
     }
 
+    public boolean isPatrolling() { return this.entityData.get(PATROLLING); }
+
+    public boolean isGuarding() { return this.entityData.get(GUARDING); }
+
+    public boolean isFollowing() { return this.entityData.get(FOLLOWING); }
+
     public void setEating(boolean eating) {
         this.entityData.set(EATING, eating);
     }
@@ -424,6 +496,12 @@ public class AbstractHumanCompanionEntity extends TameableEntity{
     public void setHunting(boolean hunting) {
         this.entityData.set(HUNTING, hunting);
     }
+
+    public void setPatrolling(boolean patrolling) { this.entityData.set(PATROLLING, patrolling); }
+
+    public void setGuarding(boolean guarding) { this.entityData.set(GUARDING, guarding); }
+
+    public void setFollowing(boolean following) { this.entityData.set(FOLLOWING, following); }
 
     public void addAlertGoals() {
         for (NearestAttackableTargetGoal alertMobGoal : alertMobGoals) {

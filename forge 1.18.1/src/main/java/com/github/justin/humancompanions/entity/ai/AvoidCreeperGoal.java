@@ -3,6 +3,7 @@ package com.github.justin.humancompanions.entity.ai;
 import java.util.EnumSet;
 import java.util.function.Predicate;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.entity.EntitySelector;
@@ -29,9 +30,7 @@ public class AvoidCreeperGoal<T extends LivingEntity> extends Goal {
     private final TargetingConditions avoidEntityTargeting;
 
     public AvoidCreeperGoal(TamableAnimal p_25027_, Class<T> p_25028_, float p_25029_, double p_25030_, double p_25031_) {
-        this(p_25027_, p_25028_, (p_25052_) -> {
-            return true;
-        }, p_25029_, p_25030_, p_25031_, EntitySelector.NO_CREATIVE_OR_SPECTATOR::test);
+        this(p_25027_, p_25028_, (p_25052_) -> true, p_25029_, p_25030_, p_25031_, EntitySelector.NO_CREATIVE_OR_SPECTATOR::test);
     }
 
     public AvoidCreeperGoal(TamableAnimal p_25040_, Class<T> p_25041_, Predicate<LivingEntity> p_25042_, float p_25043_, double p_25044_, double p_25045_, Predicate<LivingEntity> p_25046_) {
@@ -47,16 +46,8 @@ public class AvoidCreeperGoal<T extends LivingEntity> extends Goal {
         this.avoidEntityTargeting = TargetingConditions.forCombat().range((double)p_25043_).selector(p_25046_.and(p_25042_));
     }
 
-    public AvoidCreeperGoal(TamableAnimal p_25033_, Class<T> p_25034_, float p_25035_, double p_25036_, double p_25037_, Predicate<LivingEntity> p_25038_) {
-        this(p_25033_, p_25034_, (p_25049_) -> {
-            return true;
-        }, p_25035_, p_25036_, p_25037_, p_25038_);
-    }
-
     public boolean canUse() {
-        this.toAvoid = this.mob.level.getNearestEntity(this.mob.level.getEntitiesOfClass(this.avoidClass, this.mob.getBoundingBox().inflate((double)this.maxDist, 3.0D, (double)this.maxDist), (p_148078_) -> {
-            return true;
-        }), this.avoidEntityTargeting, this.mob, this.mob.getX(), this.mob.getY(), this.mob.getZ());
+        this.toAvoid = this.mob.level.getNearestEntity(this.mob.level.getEntitiesOfClass(this.avoidClass, this.mob.getBoundingBox().inflate(this.maxDist, 3.0D, this.maxDist), (p_148078_) -> true), this.avoidEntityTargeting, this.mob, this.mob.getX(), this.mob.getY(), this.mob.getZ());
         if (this.toAvoid == null) {
             return false;
         } else {
@@ -79,8 +70,10 @@ public class AvoidCreeperGoal<T extends LivingEntity> extends Goal {
     public void start() {
         TextComponent text = new TextComponent("Creeper!");
         if (this.mob.isTame()) {
-            this.mob.getOwner().sendMessage(new TranslatableComponent("chat.type.text", this.mob.getDisplayName(), text),
-                    this.mob.getUUID());
+            if (this.mob.blockPosition().closerThan(this.mob.getOwner().blockPosition(), 15)) {
+                this.mob.getOwner().sendMessage(new TranslatableComponent("chat.type.text", this.mob.getDisplayName(), text),
+                        this.mob.getUUID());
+            }
         }
         this.pathNav.moveTo(this.path, this.walkSpeedModifier);
     }

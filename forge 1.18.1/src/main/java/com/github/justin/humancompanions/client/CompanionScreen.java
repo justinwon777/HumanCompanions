@@ -6,6 +6,7 @@ import com.github.justin.humancompanions.core.PacketHandler;
 import com.github.justin.humancompanions.entity.AbstractHumanCompanionEntity;
 import com.github.justin.humancompanions.networking.SetAlertPacket;
 import com.github.justin.humancompanions.networking.SetHuntingPacket;
+import com.github.justin.humancompanions.networking.SetPatrolingPacket;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.ChatFormatting;
@@ -32,10 +33,13 @@ public class CompanionScreen extends AbstractContainerScreen<CompanionContainer>
     private static final ResourceLocation ALERT_BUTTON = new ResourceLocation(HumanCompanions.MOD_ID, "textures/alertbutton.png");
     private static final ResourceLocation HUNTING_BUTTON = new ResourceLocation(HumanCompanions.MOD_ID, "textures" +
             "/huntingbutton.png");
+    private static final ResourceLocation PATROL_BUTTON = new ResourceLocation(HumanCompanions.MOD_ID, "textures" +
+            "/patrolbutton.png");
     private final int containerRows;
     private final AbstractHumanCompanionEntity companion;
     private CompanionButton alertButton;
     private CompanionButton huntingButton;
+    private CompanionButton patrolButton;
 
     public CompanionScreen(CompanionContainer p_98409_, Inventory p_98410_,
                            AbstractHumanCompanionEntity companion) {
@@ -78,6 +82,13 @@ public class CompanionScreen extends AbstractContainerScreen<CompanionContainer>
                 btn -> {
                     PacketHandler.INSTANCE.sendToServer(new SetHuntingPacket(companion.getId()));
                 }));
+        this.patrolButton = addRenderableWidget(new CompanionButton("patrolling", leftPos + 116, topPos + 4, 16, 12,
+                0, 0
+                ,13,
+                PATROL_BUTTON,
+                btn -> {
+                    PacketHandler.INSTANCE.sendToServer(new SetPatrolingPacket(companion.getId()));
+                }));
     }
 
     @Override
@@ -102,6 +113,23 @@ public class CompanionScreen extends AbstractContainerScreen<CompanionContainer>
                 tooltips.add(new TextComponent("Hunting mode: Off"));
             }
             tooltips.add(new TextComponent("Attacks nearby mobs for food").withStyle(ChatFormatting.GRAY).withStyle(ChatFormatting.ITALIC));
+
+            this.renderTooltip(stack, tooltips, Optional.empty(), x, y);
+        }
+
+        if (this.patrolButton.isHoveredOrFocused()) {
+            List<Component> tooltips = new ArrayList<>();
+            if (this.companion.isFollowing()) {
+                tooltips.add(new TextComponent("State: Follow"));
+                tooltips.add(new TextComponent("Follows you").withStyle(ChatFormatting.GRAY).withStyle(ChatFormatting.ITALIC));
+            } else if (this.companion.isPatrolling()){
+                tooltips.add(new TextComponent("State: Patrol"));
+                tooltips.add(new TextComponent("Patrols a 4 block radius").withStyle(ChatFormatting.GRAY).withStyle(ChatFormatting.ITALIC));
+            } else {
+                tooltips.add(new TextComponent("State: Guard"));
+                tooltips.add(new TextComponent("Stands at its position ready for action").withStyle(ChatFormatting.GRAY).withStyle(ChatFormatting.ITALIC));
+            }
+
 
             this.renderTooltip(stack, tooltips, Optional.empty(), x, y);
         }
@@ -132,6 +160,14 @@ public class CompanionScreen extends AbstractContainerScreen<CompanionContainer>
                     this.xTexStart = 0;
                 } else {
                     this.xTexStart = 17;
+                }
+            } else if (this.name.equals("patrolling")) {
+                if (CompanionScreen.this.companion.isFollowing()) {
+                    this.xTexStart = 0;
+                } else if (CompanionScreen.this.companion.isPatrolling()){
+                    this.xTexStart = 17;
+                } else {
+                    this.xTexStart = 34;
                 }
             }
             RenderSystem.enableBlend();

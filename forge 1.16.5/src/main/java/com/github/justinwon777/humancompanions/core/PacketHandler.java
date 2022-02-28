@@ -7,6 +7,7 @@ import com.github.justinwon777.humancompanions.entity.AbstractHumanCompanionEnti
 import com.github.justinwon777.humancompanions.networking.OpenInventoryPacket;
 import com.github.justinwon777.humancompanions.networking.SetAlertPacket;
 import com.github.justinwon777.humancompanions.networking.SetHuntingPacket;
+import com.github.justinwon777.humancompanions.networking.SetPatrollingPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.entity.Entity;
@@ -30,6 +31,8 @@ public class PacketHandler {
                 SetAlertPacket::handle);
         INSTANCE.registerMessage(id++, SetHuntingPacket.class, SetHuntingPacket::encode, SetHuntingPacket::decode,
                 SetHuntingPacket::handle);
+        INSTANCE.registerMessage(id++, SetPatrollingPacket.class, SetPatrollingPacket::encode, SetPatrollingPacket::decode,
+                SetPatrollingPacket::handle);
     }
 
     @SuppressWarnings("resource")

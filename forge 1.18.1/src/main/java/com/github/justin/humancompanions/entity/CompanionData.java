@@ -6,10 +6,85 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.animal.*;
 import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.monster.hoglin.Hoglin;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 public class CompanionData {
+
+//    public static Map<Integer, Item[]> FOOD_GROUPS = new HashMap<>() {{
+//        put(1, MEAT);
+//        put(2, SEAFOOD);
+//        put(3, VEGETABLE);
+//        put(4, FRUIT);
+//        put(5, BAKED);
+//    }};
+//
+//    public static Map<Integer, TextComponent[]> FOOD_MESSAGES = new HashMap<>() {{
+//        put(1, MEAT_MESSAGES);
+//        put(2, SEAFOOD_MESSAGES);
+//        put(3, VEGETABLE_MESSAGES);
+//        put(4, FRUIT_MESSAGES);
+//        put(5, BAKED_MESSAGES);
+//        put(6, WRONG_FOOD);
+//    }};
+//
+//    public static Item[] MEAT = new Item[] {
+//            Items.COOKED_MUTTON,
+//            Items.COOKED_PORKCHOP,
+//            Items.COOKED_BEEF,
+//            Items.COOKED_CHICKEN,
+//            Items.COOKED_RABBIT,
+//            Items.MUTTON,
+//            Items.PORKCHOP,
+//            Items.BEEF,
+//            Items.CHICKEN,
+//            Items.RABBIT,
+//            Items.RABBIT_STEW
+//    };
+//
+//    public static Item[] SEAFOOD = new Item[] {
+//            Items.COOKED_SALMON,
+//            Items.COOKED_COD,
+//            Items.SALMON,
+//            Items.COD,
+//            Items.TROPICAL_FISH
+//    };
+//
+//    public static Item[] VEGETABLE = new Item[] {
+//            Items.GOLDEN_CARROT,
+//            Items.BEETROOT,
+//            Items.CARROT,
+//            Items.POTATO,
+//            Items.BAKED_POTATO,
+//            Items.BROWN_MUSHROOM,
+//            Items.RED_MUSHROOM,
+//            Items.DRIED_KELP,
+//            Items.MUSHROOM_STEW,
+//            Items.BEETROOT_SOUP,
+//            Items.PUMPKIN
+//    };
+//
+//    public static Item[] FRUIT = new Item[] {
+//            Items.GOLDEN_APPLE,
+//            Items.ENCHANTED_GOLDEN_APPLE,
+//            Items.MELON,
+//            Items.MELON_SLICE,
+//            Items.APPLE,
+//            Items.GLOW_BERRIES,
+//            Items.SWEET_BERRIES,
+//            Items.CHORUS_FRUIT
+//    };
+//
+//    public static Item[] BAKED = new Item[] {
+//            Items.CAKE,
+//            Items.COOKIE,
+//            Items.BREAD,
+//            Items.PUMPKIN_PIE
+//    };
 
     public static Class<?>[] alertMobs = new Class<?>[]{
             Blaze.class,
@@ -96,25 +171,43 @@ public class CompanionData {
             new TextComponent("Have you seen any food around here?"),
             new TextComponent("I could use some food"),
             new TextComponent("I wish I had some food"),
+            new TextComponent("I'm starving."),
     };
+//    public static TextComponent[] WRONG_FOOD = new TextComponent[]{
+//            new TextComponent("That's not what I asked for."),
+//            new TextComponent("I didn't ask for that."),
+//    };
+//    public static TextComponent[] MEAT_MESSAGES = new TextComponent[]{
+//            new TextComponent("I've been craving some meat."),
+//            new TextComponent("I haven't had animal flesh in a while,"),
+//            new TextComponent("Do you have any meat?")
+//    };
+//    public static TextComponent[] SEAFOOD_MESSAGES = new TextComponent[]{
+//            new TextComponent("I've been craving some seafood."),
+//            new TextComponent("I haven't had seafood in a while,"),
+//            new TextComponent("Do you have any seafood?")
+//    };
+//    public static TextComponent[] VEGETABLE_MESSAGES = new TextComponent[]{
+//            new TextComponent("I've been craving some vegetables."),
+//            new TextComponent("I haven't had vegetables in a while,"),
+//            new TextComponent("Do you have any vegetables?")
+//    };
+//    public static TextComponent[] FRUIT_MESSAGES = new TextComponent[]{
+//            new TextComponent("I've been craving some fruits."),
+//            new TextComponent("I haven't had fruits in a while,"),
+//            new TextComponent("Do you have any fruits?")
+//    };
+//    public static TextComponent[] BAKED_MESSAGES = new TextComponent[]{
+//            new TextComponent("I've been craving something baked."),
+//            new TextComponent("Do you have any baked goods?"),
+//            new TextComponent("I wish there was a bakery around here?")
+//    };
 
     public static String getRandomName() {
         Random rand = new Random();
         String firstName = maleFirstNames[rand.nextInt(maleFirstNames.length)];
         String lastName = lastNames[rand.nextInt(lastNames.length)];
         return firstName + " " + lastName;
-    }
-
-    public static String getRandomCompanionType() {
-        Random rand = new Random();
-        int type = rand.nextInt(3);
-        String typeString = null;
-        switch (type) {
-            case 0 -> typeString = "knight";
-            case 1 -> typeString = "archer";
-            case 2 -> typeString = "arbalist";
-        }
-        return typeString;
     }
 
     public static String[] maleFirstNames = new String[] {

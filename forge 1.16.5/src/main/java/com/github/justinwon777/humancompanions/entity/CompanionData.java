@@ -94,6 +94,7 @@ public class CompanionData {
             new StringTextComponent("Have you seen any food around here?"),
             new StringTextComponent("I could use some food"),
             new StringTextComponent("I wish I had some food"),
+            new StringTextComponent("I'm starving"),
     };
 
     public static String getRandomName() {
@@ -101,17 +102,6 @@ public class CompanionData {
         String firstName = maleFirstNames[rand.nextInt(maleFirstNames.length)];
         String lastName = lastNames[rand.nextInt(lastNames.length)];
         return firstName + " " + lastName;
-    }
-
-    public static String getRandomCompanionType() {
-        Random rand = new Random();
-        int type = rand.nextInt(2);
-        if (type == 0) {
-            return "knight";
-        }
-        else {
-            return "archer";
-        }
     }
 
     public static String[] maleFirstNames = new String[] {

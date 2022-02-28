@@ -29,9 +29,7 @@ public class AvoidCreeperGoal<T extends LivingEntity> extends Goal {
     private final EntityPredicate avoidEntityTargeting;
 
     public AvoidCreeperGoal(TameableEntity p_25027_, Class<T> p_25028_, float p_25029_, double p_25030_, double p_25031_) {
-        this(p_25027_, p_25028_, (p_25052_) -> {
-            return true;
-        }, p_25029_, p_25030_, p_25031_, EntityPredicates.NO_CREATIVE_OR_SPECTATOR::test);
+        this(p_25027_, p_25028_, (p_25052_) -> true, p_25029_, p_25030_, p_25031_, EntityPredicates.NO_CREATIVE_OR_SPECTATOR::test);
     }
 
     public AvoidCreeperGoal(TameableEntity p_25040_, Class<T> p_25041_, Predicate<LivingEntity> p_25042_, float p_25043_,
@@ -48,15 +46,8 @@ public class AvoidCreeperGoal<T extends LivingEntity> extends Goal {
         this.avoidEntityTargeting = (new EntityPredicate()).range((double)p_25043_).selector(p_25046_.and(p_25042_));
     }
 
-    public AvoidCreeperGoal(TameableEntity p_25033_, Class<T> p_25034_, float p_25035_, double p_25036_, double p_25037_,
-                            Predicate<LivingEntity> p_25038_) {
-        this(p_25033_, p_25034_, (p_25049_) -> {
-            return true;
-        }, p_25035_, p_25036_, p_25037_, p_25038_);
-    }
-
     public boolean canUse() {
-        this.toAvoid = this.mob.level.getNearestLoadedEntity(this.avoidClass, this.avoidEntityTargeting, this.mob, this.mob.getX(), this.mob.getY(), this.mob.getZ(), this.mob.getBoundingBox().inflate((double)this.maxDist, 3.0D, (double)this.maxDist));
+        this.toAvoid = this.mob.level.getNearestLoadedEntity(this.avoidClass, this.avoidEntityTargeting, this.mob, this.mob.getX(), this.mob.getY(), this.mob.getZ(), this.mob.getBoundingBox().inflate(this.maxDist, 3.0D, this.maxDist));
         if (this.toAvoid == null) {
             return false;
         } else {
@@ -79,8 +70,10 @@ public class AvoidCreeperGoal<T extends LivingEntity> extends Goal {
     public void start() {
         StringTextComponent text = new StringTextComponent("Creeper!");
         if (this.mob.isTame()) {
-            this.mob.getOwner().sendMessage(new TranslationTextComponent("chat.type.text", this.mob.getDisplayName(), text),
-                    this.mob.getUUID());
+            if (this.mob.blockPosition().closerThan(this.mob.getOwner().blockPosition(), 15)) {
+                this.mob.getOwner().sendMessage(new TranslationTextComponent("chat.type.text", this.mob.getDisplayName(), text),
+                        this.mob.getUUID());
+            }
         }
         this.pathNav.moveTo(this.path, this.walkSpeedModifier);
     }

@@ -6,6 +6,7 @@ import com.github.justinwon777.humancompanions.core.PacketHandler;
 import com.github.justinwon777.humancompanions.entity.AbstractHumanCompanionEntity;
 import com.github.justinwon777.humancompanions.networking.SetAlertPacket;
 import com.github.justinwon777.humancompanions.networking.SetHuntingPacket;
+import com.github.justinwon777.humancompanions.networking.SetPatrollingPacket;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.IHasContainer;
@@ -30,10 +31,13 @@ public class CompanionScreen extends ContainerScreen<CompanionContainer> impleme
     private static final ResourceLocation ALERT_BUTTON = new ResourceLocation(HumanCompanions.MOD_ID, "textures/alertbutton.png");
     private static final ResourceLocation HUNTING_BUTTON = new ResourceLocation(HumanCompanions.MOD_ID, "textures" +
             "/huntingbutton.png");
+    private static final ResourceLocation PATROL_BUTTON = new ResourceLocation(HumanCompanions.MOD_ID, "textures" +
+            "/patrolbutton.png");
     private final int containerRows;
     private final AbstractHumanCompanionEntity companion;
     private CompanionButton alertButton;
     private CompanionButton huntingButton;
+    private CompanionButton patrolButton;
 
     public CompanionScreen(CompanionContainer p_98409_, PlayerInventory p_98410_,
                            AbstractHumanCompanionEntity companion) {
@@ -75,6 +79,11 @@ public class CompanionScreen extends ContainerScreen<CompanionContainer> impleme
                 btn -> {
                     PacketHandler.INSTANCE.sendToServer(new SetHuntingPacket(companion.getId()));
                 }));
+        this.patrolButton = addButton(new CompanionButton("patrolling", leftPos + 116, topPos + 4, 16, 12, 0, 0,13,
+                PATROL_BUTTON,
+                btn -> {
+                    PacketHandler.INSTANCE.sendToServer(new SetPatrollingPacket(companion.getId()));
+                }));
     }
 
     @Override
@@ -99,6 +108,22 @@ public class CompanionScreen extends ContainerScreen<CompanionContainer> impleme
                 tooltips.add(new StringTextComponent("Hunting mode: Off"));
             }
             tooltips.add(new StringTextComponent("Attacks nearby mobs for food").withStyle(TextFormatting.GRAY).withStyle(TextFormatting.ITALIC));
+
+            this.renderComponentTooltip(stack, tooltips, x, y);
+        }
+        if (this.patrolButton.isHovered()) {
+            List<ITextComponent> tooltips = new ArrayList<>();
+            if (this.companion.isFollowing()) {
+                tooltips.add(new StringTextComponent("State: Follow"));
+                tooltips.add(new StringTextComponent("Follows you").withStyle(TextFormatting.GRAY).withStyle(TextFormatting.ITALIC));
+            } else if (this.companion.isPatrolling()){
+                tooltips.add(new StringTextComponent("State: Patrol"));
+                tooltips.add(new StringTextComponent("Patrols a 4 block radius").withStyle(TextFormatting.GRAY).withStyle(TextFormatting.ITALIC));
+            } else {
+                tooltips.add(new StringTextComponent("State: Guard"));
+                tooltips.add(new StringTextComponent("Stands at its position ready for action").withStyle(TextFormatting.GRAY).withStyle(TextFormatting.ITALIC));
+            }
+
 
             this.renderComponentTooltip(stack, tooltips, x, y);
         }
@@ -129,6 +154,14 @@ public class CompanionScreen extends ContainerScreen<CompanionContainer> impleme
                     this.xTexStart = 0;
                 } else {
                     this.xTexStart = 17;
+                }
+            } else if (this.name.equals("patrolling")) {
+                if (CompanionScreen.this.companion.isFollowing()) {
+                    this.xTexStart = 0;
+                } else if (CompanionScreen.this.companion.isPatrolling()){
+                    this.xTexStart = 17;
+                } else {
+                    this.xTexStart = 34;
                 }
             }
             RenderSystem.enableBlend();

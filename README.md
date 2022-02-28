@@ -27,7 +27,7 @@ They live in a wide variety of biomes in houses like these (plus more!):
 - Once they join you, you can access their inventory with right click.
 - They have names, but you can rename them with tags.
 - Shift+right click to toggle "sit", making them stay in place and not do anything.
-- Give them armor and weapons and they will automatically equip the best one in their inventory. They can only use the weapon they spawn with. Archer and arbalist do not need arrows.
+- Give them armor and weapons and they will automatically equip the best one in their inventory. They can only use the weapon they spawn with. Archers and arbalists do not need arrows.
 - They will follow you around the same way a wolf does. They will attack mobs that hurt you or you hurt, except creepers. They will give a warning if a creeper is nearby and run away.
 - Put food in their inventory and they will eat to heal themselves.
 - Toggle "Hunt" and "Alert" modes in their inventory to control their behavior.
@@ -37,9 +37,9 @@ They live in a wide variety of biomes in houses like these (plus more!):
 ## Known Issues
 
 - When a companion dies, sometimes it drops a duplicate of an item or doesn't drop an item in its inventory at all.
-- Archers sometimes shoot at nothing after killing a mob, will fix itself if it gets a new target
-- Arrows sometimes don't hit
-- Knights sometimes hesitate while attacking
+- Archers sometimes shoot at nothing after killing a mob, will fix itself if it gets a new target.
+- Arrows sometimes don't hit.
+- Knights sometimes hesitate while attacking.
 
 ## Helping out
 

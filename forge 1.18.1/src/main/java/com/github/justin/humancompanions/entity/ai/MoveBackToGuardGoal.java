@@ -9,11 +9,7 @@ public class MoveBackToGuardGoal extends Goal {
     public AbstractHumanCompanionEntity companion;
     public Vec3 patrolVec;
 
-    public MoveBackToGuardGoal(AbstractHumanCompanionEntity p_25987_) {
-        this(p_25987_, 1.0D);
-    }
-
-    public MoveBackToGuardGoal(AbstractHumanCompanionEntity p_25990_, double p_25991_) {
+    public MoveBackToGuardGoal(AbstractHumanCompanionEntity p_25990_) {
         this.companion = p_25990_;
     }
 

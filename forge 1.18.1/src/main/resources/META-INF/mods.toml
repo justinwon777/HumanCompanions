@@ -29,7 +29,10 @@ displayName="Human Companions" #mandatory
 # A file name (in the root of the mod JAR) containing a logo for display
 logoFile="examplemod.png" #optional
 # A text field displayed in the mod UI
-credits="justinwon777" #optional
+credits='''
+            Skins: schwaechlich, LukyLucaz, ShudderShockBailiff, Tankrid, Chronomize, traxll, Soloveigo, RiserSkin, and jojohebbeker
+            Structures: Dr_Bond, Lemon-Fox, BrokenGamer, barrel_maker, Life of the Party, McKorova, Trickn_Nuggets, and Pufficles
+            ''' #optional
 # A text field displayed in the mod UI
 authors="justinwon777" #optional
 # The description text for the mod (multi line!) (#mandatory)

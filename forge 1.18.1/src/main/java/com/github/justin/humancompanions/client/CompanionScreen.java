@@ -120,13 +120,13 @@ public class CompanionScreen extends AbstractContainerScreen<CompanionContainer>
         if (this.patrolButton.isHoveredOrFocused()) {
             List<Component> tooltips = new ArrayList<>();
             if (this.companion.isFollowing()) {
-                tooltips.add(new TextComponent("State: Follow"));
+                tooltips.add(new TextComponent("Follow"));
                 tooltips.add(new TextComponent("Follows you").withStyle(ChatFormatting.GRAY).withStyle(ChatFormatting.ITALIC));
             } else if (this.companion.isPatrolling()){
-                tooltips.add(new TextComponent("State: Patrol"));
+                tooltips.add(new TextComponent("Patrol"));
                 tooltips.add(new TextComponent("Patrols a 4 block radius").withStyle(ChatFormatting.GRAY).withStyle(ChatFormatting.ITALIC));
             } else {
-                tooltips.add(new TextComponent("State: Guard"));
+                tooltips.add(new TextComponent("Guard"));
                 tooltips.add(new TextComponent("Stands at its position ready for action").withStyle(ChatFormatting.GRAY).withStyle(ChatFormatting.ITALIC));
             }
 

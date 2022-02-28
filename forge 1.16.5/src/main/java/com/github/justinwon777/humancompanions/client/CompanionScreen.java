@@ -114,13 +114,13 @@ public class CompanionScreen extends ContainerScreen<CompanionContainer> impleme
         if (this.patrolButton.isHovered()) {
             List<ITextComponent> tooltips = new ArrayList<>();
             if (this.companion.isFollowing()) {
-                tooltips.add(new StringTextComponent("State: Follow"));
+                tooltips.add(new StringTextComponent("Follow"));
                 tooltips.add(new StringTextComponent("Follows you").withStyle(TextFormatting.GRAY).withStyle(TextFormatting.ITALIC));
             } else if (this.companion.isPatrolling()){
-                tooltips.add(new StringTextComponent("State: Patrol"));
+                tooltips.add(new StringTextComponent("Patrol"));
                 tooltips.add(new StringTextComponent("Patrols a 4 block radius").withStyle(TextFormatting.GRAY).withStyle(TextFormatting.ITALIC));
             } else {
-                tooltips.add(new StringTextComponent("State: Guard"));
+                tooltips.add(new StringTextComponent("Guard"));
                 tooltips.add(new StringTextComponent("Stands at its position ready for action").withStyle(TextFormatting.GRAY).withStyle(TextFormatting.ITALIC));
             }
 

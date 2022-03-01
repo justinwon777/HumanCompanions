@@ -4,6 +4,8 @@ import com.github.justinwon777.humancompanions.HumanCompanions;
 import com.github.justinwon777.humancompanions.container.CompanionContainer;
 import com.github.justinwon777.humancompanions.core.PacketHandler;
 import com.github.justinwon777.humancompanions.entity.AbstractHumanCompanionEntity;
+import com.github.justinwon777.humancompanions.entity.Arbalist;
+import com.github.justinwon777.humancompanions.entity.Archer;
 import com.github.justinwon777.humancompanions.networking.SetAlertPacket;
 import com.github.justinwon777.humancompanions.networking.SetHuntingPacket;
 import com.github.justinwon777.humancompanions.networking.SetPatrollingPacket;
@@ -21,13 +23,16 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 
 @OnlyIn(Dist.CLIENT)
 public class CompanionScreen extends ContainerScreen<CompanionContainer> implements IHasContainer<CompanionContainer> {
-    private static final ResourceLocation CONTAINER_BACKGROUND = new ResourceLocation("textures/gui/container/generic_54.png");
+    private static final ResourceLocation CONTAINER_BACKGROUND = new ResourceLocation(HumanCompanions.MOD_ID,
+            "textures/inventory.png");
     private static final ResourceLocation ALERT_BUTTON = new ResourceLocation(HumanCompanions.MOD_ID, "textures/alertbutton.png");
     private static final ResourceLocation HUNTING_BUTTON = new ResourceLocation(HumanCompanions.MOD_ID, "textures" +
             "/huntingbutton.png");
@@ -38,6 +43,8 @@ public class CompanionScreen extends ContainerScreen<CompanionContainer> impleme
     private CompanionButton alertButton;
     private CompanionButton huntingButton;
     private CompanionButton patrolButton;
+    DecimalFormat df = new DecimalFormat("#.#");
+    int sidebarx;
 
     public CompanionScreen(CompanionContainer p_98409_, PlayerInventory p_98410_,
                            AbstractHumanCompanionEntity companion) {
@@ -47,6 +54,9 @@ public class CompanionScreen extends ContainerScreen<CompanionContainer> impleme
         this.containerRows = p_98409_.getRowCount();
         this.imageHeight = 114 + this.containerRows * 18;
         this.inventoryLabelY = this.imageHeight - 94;
+        this.imageWidth = 226;
+        df.setRoundingMode(RoundingMode.CEILING);
+        sidebarx = 174;
     }
 
     @Override
@@ -84,6 +94,27 @@ public class CompanionScreen extends ContainerScreen<CompanionContainer> impleme
                 btn -> {
                     PacketHandler.INSTANCE.sendToServer(new SetPatrollingPacket(companion.getId()));
                 }));
+    }
+
+    @Override
+    protected void renderLabels(MatrixStack pPoseStack, int pMouseX, int pMouseY) {
+        super.renderLabels(pPoseStack, pMouseX, pMouseY);
+        StringTextComponent healthTitle = new StringTextComponent("Health");
+        StringTextComponent classTitle = new StringTextComponent("Class");
+        StringTextComponent health =
+                new StringTextComponent(df.format(companion.getHealth()) + "/" + (int) companion.getMaxHealth());
+        this.font.draw(pPoseStack, classTitle.withStyle(TextFormatting.UNDERLINE), sidebarx, this.titleLabelY + 5,
+                4210752);
+        if (companion instanceof Arbalist) {
+            this.font.draw(pPoseStack, "Arbalist", sidebarx, this.titleLabelY + 16, 4210752);
+        } else if (companion instanceof Archer) {
+            this.font.draw(pPoseStack, "Archer", sidebarx, this.titleLabelY + 16, 4210752);
+        } else {
+            this.font.draw(pPoseStack, "Knight", sidebarx, this.titleLabelY + 16, 4210752);
+        }
+        this.font.draw(pPoseStack, healthTitle.withStyle(TextFormatting.UNDERLINE), sidebarx, this.titleLabelY + 33,
+                4210752);
+        this.font.draw(pPoseStack, health, sidebarx, this.titleLabelY + 44, 4210752);
     }
 
     @Override

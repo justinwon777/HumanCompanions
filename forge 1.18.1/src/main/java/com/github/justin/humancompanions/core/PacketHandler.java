@@ -4,10 +4,7 @@ import com.github.justin.humancompanions.HumanCompanions;
 import com.github.justin.humancompanions.client.CompanionScreen;
 import com.github.justin.humancompanions.container.CompanionContainer;
 import com.github.justin.humancompanions.entity.AbstractHumanCompanionEntity;
-import com.github.justin.humancompanions.networking.OpenInventoryPacket;
-import com.github.justin.humancompanions.networking.SetAlertPacket;
-import com.github.justin.humancompanions.networking.SetHuntingPacket;
-import com.github.justin.humancompanions.networking.SetPatrolingPacket;
+import com.github.justin.humancompanions.networking.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.resources.ResourceLocation;
@@ -33,6 +30,8 @@ public class PacketHandler {
                 SetHuntingPacket::handle);
         INSTANCE.registerMessage(id++, SetPatrolingPacket.class, SetPatrolingPacket::encode, SetPatrolingPacket::decode,
                 SetPatrolingPacket::handle);
+        INSTANCE.registerMessage(id++, ClearTargetPacket.class, ClearTargetPacket::encode, ClearTargetPacket::decode,
+                ClearTargetPacket::handle);
     }
 
     @SuppressWarnings("resource")

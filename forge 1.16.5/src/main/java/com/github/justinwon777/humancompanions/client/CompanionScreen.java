@@ -6,6 +6,7 @@ import com.github.justinwon777.humancompanions.core.PacketHandler;
 import com.github.justinwon777.humancompanions.entity.AbstractHumanCompanionEntity;
 import com.github.justinwon777.humancompanions.entity.Arbalist;
 import com.github.justinwon777.humancompanions.entity.Archer;
+import com.github.justinwon777.humancompanions.networking.ClearTargetPacket;
 import com.github.justinwon777.humancompanions.networking.SetAlertPacket;
 import com.github.justinwon777.humancompanions.networking.SetHuntingPacket;
 import com.github.justinwon777.humancompanions.networking.SetPatrollingPacket;
@@ -38,11 +39,14 @@ public class CompanionScreen extends ContainerScreen<CompanionContainer> impleme
             "/huntingbutton.png");
     private static final ResourceLocation PATROL_BUTTON = new ResourceLocation(HumanCompanions.MOD_ID, "textures" +
             "/patrolbutton.png");
+    private static final ResourceLocation CLEAR_BUTTON = new ResourceLocation(HumanCompanions.MOD_ID, "textures" +
+            "/clearbutton.png");
     private final int containerRows;
     private final AbstractHumanCompanionEntity companion;
     private CompanionButton alertButton;
     private CompanionButton huntingButton;
     private CompanionButton patrolButton;
+    private CompanionButton clearButton;
     DecimalFormat df = new DecimalFormat("#.#");
     int sidebarx;
 
@@ -94,6 +98,13 @@ public class CompanionScreen extends ContainerScreen<CompanionContainer> impleme
                 btn -> {
                     PacketHandler.INSTANCE.sendToServer(new SetPatrollingPacket(companion.getId()));
                 }));
+        this.clearButton = addButton(new CompanionButton("clear", leftPos + sidebarx + 5, topPos + 56, 31,
+                12, 0, 0
+                ,13,
+                CLEAR_BUTTON,
+                btn -> {
+                    PacketHandler.INSTANCE.sendToServer(new ClearTargetPacket(companion.getId()));
+                }));
     }
 
     @Override
@@ -103,18 +114,18 @@ public class CompanionScreen extends ContainerScreen<CompanionContainer> impleme
         StringTextComponent classTitle = new StringTextComponent("Class");
         StringTextComponent health =
                 new StringTextComponent(df.format(companion.getHealth()) + "/" + (int) companion.getMaxHealth());
-        this.font.draw(pPoseStack, classTitle.withStyle(TextFormatting.UNDERLINE), sidebarx, this.titleLabelY + 5,
+        this.font.draw(pPoseStack, classTitle.withStyle(TextFormatting.UNDERLINE), sidebarx, this.titleLabelY + 3,
                 4210752);
         if (companion instanceof Arbalist) {
-            this.font.draw(pPoseStack, "Arbalist", sidebarx, this.titleLabelY + 16, 4210752);
+            this.font.draw(pPoseStack, "Arbalist", sidebarx, this.titleLabelY + 14, 4210752);
         } else if (companion instanceof Archer) {
-            this.font.draw(pPoseStack, "Archer", sidebarx, this.titleLabelY + 16, 4210752);
+            this.font.draw(pPoseStack, "Archer", sidebarx, this.titleLabelY + 14, 4210752);
         } else {
-            this.font.draw(pPoseStack, "Knight", sidebarx, this.titleLabelY + 16, 4210752);
+            this.font.draw(pPoseStack, "Knight", sidebarx, this.titleLabelY + 14, 4210752);
         }
-        this.font.draw(pPoseStack, healthTitle.withStyle(TextFormatting.UNDERLINE), sidebarx, this.titleLabelY + 33,
+        this.font.draw(pPoseStack, healthTitle.withStyle(TextFormatting.UNDERLINE), sidebarx, this.titleLabelY + 27,
                 4210752);
-        this.font.draw(pPoseStack, health, sidebarx, this.titleLabelY + 44, 4210752);
+        this.font.draw(pPoseStack, health, sidebarx, this.titleLabelY + 38, 4210752);
     }
 
     @Override
@@ -155,6 +166,12 @@ public class CompanionScreen extends ContainerScreen<CompanionContainer> impleme
                 tooltips.add(new StringTextComponent("Stands at its position ready for action").withStyle(TextFormatting.GRAY).withStyle(TextFormatting.ITALIC));
             }
 
+            this.renderComponentTooltip(stack, tooltips, x, y);
+        }
+        if (this.clearButton.isHovered()) {
+            List<ITextComponent> tooltips = new ArrayList<>();
+            tooltips.add(new StringTextComponent("Clear target"));
+            tooltips.add(new StringTextComponent("Useful if it gets stuck attacking").withStyle(TextFormatting.GRAY).withStyle(TextFormatting.ITALIC));
 
             this.renderComponentTooltip(stack, tooltips, x, y);
         }

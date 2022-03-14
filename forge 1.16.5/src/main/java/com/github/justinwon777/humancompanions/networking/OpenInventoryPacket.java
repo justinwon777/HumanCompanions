@@ -31,10 +31,6 @@ public class OpenInventoryPacket {
         return this.id;
     }
 
-    public int getSize() {
-        return this.size;
-    }
-
     public int getEntityId() {
         return this.entityId;
     }

@@ -6,6 +6,7 @@ import com.github.justin.humancompanions.core.PacketHandler;
 import com.github.justin.humancompanions.entity.AbstractHumanCompanionEntity;
 import com.github.justin.humancompanions.entity.Arbalist;
 import com.github.justin.humancompanions.entity.Archer;
+import com.github.justin.humancompanions.networking.ClearTargetPacket;
 import com.github.justin.humancompanions.networking.SetAlertPacket;
 import com.github.justin.humancompanions.networking.SetHuntingPacket;
 import com.github.justin.humancompanions.networking.SetPatrolingPacket;
@@ -40,11 +41,14 @@ public class CompanionScreen extends AbstractContainerScreen<CompanionContainer>
             "/huntingbutton.png");
     private static final ResourceLocation PATROL_BUTTON = new ResourceLocation(HumanCompanions.MOD_ID, "textures" +
             "/patrolbutton.png");
+    private static final ResourceLocation CLEAR_BUTTON = new ResourceLocation(HumanCompanions.MOD_ID, "textures" +
+            "/clearbutton.png");
     private final int containerRows;
     private final AbstractHumanCompanionEntity companion;
     private CompanionButton alertButton;
     private CompanionButton huntingButton;
     private CompanionButton patrolButton;
+    private CompanionButton clearButton;
     DecimalFormat df = new DecimalFormat("#.#");
     int sidebarx;
 
@@ -99,6 +103,13 @@ public class CompanionScreen extends AbstractContainerScreen<CompanionContainer>
                 btn -> {
                     PacketHandler.INSTANCE.sendToServer(new SetPatrolingPacket(companion.getId()));
                 }));
+        this.clearButton = addRenderableWidget(new CompanionButton("clear", leftPos + sidebarx + 5, topPos + 56, 31,
+                12, 0, 0
+                ,13,
+                CLEAR_BUTTON,
+                btn -> {
+                    PacketHandler.INSTANCE.sendToServer(new ClearTargetPacket(companion.getId()));
+                }));
     }
 
     @Override
@@ -108,18 +119,18 @@ public class CompanionScreen extends AbstractContainerScreen<CompanionContainer>
         TextComponent classTitle = new TextComponent("Class");
         TextComponent health =
                 new TextComponent(df.format(companion.getHealth()) + "/" + (int) companion.getMaxHealth());
-        this.font.draw(pPoseStack, classTitle.withStyle(ChatFormatting.UNDERLINE), sidebarx, this.titleLabelY + 5,
+        this.font.draw(pPoseStack, classTitle.withStyle(ChatFormatting.UNDERLINE), sidebarx, this.titleLabelY + 3,
                 4210752);
         if (companion instanceof Arbalist) {
-            this.font.draw(pPoseStack, "Arbalist", sidebarx, this.titleLabelY + 16, 4210752);
+            this.font.draw(pPoseStack, "Arbalist", sidebarx, this.titleLabelY + 14, 4210752);
         } else if (companion instanceof Archer) {
-            this.font.draw(pPoseStack, "Archer", sidebarx, this.titleLabelY + 16, 4210752);
+            this.font.draw(pPoseStack, "Archer", sidebarx, this.titleLabelY + 14, 4210752);
         } else {
-            this.font.draw(pPoseStack, "Knight", sidebarx, this.titleLabelY + 16, 4210752);
+            this.font.draw(pPoseStack, "Knight", sidebarx, this.titleLabelY + 14, 4210752);
         }
-        this.font.draw(pPoseStack, healthTitle.withStyle(ChatFormatting.UNDERLINE), sidebarx, this.titleLabelY + 33,
+        this.font.draw(pPoseStack, healthTitle.withStyle(ChatFormatting.UNDERLINE), sidebarx, this.titleLabelY + 27,
                 4210752);
-        this.font.draw(pPoseStack, health, sidebarx, this.titleLabelY + 44, 4210752);
+        this.font.draw(pPoseStack, health, sidebarx, this.titleLabelY + 38, 4210752);
     }
 
     @Override
@@ -153,7 +164,7 @@ public class CompanionScreen extends AbstractContainerScreen<CompanionContainer>
             if (this.companion.isFollowing()) {
                 tooltips.add(new TextComponent("Follow"));
                 tooltips.add(new TextComponent("Follows you").withStyle(ChatFormatting.GRAY).withStyle(ChatFormatting.ITALIC));
-            } else if (this.companion.isPatrolling()){
+            } else if (this.companion.isPatrolling()) {
                 tooltips.add(new TextComponent("Patrol"));
                 tooltips.add(new TextComponent("Patrols a 4 block radius").withStyle(ChatFormatting.GRAY).withStyle(ChatFormatting.ITALIC));
             } else {
@@ -161,6 +172,13 @@ public class CompanionScreen extends AbstractContainerScreen<CompanionContainer>
                 tooltips.add(new TextComponent("Stands at its position ready for action").withStyle(ChatFormatting.GRAY).withStyle(ChatFormatting.ITALIC));
             }
 
+            this.renderTooltip(stack, tooltips, Optional.empty(), x, y);
+        }
+
+        if (this.clearButton.isHoveredOrFocused()) {
+            List<Component> tooltips = new ArrayList<>();
+            tooltips.add(new TextComponent("Clear target"));
+            tooltips.add(new TextComponent("Useful if it gets stuck attacking").withStyle(ChatFormatting.GRAY).withStyle(ChatFormatting.ITALIC));
 
             this.renderTooltip(stack, tooltips, Optional.empty(), x, y);
         }

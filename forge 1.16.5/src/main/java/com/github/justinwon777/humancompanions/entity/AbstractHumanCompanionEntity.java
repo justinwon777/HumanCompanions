@@ -445,6 +445,10 @@ public class AbstractHumanCompanionEntity extends TameableEntity{
         return ItemStack.EMPTY;
     }
 
+    public void clearTarget() {
+        this.setTarget(null);
+    }
+
     @Nullable
     public void setPatrolPos(BlockPos position) { this.entityData.set(PATROL_POS, Optional.ofNullable(position)); }
 

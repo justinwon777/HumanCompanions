@@ -37,7 +37,7 @@ They live in a wide variety of biomes in houses like these (plus more!):
 ## Known Issues
 
 - When a companion dies, sometimes it drops a duplicate of an item or doesn't drop an item in its inventory at all.
-- Archers sometimes shoot at nothing after killing a mob, will fix itself if it gets a new target.
+- Archers sometimes shoot at nothing after killing a mob. Use clear button to clear target.
 - Arrows sometimes don't hit.
 - Knights sometimes hesitate while attacking.
 

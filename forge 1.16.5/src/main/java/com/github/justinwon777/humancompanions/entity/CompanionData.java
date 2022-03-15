@@ -3,12 +3,17 @@ package com.github.justinwon777.humancompanions.entity;
 import com.github.justinwon777.humancompanions.HumanCompanions;
 import net.minecraft.entity.monster.*;
 import net.minecraft.entity.passive.*;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
 
 import java.util.Random;
 
 public class CompanionData {
+
+    public static Random rand = new Random();
 
     public static Class<?>[] alertMobs = new Class<?>[]{
             BlazeEntity.class,
@@ -96,6 +101,70 @@ public class CompanionData {
             new StringTextComponent("I wish I had some food"),
             new StringTextComponent("I'm starving"),
     };
+
+    public static int getHealthModifier() {
+        float healthFloat = rand.nextFloat();
+        if (healthFloat <= 0.03) {
+            return -4;
+        } else if (healthFloat <= 0.1) {
+            return -3;
+        } else if (healthFloat <= 0.2) {
+            return -2;
+        } else if (healthFloat <= 0.35) {
+            return -1;
+        } else if (healthFloat <= 0.65) {
+            return 0;
+        } else if (healthFloat <= 0.8) {
+            return 1;
+        } else if (healthFloat <= 0.9) {
+            return 2;
+        } else if (healthFloat <= 0.97) {
+            return 3;
+        } else {
+            return 4;
+        }
+    }
+
+    public static ItemStack getSpawnArmor(EquipmentSlotType armorType) {
+        float materialFloat = rand.nextFloat();
+        if (materialFloat <= 0.4F) {
+            return ItemStack.EMPTY;
+        } else if(materialFloat < 0.70F) {
+            switch(armorType) {
+                case HEAD:
+                    return Items.LEATHER_HELMET.getDefaultInstance();
+                case CHEST:
+                    return Items.LEATHER_CHESTPLATE.getDefaultInstance();
+                case LEGS:
+                    return Items.LEATHER_LEGGINGS.getDefaultInstance();
+                case FEET:
+                    return Items.LEATHER_BOOTS.getDefaultInstance();
+            }
+        } else if(materialFloat < 0.90F) {
+            switch(armorType) {
+                case HEAD:
+                    return Items.CHAINMAIL_HELMET.getDefaultInstance();
+                case CHEST:
+                    return Items.CHAINMAIL_CHESTPLATE.getDefaultInstance();
+                case LEGS:
+                    return Items.CHAINMAIL_LEGGINGS.getDefaultInstance();
+                case FEET:
+                    return Items.CHAINMAIL_BOOTS.getDefaultInstance();
+            }
+        } else {
+            switch(armorType) {
+                case HEAD:
+                    return Items.IRON_HELMET.getDefaultInstance();
+                case CHEST:
+                    return Items.IRON_CHESTPLATE.getDefaultInstance();
+                case LEGS:
+                    return Items.IRON_LEGGINGS.getDefaultInstance();
+                case FEET:
+                    return Items.IRON_BOOTS.getDefaultInstance();
+            }
+        }
+        return ItemStack.EMPTY;
+    }
 
     public static String getRandomName() {
         Random rand = new Random();

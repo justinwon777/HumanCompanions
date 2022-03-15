@@ -7,8 +7,10 @@ import com.github.justinwon777.humancompanions.entity.ai.*;
 import com.github.justinwon777.humancompanions.networking.OpenInventoryPacket;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.monster.CreeperEntity;
 import net.minecraft.entity.passive.TameableEntity;
@@ -123,6 +125,11 @@ public class AbstractHumanCompanionEntity extends TameableEntity{
     public ILivingEntityData finalizeSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn,
                                            SpawnReason reason, @Nullable ILivingEntityData spawnDataIn,
                                            @Nullable CompoundNBT dataTag) {
+        AttributeModifier SPAWN_HEALTH_MODIFIER = new AttributeModifier("health",
+                CompanionData.getHealthModifier(), AttributeModifier.Operation.ADDITION);
+        ModifiableAttributeInstance attributeinstance = this.getAttribute(Attributes.MAX_HEALTH);
+        attributeinstance.addPermanentModifier(SPAWN_HEALTH_MODIFIER);
+        this.setHealth(this.getMaxHealth());
         this.setCompanionSkin(this.random.nextInt(CompanionData.maleSkins.length));
         this.setCustomName(new StringTextComponent(CompanionData.getRandomName()));
         setPatrolPos(this.blockPosition());
@@ -135,7 +142,7 @@ public class AbstractHumanCompanionEntity extends TameableEntity{
 
         for (int i = 0; i < 4; i++) {
             EquipmentSlotType armorType = armorTypes[i];
-            ItemStack itemstack = getSpawnArmor(armorType);
+            ItemStack itemstack = CompanionData.getSpawnArmor(armorType);
             if(!itemstack.isEmpty()) {
                 this.inventory.setItem(i, itemstack);
             }
@@ -383,47 +390,6 @@ public class AbstractHumanCompanionEntity extends TameableEntity{
         return super.doHurtTarget(entity);
     }
 
-    public ItemStack getSpawnArmor(EquipmentSlotType armorType) {
-        float materialFloat = this.random.nextFloat();
-        if (materialFloat <= 0.4F) {
-            return ItemStack.EMPTY;
-        } else if(materialFloat < 0.70F) {
-            switch(armorType) {
-                case HEAD:
-                    return Items.LEATHER_HELMET.getDefaultInstance();
-                case CHEST:
-                    return Items.LEATHER_CHESTPLATE.getDefaultInstance();
-                case LEGS:
-                    return Items.LEATHER_LEGGINGS.getDefaultInstance();
-                case FEET:
-                    return Items.LEATHER_BOOTS.getDefaultInstance();
-            }
-        } else if(materialFloat < 0.90F) {
-            switch(armorType) {
-                case HEAD:
-                    return Items.CHAINMAIL_HELMET.getDefaultInstance();
-                case CHEST:
-                    return Items.CHAINMAIL_CHESTPLATE.getDefaultInstance();
-                case LEGS:
-                    return Items.CHAINMAIL_LEGGINGS.getDefaultInstance();
-                case FEET:
-                    return Items.CHAINMAIL_BOOTS.getDefaultInstance();
-            }
-        } else {
-            switch(armorType) {
-                case HEAD:
-                    return Items.IRON_HELMET.getDefaultInstance();
-                case CHEST:
-                    return Items.IRON_CHESTPLATE.getDefaultInstance();
-                case LEGS:
-                    return Items.IRON_LEGGINGS.getDefaultInstance();
-                case FEET:
-                    return Items.IRON_BOOTS.getDefaultInstance();
-            }
-        }
-        return ItemStack.EMPTY;
-    }
-
     @Override
     public ItemStack eat(World world, ItemStack stack) {
         if (stack.isEdible()) {
@@ -437,7 +403,7 @@ public class AbstractHumanCompanionEntity extends TameableEntity{
         for (int i = 0; i < this.inventory.getContainerSize(); ++i) {
             ItemStack itemstack = this.inventory.getItem(i);
             if (itemstack.isEdible()) {
-                if ((float)itemstack.getItem().getFoodProperties().getNutrition() + this.getHealth() <= 20) {
+                if ((float)itemstack.getItem().getFoodProperties().getNutrition() + this.getHealth() <= this.getMaxHealth()) {
                     return itemstack;
                 }
             }

@@ -18,6 +18,8 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.*;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
@@ -125,6 +127,11 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn,
                                         MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn,
                                         @Nullable CompoundTag dataTag) {
+        AttributeModifier SPAWN_HEALTH_MODIFIER = new AttributeModifier("health",
+                CompanionData.getHealthModifier(), AttributeModifier.Operation.ADDITION);
+        AttributeInstance attributeinstance = this.getAttribute(Attributes.MAX_HEALTH);
+        attributeinstance.addPermanentModifier(SPAWN_HEALTH_MODIFIER);
+        this.setHealth(this.getMaxHealth());
         setCompanionSkin(this.random.nextInt(CompanionData.maleSkins.length));
         setCustomName(new TextComponent(CompanionData.getRandomName()));
         setPatrolPos(this.blockPosition());
@@ -137,7 +144,7 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
 
         for (int i = 0; i < 4; i++) {
             EquipmentSlot armorType = armorTypes[i];
-            ItemStack itemstack = getSpawnArmor(armorType);
+            ItemStack itemstack = CompanionData.getSpawnArmor(armorType);
             if(!itemstack.isEmpty()) {
                 this.inventory.setItem(i, itemstack);
             }
@@ -266,17 +273,6 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
         MinecraftForge.EVENT_BUS.post(new PlayerContainerEvent.Open(player, player.containerMenu));
     }
 
-    public ItemStack getSpawnSword() {
-        float materialFloat = this.random.nextFloat();
-        if(materialFloat < 0.5F) {
-            return Items.WOODEN_SWORD.getDefaultInstance();
-        } else if(materialFloat < 0.90F) {
-            return Items.STONE_SWORD.getDefaultInstance();
-        } else {
-            return Items.IRON_SWORD.getDefaultInstance();
-        }
-    }
-
     public void checkArmor() {
         ItemStack head = this.getItemBySlot(EquipmentSlot.HEAD);
         ItemStack chest = this.getItemBySlot(EquipmentSlot.CHEST);
@@ -395,47 +391,6 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
         return super.doHurtTarget(entity);
     }
 
-    public ItemStack getSpawnArmor(EquipmentSlot armorType) {
-        float materialFloat = this.random.nextFloat();
-        if (materialFloat <= 0.4F) {
-            return ItemStack.EMPTY;
-        } else if(materialFloat < 0.70F) {
-            switch(armorType) {
-                case HEAD:
-                    return Items.LEATHER_HELMET.getDefaultInstance();
-                case CHEST:
-                    return Items.LEATHER_CHESTPLATE.getDefaultInstance();
-                case LEGS:
-                    return Items.LEATHER_LEGGINGS.getDefaultInstance();
-                case FEET:
-                    return Items.LEATHER_BOOTS.getDefaultInstance();
-            }
-        } else if(materialFloat < 0.90F) {
-            switch(armorType) {
-                case HEAD:
-                    return Items.CHAINMAIL_HELMET.getDefaultInstance();
-                case CHEST:
-                    return Items.CHAINMAIL_CHESTPLATE.getDefaultInstance();
-                case LEGS:
-                    return Items.CHAINMAIL_LEGGINGS.getDefaultInstance();
-                case FEET:
-                    return Items.CHAINMAIL_BOOTS.getDefaultInstance();
-            }
-        } else {
-            switch(armorType) {
-                case HEAD:
-                    return Items.IRON_HELMET.getDefaultInstance();
-                case CHEST:
-                    return Items.IRON_CHESTPLATE.getDefaultInstance();
-                case LEGS:
-                    return Items.IRON_LEGGINGS.getDefaultInstance();
-                case FEET:
-                    return Items.IRON_BOOTS.getDefaultInstance();
-            }
-        }
-        return ItemStack.EMPTY;
-    }
-
     @Override
     public ItemStack eat(Level world, ItemStack stack) {
         if (stack.isEdible()) {
@@ -449,7 +404,7 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
         for (int i = 0; i < this.inventory.getContainerSize(); ++i) {
             ItemStack itemstack = this.inventory.getItem(i);
             if (itemstack.isEdible()) {
-                if ((float)itemstack.getItem().getFoodProperties().getNutrition() + this.getHealth() <= 20) {
+                if ((float)itemstack.getItem().getFoodProperties().getNutrition() + this.getHealth() <= this.getMaxHealth()) {
                     return itemstack;
                 }
             }

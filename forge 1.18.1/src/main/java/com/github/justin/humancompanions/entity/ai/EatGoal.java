@@ -11,11 +11,11 @@ public class EatGoal extends Goal {
     ItemStack food = ItemStack.EMPTY;
 
     public EatGoal(AbstractHumanCompanionEntity entity) {
-        this.companion = entity;
+        companion = entity;
     }
 
     public boolean canUse() {
-        if (this.companion.getHealth() < 20) {
+        if (companion.getHealth() < companion.getMaxHealth()) {
             food = companion.checkFood();
             return !food.isEmpty();
         }
@@ -23,7 +23,7 @@ public class EatGoal extends Goal {
     }
 
     public void start() {
-        this.companion.setItemSlot(EquipmentSlot.OFFHAND, food);
+        companion.setItemSlot(EquipmentSlot.OFFHAND, food);
         companion.startUsingItem(InteractionHand.OFF_HAND);
         companion.setEating(true);
     }
@@ -34,7 +34,7 @@ public class EatGoal extends Goal {
     }
 
     public void tick () {
-        if (this.companion.getHealth() < 20) {
+        if (companion.getHealth() < companion.getMaxHealth()) {
             food = companion.checkFood();
             if (!food.isEmpty()) {
                 start();

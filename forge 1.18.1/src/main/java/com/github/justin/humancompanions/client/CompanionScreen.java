@@ -86,24 +86,30 @@ public class CompanionScreen extends AbstractContainerScreen<CompanionContainer>
     @Override
     protected void init() {
         super.init();
-        this.alertButton = addRenderableWidget(new CompanionButton("alert", leftPos + 152, topPos + 4, 16, 12, 0, 0, 13,
+        this.alertButton = addRenderableWidget(new CompanionButton("alert", leftPos + sidebarx + 2, topPos + 70, 16,
+                12, 0
+                , 0, 13,
                 ALERT_BUTTON,
                 btn -> {
                     PacketHandler.INSTANCE.sendToServer(new SetAlertPacket(companion.getId()));
         }));
-        this.huntingButton = addRenderableWidget(new CompanionButton("hunting", leftPos + 134, topPos + 4, 16, 12, 0, 0,13,
+        this.huntingButton = addRenderableWidget(new CompanionButton("hunting", leftPos + sidebarx + 21, topPos + 70,
+                16,
+                12, 0, 0,13,
                 HUNTING_BUTTON,
                 btn -> {
                     PacketHandler.INSTANCE.sendToServer(new SetHuntingPacket(companion.getId()));
                 }));
-        this.patrolButton = addRenderableWidget(new CompanionButton("patrolling", leftPos + 116, topPos + 4, 16, 12,
+        this.patrolButton = addRenderableWidget(new CompanionButton("patrolling", leftPos + sidebarx + 2, topPos + 85,
+                16,
+                12,
                 0, 0
                 ,13,
                 PATROL_BUTTON,
                 btn -> {
                     PacketHandler.INSTANCE.sendToServer(new SetPatrolingPacket(companion.getId()));
                 }));
-        this.clearButton = addRenderableWidget(new CompanionButton("clear", leftPos + sidebarx + 5, topPos + 56, 31,
+        this.clearButton = addRenderableWidget(new CompanionButton("clear", leftPos + sidebarx + 4, topPos + 56, 31,
                 12, 0, 0
                 ,13,
                 CLEAR_BUTTON,

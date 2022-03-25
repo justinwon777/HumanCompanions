@@ -83,22 +83,25 @@ public class CompanionScreen extends ContainerScreen<CompanionContainer> impleme
     @Override
     protected void init() {
         super.init();
-        this.alertButton = addButton(new CompanionButton("alert", leftPos + 152, topPos + 4, 16, 12, 0, 0, 13,
+        this.alertButton = addButton(new CompanionButton("alert", leftPos + sidebarx + 2, topPos + 70, 16, 12, 0, 0, 13,
                 ALERT_BUTTON,
                 btn -> {
                     PacketHandler.INSTANCE.sendToServer(new SetAlertPacket(companion.getId()));
                 }));
-        this.huntingButton = addButton(new CompanionButton("hunting", leftPos + 134, topPos + 4, 16, 12, 0, 0,13,
+        this.huntingButton = addButton(new CompanionButton("hunting", leftPos + sidebarx + 21, topPos + 70, 16, 12, 0, 0
+                ,13,
                 HUNTING_BUTTON,
                 btn -> {
                     PacketHandler.INSTANCE.sendToServer(new SetHuntingPacket(companion.getId()));
                 }));
-        this.patrolButton = addButton(new CompanionButton("patrolling", leftPos + 116, topPos + 4, 16, 12, 0, 0,13,
+        this.patrolButton = addButton(new CompanionButton("patrolling", leftPos + sidebarx + 2, topPos + 85, 16, 12,
+                0, 0
+                ,13,
                 PATROL_BUTTON,
                 btn -> {
                     PacketHandler.INSTANCE.sendToServer(new SetPatrollingPacket(companion.getId()));
                 }));
-        this.clearButton = addButton(new CompanionButton("clear", leftPos + sidebarx + 5, topPos + 56, 31,
+        this.clearButton = addButton(new CompanionButton("clear", leftPos + sidebarx + 4, topPos + 56, 31,
                 12, 0, 0
                 ,13,
                 CLEAR_BUTTON,

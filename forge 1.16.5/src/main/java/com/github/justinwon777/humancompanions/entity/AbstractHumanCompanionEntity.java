@@ -250,7 +250,9 @@ public class AbstractHumanCompanionEntity extends TameableEntity{
                                 text), this.getUUID());
                     }
                 } else {
-                    this.openGui((ServerPlayerEntity) player);
+                    if (this.getOwner() == player) {
+                        this.openGui((ServerPlayerEntity) player);
+                    }
                 }
                 return ActionResultType.SUCCESS;
             }

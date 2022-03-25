@@ -25,9 +25,10 @@ public class StructureInit {
                     () -> (new CompanionHouseStructure(VillageConfig.CODEC)));
 
     public static void setupStructures() {
+        System.out.println(Config.AVERAGE_HOUSE_SEPARATION.get());
         setupMapSpacingAndLand(
                 COMPANION_HOUSE.get(),
-                new StructureSeparationSettings(20,
+                new StructureSeparationSettings(Config.AVERAGE_HOUSE_SEPARATION.get(),
                         10,
                         1234567890),
                 true);

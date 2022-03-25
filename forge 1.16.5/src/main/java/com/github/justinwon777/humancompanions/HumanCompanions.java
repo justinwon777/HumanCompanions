@@ -1,10 +1,7 @@
 package com.github.justinwon777.humancompanions;
 
 import com.github.justinwon777.humancompanions.client.renderer.CompanionRenderer;
-import com.github.justinwon777.humancompanions.core.ConfiguredStructures;
-import com.github.justinwon777.humancompanions.core.EntityInit;
-import com.github.justinwon777.humancompanions.core.PacketHandler;
-import com.github.justinwon777.humancompanions.core.StructureInit;
+import com.github.justinwon777.humancompanions.core.*;
 import com.mojang.serialization.Codec;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
@@ -48,6 +45,7 @@ public class HumanCompanions
         EntityInit.ENTITIES.register(eventBus);
         StructureInit.DEFERRED_REGISTRY_STRUCTURE.register(eventBus);
         PacketHandler.register();
+        Config.register();
         eventBus.addListener(this::setup);
         eventBus.addListener(this::doClientStuff);
 

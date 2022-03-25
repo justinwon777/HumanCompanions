@@ -48,6 +48,7 @@ public class HumanCompanions {
         EntityInit.ENTITIES.register(eventBus);
         StructureInit.DEFERRED_REGISTRY_STRUCTURE.register(eventBus);
         PacketHandler.register();
+        Config.register();
         eventBus.addListener(this::setup);
 
         IEventBus forgeBus = MinecraftForge.EVENT_BUS;

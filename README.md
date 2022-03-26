@@ -41,6 +41,7 @@ They live in a wide variety of biomes in houses like these (plus more!):
 - Arrows sometimes don't hit.
 - Knights sometimes hesitate while attacking.
 
-## Helping out
+## Discord
 
-If you wanna help contribute, that'd be great, so contact me on discord at Penglen#9566
+Join the discord to ask questions or help contribute
+https://discord.gg/GyarGWrh

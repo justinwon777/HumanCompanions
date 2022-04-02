@@ -1,0 +1,6 @@
+{
+  "entity.humancompanions.knight": "Knight",
+  "entity.humancompanions.archer": "Archer",
+  "entity.humancompanions.archer": "Arbalist",
+  "container.humancompanions.companion_inventory": "Companion Inventory"
+}

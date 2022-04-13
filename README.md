@@ -44,4 +44,4 @@ They live in a wide variety of biomes in houses like these (plus more!):
 ## Discord
 
 Join the discord to ask questions or help contribute
-https://discord.gg/GyarGWrh
+https://discord.gg/RmTYpsAhCV

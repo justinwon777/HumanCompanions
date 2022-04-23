@@ -6,6 +6,7 @@ import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.target.TargetGoal;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
+import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.monster.Creeper;
 
 public class CustomOwnerHurtTargetGoal extends TargetGoal {
@@ -32,7 +33,7 @@ public class CustomOwnerHurtTargetGoal extends TargetGoal {
                             return false;
                         }
                     }
-                } else if (this.ownerLastHurt instanceof Creeper) {
+                } else if (this.ownerLastHurt instanceof Creeper || this.ownerLastHurt instanceof ArmorStand) {
                     return false;
                 }
                 int i = livingentity.getLastHurtMobTimestamp();

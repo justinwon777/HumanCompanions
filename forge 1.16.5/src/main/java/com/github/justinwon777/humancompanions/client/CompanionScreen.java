@@ -6,10 +6,7 @@ import com.github.justinwon777.humancompanions.core.PacketHandler;
 import com.github.justinwon777.humancompanions.entity.AbstractHumanCompanionEntity;
 import com.github.justinwon777.humancompanions.entity.Arbalist;
 import com.github.justinwon777.humancompanions.entity.Archer;
-import com.github.justinwon777.humancompanions.networking.ClearTargetPacket;
-import com.github.justinwon777.humancompanions.networking.SetAlertPacket;
-import com.github.justinwon777.humancompanions.networking.SetHuntingPacket;
-import com.github.justinwon777.humancompanions.networking.SetPatrollingPacket;
+import com.github.justinwon777.humancompanions.networking.*;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.IHasContainer;
@@ -41,12 +38,15 @@ public class CompanionScreen extends ContainerScreen<CompanionContainer> impleme
             "/patrolbutton.png");
     private static final ResourceLocation CLEAR_BUTTON = new ResourceLocation(HumanCompanions.MOD_ID, "textures" +
             "/clearbutton.png");
+    private static final ResourceLocation STATIONERY_BUTTON = new ResourceLocation(HumanCompanions.MOD_ID, "textures" +
+            "/stationerybutton.png");
     private final int containerRows;
     private final AbstractHumanCompanionEntity companion;
     private CompanionButton alertButton;
     private CompanionButton huntingButton;
     private CompanionButton patrolButton;
     private CompanionButton clearButton;
+    private CompanionButton stationeryButton;
     DecimalFormat df = new DecimalFormat("#.#");
     int sidebarx;
 
@@ -108,6 +108,13 @@ public class CompanionScreen extends ContainerScreen<CompanionContainer> impleme
                 btn -> {
                     PacketHandler.INSTANCE.sendToServer(new ClearTargetPacket(companion.getId()));
                 }));
+        if (companion instanceof Archer || companion instanceof Arbalist) {
+            this.stationeryButton = addButton(new CompanionButton("stationery", leftPos + sidebarx + 21, topPos + 85, 16, 12, 0, 0, 13,
+                    STATIONERY_BUTTON,
+                    btn -> {
+                        PacketHandler.INSTANCE.sendToServer(new SetStationeryPacket(companion.getId()));
+                    }));
+        }
     }
 
     @Override
@@ -178,6 +185,19 @@ public class CompanionScreen extends ContainerScreen<CompanionContainer> impleme
 
             this.renderComponentTooltip(stack, tooltips, x, y);
         }
+        if (companion instanceof Archer || companion instanceof Arbalist) {
+            if (this.stationeryButton.isHovered()) {
+                List<ITextComponent> tooltips = new ArrayList<>();
+                if (this.companion.isStationery()) {
+                    tooltips.add(new StringTextComponent("Stationery: On"));
+                } else {
+                    tooltips.add(new StringTextComponent("Stationery: Off"));
+                }
+                tooltips.add(new StringTextComponent("Companion will not move while attacking in guard mode").withStyle(TextFormatting.GRAY).withStyle(TextFormatting.ITALIC));
+
+                this.renderComponentTooltip(stack, tooltips, x, y);
+            }
+        }
     }
 
     class CompanionButton extends ImageButton {
@@ -213,6 +233,12 @@ public class CompanionScreen extends ContainerScreen<CompanionContainer> impleme
                     this.xTexStart = 17;
                 } else {
                     this.xTexStart = 34;
+                }
+            } else if (this.name.equals("stationery")) {
+                if (CompanionScreen.this.companion.isStationery()) {
+                    this.xTexStart = 0;
+                } else {
+                    this.xTexStart = 17;
                 }
             }
             RenderSystem.enableBlend();

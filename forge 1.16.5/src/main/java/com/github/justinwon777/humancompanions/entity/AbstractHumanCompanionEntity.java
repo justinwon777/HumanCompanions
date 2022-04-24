@@ -57,6 +57,8 @@ public class AbstractHumanCompanionEntity extends TameableEntity{
             DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> GUARDING = EntityDataManager.defineId(AbstractHumanCompanionEntity.class,
             DataSerializers.BOOLEAN);
+    private static final DataParameter<Boolean> STATIONERY = EntityDataManager.defineId(AbstractHumanCompanionEntity.class,
+            DataSerializers.BOOLEAN);
     private static final DataParameter<Optional<BlockPos>> PATROL_POS = EntityDataManager.defineId(AbstractHumanCompanionEntity.class,
             DataSerializers.OPTIONAL_BLOCK_POS);
     private static final DataParameter<Integer> PATROL_RADIUS = EntityDataManager.defineId(AbstractHumanCompanionEntity.class,
@@ -104,6 +106,7 @@ public class AbstractHumanCompanionEntity extends TameableEntity{
 
     public static AttributeModifierMap.MutableAttribute createAttributes() {
         return MobEntity.createMobAttributes()
+                .add(Attributes.FOLLOW_RANGE, 20.0D)
                 .add(Attributes.MAX_HEALTH, 20.0D)
                 .add(Attributes.ATTACK_DAMAGE, 1.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.32D);
@@ -118,6 +121,7 @@ public class AbstractHumanCompanionEntity extends TameableEntity{
         this.entityData.define(PATROLLING, false);
         this.entityData.define(FOLLOWING, false);
         this.entityData.define(GUARDING, false);
+        this.entityData.define(STATIONERY, false);
         this.entityData.define(PATROL_POS, Optional.empty());
         this.entityData.define(PATROL_RADIUS, 10);
     }
@@ -161,6 +165,7 @@ public class AbstractHumanCompanionEntity extends TameableEntity{
         tag.putBoolean("Patrolling", this.isPatrolling());
         tag.putBoolean("Following", this.isFollowing());
         tag.putBoolean("Guarding", this.isGuarding());
+        tag.putBoolean("Stationery", this.isStationery());
         tag.putInt("radius", this.getPatrolRadius());
         if (this.getPatrolPos() != null) {
             int[] patrolPos = {this.getPatrolPos().getX(), this.getPatrolPos().getY(), this.getPatrolPos().getZ()};
@@ -177,6 +182,7 @@ public class AbstractHumanCompanionEntity extends TameableEntity{
         this.setPatrolling(tag.getBoolean("Patrolling"));
         this.setFollowing(tag.getBoolean("Following"));
         this.setGuarding(tag.getBoolean("Guarding"));
+        this.setStationery(tag.getBoolean("Stationery"));
         this.setPatrolRadius(tag.getInt("radius"));
         if (tag.getBoolean("Alert")) {
             this.addAlertGoals();
@@ -427,51 +433,37 @@ public class AbstractHumanCompanionEntity extends TameableEntity{
 
     public int getPatrolRadius() { return this.entityData.get(PATROL_RADIUS); }
 
-    public ResourceLocation getResourceLocation() {
-        return CompanionData.maleSkins[getCompanionSkin()];
-    }
+    public ResourceLocation getResourceLocation() { return CompanionData.maleSkins[getCompanionSkin()]; }
 
-    public int getCompanionSkin() {
-        return this.entityData.get(DATA_TYPE_ID);
-    }
+    public int getCompanionSkin() { return this.entityData.get(DATA_TYPE_ID); }
 
-    public void setCompanionSkin(int skinIndex) {
-        this.entityData.set(DATA_TYPE_ID, skinIndex);
-    }
+    public void setCompanionSkin(int skinIndex) { this.entityData.set(DATA_TYPE_ID, skinIndex); }
 
-    public boolean isEating() {
-        return this.entityData.get(EATING);
-    }
+    public boolean isEating() { return this.entityData.get(EATING); }
 
-    public boolean isAlert() {
-        return this.entityData.get(ALERT);
-    }
+    public boolean isAlert() { return this.entityData.get(ALERT); }
 
-    public boolean isHunting() {
-        return this.entityData.get(HUNTING);
-    }
+    public boolean isHunting() { return this.entityData.get(HUNTING); }
 
     public boolean isPatrolling() { return this.entityData.get(PATROLLING); }
 
     public boolean isGuarding() { return this.entityData.get(GUARDING); }
 
+    public boolean isStationery() { return this.entityData.get(STATIONERY); }
+
     public boolean isFollowing() { return this.entityData.get(FOLLOWING); }
 
-    public void setEating(boolean eating) {
-        this.entityData.set(EATING, eating);
-    }
+    public void setEating(boolean eating) { this.entityData.set(EATING, eating); }
 
-    public void setAlert(boolean alert) {
-        this.entityData.set(ALERT, alert);
-    }
+    public void setAlert(boolean alert) { this.entityData.set(ALERT, alert); }
 
-    public void setHunting(boolean hunting) {
-        this.entityData.set(HUNTING, hunting);
-    }
+    public void setHunting(boolean hunting) { this.entityData.set(HUNTING, hunting); }
 
     public void setPatrolling(boolean patrolling) { this.entityData.set(PATROLLING, patrolling); }
 
     public void setGuarding(boolean guarding) { this.entityData.set(GUARDING, guarding); }
+
+    public void setStationery(boolean stationery) { this.entityData.set(STATIONERY, stationery); }
 
     public void setFollowing(boolean following) { this.entityData.set(FOLLOWING, following); }
 

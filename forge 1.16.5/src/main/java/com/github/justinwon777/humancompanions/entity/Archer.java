@@ -24,7 +24,7 @@ public class Archer extends AbstractHumanCompanionEntity implements IRangedAttac
 
     public Archer(EntityType<? extends TameableEntity> entityType, World level) {
         super(entityType, level);
-        this.goalSelector.addGoal(2, new ArcherBowAttackGoal<>(this, 1.0D, 5, 15.0F));
+        this.goalSelector.addGoal(2, new ArcherBowAttackGoal<>(this, 1.0D, 20, 20.0F));
 
     }
 
@@ -56,8 +56,8 @@ public class Archer extends AbstractHumanCompanionEntity implements IRangedAttac
         double d1 = p_82196_1_.getY(0.3333333333333333D) - abstractarrowentity.getY();
         double d2 = p_82196_1_.getZ() - this.getZ();
         double d3 = (double) MathHelper.sqrt(d0 * d0 + d2 * d2);
-        abstractarrowentity.shoot(d0, d1 + d3 * (double)0.2F, d2, 1.6F, (float)(14 - this.level.getDifficulty().getId() * 4));
-        this.playSound(SoundEvents.SKELETON_SHOOT, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
+        abstractarrowentity.shoot(d0, d1 + d3 * (double)0.2F, d2, 1.6F, (float)(this.level.getDifficulty().getId() * 3));
+        this.playSound(SoundEvents.ARROW_SHOOT, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
         this.level.addFreshEntity(abstractarrowentity);
         if (!this.level.isClientSide) {
             this.getMainHandItem().hurtAndBreak(1, this, (p_43296_) -> {

@@ -32,6 +32,8 @@ public class PacketHandler {
                 SetPatrollingPacket::handle);
         INSTANCE.registerMessage(id++, ClearTargetPacket.class, ClearTargetPacket::encode, ClearTargetPacket::decode,
                 ClearTargetPacket::handle);
+        INSTANCE.registerMessage(id++, SetStationeryPacket.class, SetStationeryPacket::encode, SetStationeryPacket::decode,
+                SetStationeryPacket::handle);
     }
 
     @SuppressWarnings("resource")

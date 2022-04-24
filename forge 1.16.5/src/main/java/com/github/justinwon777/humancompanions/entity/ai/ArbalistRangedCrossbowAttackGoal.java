@@ -75,15 +75,22 @@ public class ArbalistRangedCrossbowAttackGoal<T extends AbstractHumanCompanionEn
 
             double d0 = this.mob.distanceToSqr(livingentity);
             boolean flag2 = (d0 > (double)this.attackRadiusSqr || this.seeTime < 5) && this.attackDelay == 0;
-            if (flag2) {
-                --this.updatePathDelay;
-                if (this.updatePathDelay <= 0) {
-                    this.mob.getNavigation().moveTo(livingentity, this.canRun() ? this.speedModifier : this.speedModifier * 0.5D);
-                    this.updatePathDelay = PATHFINDING_DELAY_RANGE.randomValue(this.mob.getRandom());
+            if (this.mob.isStationery() && this.mob.isGuarding()) {
+                if (!flag || d0 > (double) this.attackRadiusSqr) {
+                    this.mob.clearTarget();
                 }
-            } else {
-                this.updatePathDelay = 0;
-                this.mob.getNavigation().stop();
+            }
+            else {
+                if (flag2) {
+                    --this.updatePathDelay;
+                    if (this.updatePathDelay <= 0) {
+                        this.mob.getNavigation().moveTo(livingentity, this.canRun() ? this.speedModifier : this.speedModifier * 0.5D);
+                        this.updatePathDelay = PATHFINDING_DELAY_RANGE.randomValue(this.mob.getRandom());
+                    }
+                } else {
+                    this.updatePathDelay = 0;
+                    this.mob.getNavigation().stop();
+                }
             }
 
             this.mob.getLookControl().setLookAt(livingentity, 30.0F, 30.0F);
@@ -112,10 +119,12 @@ public class ArbalistRangedCrossbowAttackGoal<T extends AbstractHumanCompanionEn
                     this.crossbowState = ArbalistRangedCrossbowAttackGoal.CrossbowState.READY_TO_ATTACK;
                 }
             } else if (this.crossbowState == ArbalistRangedCrossbowAttackGoal.CrossbowState.READY_TO_ATTACK && flag) {
-                this.mob.performRangedAttack(livingentity, 1.0F);
-                ItemStack itemstack1 = this.mob.getItemInHand(ProjectileHelper.getWeaponHoldingHand(this.mob, item -> item instanceof CrossbowItem));
-                CrossbowItem.setCharged(itemstack1, false);
-                this.crossbowState = ArbalistRangedCrossbowAttackGoal.CrossbowState.UNCHARGED;
+                if (this.mob.getTarget() != null) {
+                    this.mob.performRangedAttack(livingentity, 1.0F);
+                    ItemStack itemstack1 = this.mob.getItemInHand(ProjectileHelper.getWeaponHoldingHand(this.mob, item -> item instanceof CrossbowItem));
+                    CrossbowItem.setCharged(itemstack1, false);
+                    this.crossbowState = ArbalistRangedCrossbowAttackGoal.CrossbowState.UNCHARGED;
+                }
             }
 
         }

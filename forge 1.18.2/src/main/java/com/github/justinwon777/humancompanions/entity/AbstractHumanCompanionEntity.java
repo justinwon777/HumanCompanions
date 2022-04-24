@@ -55,7 +55,9 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
             EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> FOLLOWING = SynchedEntityData.defineId(AbstractHumanCompanionEntity.class,
             EntityDataSerializers.BOOLEAN);
-    private static final EntityDataAccessor<Boolean> GUARDING =
+    private static final EntityDataAccessor<Boolean> GUARDING = SynchedEntityData.defineId(AbstractHumanCompanionEntity.class,
+            EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> STATIONERY =
             SynchedEntityData.defineId(AbstractHumanCompanionEntity.class,
             EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Optional<BlockPos>> PATROL_POS = SynchedEntityData.defineId(AbstractHumanCompanionEntity.class,
@@ -106,6 +108,7 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
 
     public static AttributeSupplier.Builder createAttributes() {
         return Mob.createMobAttributes()
+                .add(Attributes.FOLLOW_RANGE, 20.0D)
                 .add(Attributes.MAX_HEALTH, 20.0D)
                 .add(Attributes.ATTACK_DAMAGE, 1.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.32D);
@@ -120,6 +123,7 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
         this.entityData.define(PATROLLING, false);
         this.entityData.define(FOLLOWING, false);
         this.entityData.define(GUARDING, false);
+        this.entityData.define(STATIONERY, false);
         this.entityData.define(PATROL_POS, Optional.empty());
         this.entityData.define(PATROL_RADIUS, 10);
     }
@@ -163,6 +167,7 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
         tag.putBoolean("Patrolling", this.isPatrolling());
         tag.putBoolean("Following", this.isFollowing());
         tag.putBoolean("Guarding", this.isGuarding());
+        tag.putBoolean("Stationery", this.isStationery());
         tag.putInt("radius", this.getPatrolRadius());
         if (this.getPatrolPos() != null) {
             int[] patrolPos = {this.getPatrolPos().getX(), this.getPatrolPos().getY(), this.getPatrolPos().getZ()};
@@ -179,6 +184,7 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
         this.setPatrolling(tag.getBoolean("Patrolling"));
         this.setFollowing(tag.getBoolean("Following"));
         this.setGuarding(tag.getBoolean("Guarding"));
+        this.setStationery(tag.getBoolean("Stationery"));
         this.setPatrolRadius(tag.getInt("radius"));
         if (tag.getBoolean("Alert")) {
             addAlertGoals();
@@ -418,7 +424,6 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
         this.setTarget(null);
     }
 
-    @Nullable
     public void setPatrolPos(BlockPos position) {
         this.entityData.set(PATROL_POS, Optional.ofNullable(position));
     }
@@ -460,13 +465,11 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
         return this.entityData.get(HUNTING);
     }
 
-    public boolean isPatrolling() {
-        return this.entityData.get(PATROLLING);
-    }
+    public boolean isPatrolling() { return this.entityData.get(PATROLLING); }
 
-    public boolean isGuarding() {
-        return this.entityData.get(GUARDING);
-    }
+    public boolean isGuarding() { return this.entityData.get(GUARDING); }
+
+    public boolean isStationery() { return this.entityData.get(STATIONERY); }
 
     public boolean isFollowing() {
         return this.entityData.get(FOLLOWING);
@@ -490,6 +493,10 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
 
     public void setGuarding(boolean guarding) {
         this.entityData.set(GUARDING, guarding);
+    }
+
+    public void setStationery(boolean stationery) {
+        this.entityData.set(STATIONERY, stationery);
     }
 
     public void setFollowing(boolean following) {

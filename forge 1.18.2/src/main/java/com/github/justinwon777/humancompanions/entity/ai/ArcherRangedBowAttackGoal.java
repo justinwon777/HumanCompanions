@@ -78,37 +78,45 @@ public class ArcherRangedBowAttackGoal<T extends AbstractHumanCompanionEntity & 
                 --this.seeTime;
             }
 
-            if (!(d0 > (double)this.attackRadiusSqr) && this.seeTime >= 20) {
-                this.mob.getNavigation().stop();
-                ++this.strafingTime;
-            } else {
-                this.mob.getNavigation().moveTo(livingentity, this.speedModifier);
-                this.strafingTime = -1;
-            }
-
-            if (this.strafingTime >= 20) {
-                if ((double)this.mob.getRandom().nextFloat() < 0.3D) {
-                    this.strafingClockwise = !this.strafingClockwise;
-                }
-
-                if ((double)this.mob.getRandom().nextFloat() < 0.3D) {
-                    this.strafingBackwards = !this.strafingBackwards;
-                }
-
-                this.strafingTime = 0;
-            }
-
-            if (this.strafingTime > -1) {
-                if (d0 > (double)(this.attackRadiusSqr * 0.75F)) {
-                    this.strafingBackwards = false;
-                } else if (d0 < (double)(this.attackRadiusSqr * 0.25F)) {
-                    this.strafingBackwards = true;
-                }
-
-                this.mob.getMoveControl().strafe(this.strafingBackwards ? -0.5F : 0.5F, this.strafingClockwise ? 0.5F : -0.5F);
-                this.mob.lookAt(livingentity, 30.0F, 30.0F);
-            } else {
+            if (this.mob.isStationery() && this.mob.isGuarding()) {
                 this.mob.getLookControl().setLookAt(livingentity, 30.0F, 30.0F);
+                if (!flag || d0 > (double) this.attackRadiusSqr) {
+                    this.mob.clearTarget();
+                }
+            }
+            else {
+                if (!(d0 > (double) this.attackRadiusSqr) && this.seeTime >= 20) {
+                    this.mob.getNavigation().stop();
+                    ++this.strafingTime;
+                } else {
+                    this.mob.getNavigation().moveTo(livingentity, this.speedModifier);
+                    this.strafingTime = -1;
+                }
+
+                if (this.strafingTime >= 20) {
+                    if ((double) this.mob.getRandom().nextFloat() < 0.3D) {
+                        this.strafingClockwise = !this.strafingClockwise;
+                    }
+
+                    if ((double) this.mob.getRandom().nextFloat() < 0.3D) {
+                        this.strafingBackwards = !this.strafingBackwards;
+                    }
+
+                    this.strafingTime = 0;
+                }
+
+                if (this.strafingTime > -1) {
+                    if (d0 > (double) (this.attackRadiusSqr * 0.75F)) {
+                        this.strafingBackwards = false;
+                    } else if (d0 < (double) (this.attackRadiusSqr * 0.25F)) {
+                        this.strafingBackwards = true;
+                    }
+
+                    this.mob.getMoveControl().strafe(this.strafingBackwards ? -0.5F : 0.5F, this.strafingClockwise ? 0.5F : -0.5F);
+                    this.mob.lookAt(livingentity, 30.0F, 30.0F);
+                } else {
+                    this.mob.getLookControl().setLookAt(livingentity, 30.0F, 30.0F);
+                }
             }
 
             if (this.mob.isUsingItem()) {

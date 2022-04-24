@@ -6,10 +6,7 @@ import com.github.justinwon777.humancompanions.core.PacketHandler;
 import com.github.justinwon777.humancompanions.entity.AbstractHumanCompanionEntity;
 import com.github.justinwon777.humancompanions.entity.Arbalist;
 import com.github.justinwon777.humancompanions.entity.Archer;
-import com.github.justinwon777.humancompanions.networking.ClearTargetPacket;
-import com.github.justinwon777.humancompanions.networking.SetAlertPacket;
-import com.github.justinwon777.humancompanions.networking.SetHuntingPacket;
-import com.github.justinwon777.humancompanions.networking.SetPatrolingPacket;
+import com.github.justinwon777.humancompanions.networking.*;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.ChatFormatting;
@@ -43,12 +40,15 @@ public class CompanionScreen extends AbstractContainerScreen<CompanionContainer>
             "/patrolbutton.png");
     private static final ResourceLocation CLEAR_BUTTON = new ResourceLocation(HumanCompanions.MOD_ID, "textures" +
             "/clearbutton.png");
+    private static final ResourceLocation STATIONERY_BUTTON = new ResourceLocation(HumanCompanions.MOD_ID, "textures" +
+            "/stationerybutton.png");
     private final int containerRows;
     private final AbstractHumanCompanionEntity companion;
     private CompanionButton alertButton;
     private CompanionButton huntingButton;
     private CompanionButton patrolButton;
     private CompanionButton clearButton;
+    private CompanionButton stationeryButton;
     DecimalFormat df = new DecimalFormat("#.#");
     int sidebarx;
 
@@ -109,6 +109,18 @@ public class CompanionScreen extends AbstractContainerScreen<CompanionContainer>
                 btn -> {
                     PacketHandler.INSTANCE.sendToServer(new SetPatrolingPacket(companion.getId()));
                 }));
+        if (companion instanceof Archer || companion instanceof Arbalist) {
+            this.stationeryButton = addRenderableWidget(new CompanionButton("stationery", leftPos + sidebarx + 21,
+                    topPos + 85,
+                    16,
+                    12,
+                    0, 0
+                    , 13,
+                    STATIONERY_BUTTON,
+                    btn -> {
+                        PacketHandler.INSTANCE.sendToServer(new SetStationeryPacket(companion.getId()));
+                    }));
+        }
         this.clearButton = addRenderableWidget(new CompanionButton("clear", leftPos + sidebarx + 4, topPos + 56, 31,
                 12, 0, 0
                 ,13,
@@ -188,6 +200,20 @@ public class CompanionScreen extends AbstractContainerScreen<CompanionContainer>
 
             this.renderTooltip(stack, tooltips, Optional.empty(), x, y);
         }
+
+        if (companion instanceof Archer || companion instanceof Arbalist) {
+            if (this.stationeryButton.isHoveredOrFocused()) {
+                List<Component> tooltips = new ArrayList<>();
+                if (this.companion.isStationery()) {
+                    tooltips.add(new TextComponent("Stationery: On"));
+                } else {
+                    tooltips.add(new TextComponent("Stationery: Off"));
+                }
+                tooltips.add(new TextComponent("Companion will not move while attacking in guard mode").withStyle(ChatFormatting.GRAY).withStyle(ChatFormatting.ITALIC));
+
+                this.renderTooltip(stack, tooltips, Optional.empty(), x, y);
+            }
+        }
     }
 
     class CompanionButton extends ImageButton {
@@ -223,6 +249,12 @@ public class CompanionScreen extends AbstractContainerScreen<CompanionContainer>
                     this.xTexStart = 17;
                 } else {
                     this.xTexStart = 34;
+                }
+            } else if (this.name.equals("stationery")) {
+                if (CompanionScreen.this.companion.isStationery()) {
+                    this.xTexStart = 0;
+                } else {
+                    this.xTexStart = 17;
                 }
             }
             RenderSystem.enableBlend();

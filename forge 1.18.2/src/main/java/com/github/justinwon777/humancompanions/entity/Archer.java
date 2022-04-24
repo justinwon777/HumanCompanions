@@ -22,7 +22,7 @@ public class Archer extends AbstractHumanCompanionEntity implements RangedAttack
 
     public Archer(EntityType<? extends TamableAnimal> entityType, Level level) {
         super(entityType, level);
-        this.goalSelector.addGoal(2, new ArcherRangedBowAttackGoal<>(this, 1.0D, 5, 15.0F));
+        this.goalSelector.addGoal(2, new ArcherRangedBowAttackGoal<>(this, 1.0D, 20, 20.0F));
 
     }
 
@@ -54,8 +54,8 @@ public class Archer extends AbstractHumanCompanionEntity implements RangedAttack
         double d1 = p_32141_.getY(0.3333333333333333D) - abstractarrow.getY();
         double d2 = p_32141_.getZ() - this.getZ();
         double d3 = Math.sqrt(d0 * d0 + d2 * d2);
-        abstractarrow.shoot(d0, d1 + d3 * (double)0.2F, d2, 1.6F, (float)(14 - this.level.getDifficulty().getId() * 4));
-        this.playSound(SoundEvents.SKELETON_SHOOT, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
+        abstractarrow.shoot(d0, d1 + d3 * (double)0.20F, d2, 1.6F, (float)(this.level.getDifficulty().getId() * 3));
+        this.playSound(SoundEvents.ARROW_SHOOT, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
         this.level.addFreshEntity(abstractarrow);
         if (!this.level.isClientSide) {
             this.getMainHandItem().hurtAndBreak(1, this, (p_43296_) -> {

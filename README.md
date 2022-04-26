@@ -32,13 +32,15 @@ They live in a wide variety of biomes in houses like these (plus more!):
 - Put food in their inventory and they will eat to heal themselves.
 - Toggle "Hunt" and "Alert" modes in their inventory to control their behavior.
 - Toggle between follow, patrol, and guard states
+- Toggle stationery to keep archers and arbalists standing while shooting
 - You could do "/locate humancompanions:companion_house" to find a house quickly.
 
 ## Known Issues
 
+- Rare crash when companion is hit by an arrow. Please report details if seen.
 - When a companion dies, sometimes it drops a duplicate of an item or doesn't drop an item in its inventory at all.
 - Archers sometimes shoot at nothing after killing a mob. Use clear button to clear target.
-- Arrows sometimes don't hit.
+- When knights break their sword, it will show it's stil equipping. Reload game to fix.
 - Knights sometimes hesitate while attacking.
 
 ## Discord

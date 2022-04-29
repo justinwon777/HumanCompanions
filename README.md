@@ -38,7 +38,7 @@ They live in a wide variety of biomes in houses like these (plus more!):
 ## Known Issues
 
 - Rare crash when companion is hit by an arrow. Please report details if seen.
-- They will permanently despawn if you get too far away from them
+- While in follow mode, they will permanently despawn if you get too far away from them
 - When a companion dies, sometimes it drops a duplicate of an item or doesn't drop an item in its inventory at all.
 - Archers sometimes shoot at nothing after killing a mob. Use clear button to clear target.
 - When knights break their sword, it will show it's stil equipping. Reload game to fix.

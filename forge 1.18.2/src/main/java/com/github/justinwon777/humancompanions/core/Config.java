@@ -14,7 +14,7 @@ public class Config {
 
     private static void registerCommonConfig() {
         ForgeConfigSpec.Builder COMMON_BUILDER = new ForgeConfigSpec.Builder();
-        COMMON_BUILDER.comment("Settings for world gen").push("world gen");
+        COMMON_BUILDER.comment("Settings for world gen (Doesn't work in 1.18.2. Use datapacks instead.)").push("world gen");
         AVERAGE_HOUSE_SEPARATION = COMMON_BUILDER
                 .comment("Average chunk separation between companion houses")
                 .defineInRange("averageHouseSeparation", 20, 11, Integer.MAX_VALUE);

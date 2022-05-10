@@ -13,6 +13,10 @@ A clear and concise description of what the bug is.
 **To Reproduce**
 Reproduction steps are important for me to fix the issue. Please include if you can.
 
+**Versions (Please fill this out)**
+Minecraft version:
+Human Companions version:
+
 **Additional info**
 Add any of the following if you can:
 - Screenshots

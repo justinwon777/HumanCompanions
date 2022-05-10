@@ -18,7 +18,7 @@ Minecraft version:
 Human Companions version:
 
 **Additional info**
-Add any of the following if you can:
+Add anything that would help figure out the issue, such as...
 - Screenshots
 - Videos
 - Logs

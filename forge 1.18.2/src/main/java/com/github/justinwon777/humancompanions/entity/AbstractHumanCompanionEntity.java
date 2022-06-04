@@ -1,6 +1,7 @@
 package com.github.justinwon777.humancompanions.entity;
 
 import com.github.justinwon777.humancompanions.container.CompanionContainer;
+import com.github.justinwon777.humancompanions.core.Config;
 import com.github.justinwon777.humancompanions.core.EntityInit;
 import com.github.justinwon777.humancompanions.core.PacketHandler;
 import com.github.justinwon777.humancompanions.entity.ai.*;
@@ -345,7 +346,9 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
                 LivingEntity owner1 = ((TamableAnimal) p_34288_.getEntity()).getOwner();
                 LivingEntity owner2 = this.getOwner();
                 if (owner1 == owner2) {
-                    return false;
+                    if (!Config.FRIENDLY_FIRE.get()) {
+                        return false;
+                    }
                 }
             }
         }

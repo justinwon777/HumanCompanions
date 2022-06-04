@@ -1,5 +1,6 @@
 package com.github.justinwon777.humancompanions.entity.ai;
 
+import com.github.justinwon777.humancompanions.core.Config;
 import net.minecraft.entity.EntityPredicate;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
@@ -33,7 +34,9 @@ public class CustomOwnerHurtTargetGoal extends TargetGoal {
                         LivingEntity owner1 = ((TameableEntity) this.ownerLastHurt).getOwner();
                         LivingEntity owner2 = this.tameAnimal.getOwner();
                         if (owner1 == owner2) {
-                            return false;
+                            if (!Config.FRIENDLY_FIRE.get()) {
+                                return false;
+                            }
                         }
                     }
                 } else if (this.ownerLastHurt instanceof CreeperEntity || this.ownerLastHurt instanceof ArmorStandEntity) {

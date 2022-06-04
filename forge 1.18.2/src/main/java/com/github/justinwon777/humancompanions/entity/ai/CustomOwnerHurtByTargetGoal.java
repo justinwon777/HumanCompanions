@@ -1,6 +1,8 @@
 package com.github.justinwon777.humancompanions.entity.ai;
 
 import java.util.EnumSet;
+
+import com.github.justinwon777.humancompanions.core.Config;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -30,7 +32,9 @@ public class CustomOwnerHurtByTargetGoal extends TargetGoal {
                         LivingEntity owner1 = ((TamableAnimal) this.ownerLastHurtBy).getOwner();
                         LivingEntity owner2 = this.tameAnimal.getOwner();
                         if (owner1 == owner2) {
-                            return false;
+                            if (!Config.FRIENDLY_FIRE.get()) {
+                                return false;
+                            }
                         }
                     }
                 }

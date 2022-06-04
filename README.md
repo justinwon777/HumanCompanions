@@ -44,7 +44,8 @@ They live in a wide variety of biomes in houses like these (plus more!):
 - When knights break their sword, it will show it's stil equipping. Reload game to fix.
 - Knights sometimes hesitate while attacking.
 
-## Discord
+## Links
 
-Join the discord to ask questions or help contribute
-https://discord.gg/RmTYpsAhCV
+Join the discord to ask questions or help contribute https://discord.gg/RmTYpsAhCV
+
+Support me on [Patreon.](https://www.patreon.com/humancompanions "patreon")

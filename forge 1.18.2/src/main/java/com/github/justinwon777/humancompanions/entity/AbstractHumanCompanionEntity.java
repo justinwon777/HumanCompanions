@@ -258,7 +258,7 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
                                 text), this.getUUID());
                     }
                 } else {
-                    if (this.getOwner() == player) {
+                    if (this.isAlliedTo(player)) {
                         this.openGui((ServerPlayer) player);
                     }
                 }
@@ -342,7 +342,9 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
     public boolean hurt(DamageSource p_34288_, float p_34289_) {
         if (p_34288_.getEntity() instanceof TamableAnimal) {
             if (this.isTame() && ((TamableAnimal) p_34288_.getEntity()).isTame()) {
-                if (this.getOwner().is(((TamableAnimal) p_34288_.getEntity()).getOwner())) {
+                LivingEntity owner1 = ((TamableAnimal) p_34288_.getEntity()).getOwner();
+                LivingEntity owner2 = this.getOwner();
+                if (owner1 == owner2) {
                     return false;
                 }
             }

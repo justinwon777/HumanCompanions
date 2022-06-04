@@ -29,7 +29,9 @@ public class CustomOwnerHurtByTargetGoal extends TargetGoal {
                 this.ownerLastHurtBy = livingentity.getLastHurtByMob();
                 if (this.ownerLastHurtBy instanceof TameableEntity) {
                     if (((TameableEntity) this.ownerLastHurtBy).isTame()) {
-                        if (((TameableEntity) this.ownerLastHurtBy).getOwner().is(this.tameAnimal.getOwner())) {
+                        LivingEntity owner1 = ((TameableEntity) this.ownerLastHurtBy).getOwner();
+                        LivingEntity owner2 = this.tameAnimal.getOwner();
+                        if (owner1 == owner2) {
                             return false;
                         }
                     }

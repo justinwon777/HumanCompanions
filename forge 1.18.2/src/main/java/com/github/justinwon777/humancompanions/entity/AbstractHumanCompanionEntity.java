@@ -221,8 +221,8 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
 
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
-        if (!this.level.isClientSide && hand == InteractionHand.MAIN_HAND) {
-            if (!this.isTame()) {
+        if (hand == InteractionHand.MAIN_HAND) {
+            if (!this.isTame() && !this.level.isClientSide()) {
                 if (itemstack.isEdible()) {
                     itemstack.shrink(1);
                     if (this.random.nextInt(tameIdx) == 0) {
@@ -246,26 +246,30 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
                             CompanionData.notTamed[this.random.nextInt(CompanionData.notTamed.length)]), this.getUUID());
                 }
             } else {
-                if(player.isShiftKeyDown()) {
-                    if (!this.isOrderedToSit()) {
-                        this.setOrderedToSit(true);
-                        TextComponent text = new TextComponent("I'll stand here.");
-                        player.sendMessage(new TranslatableComponent("chat.type.text", this.getDisplayName(),
-                                text), this.getUUID());
+                if (this.isAlliedTo(player)) {
+                    if(player.isShiftKeyDown()) {
+                        if(!this.level.isClientSide()) {
+                            if (!this.isOrderedToSit()) {
+                                this.setOrderedToSit(true);
+                                TextComponent text = new TextComponent("I'll stand here.");
+                                player.sendMessage(new TranslatableComponent("chat.type.text", this.getDisplayName(),
+                                        text), this.getUUID());
+                            } else {
+                                this.setOrderedToSit(false);
+                                TextComponent text = new TextComponent("I'll move around.");
+                                player.sendMessage(new TranslatableComponent("chat.type.text", this.getDisplayName(),
+                                        text), this.getUUID());
+                            }
+                        }
                     } else {
-                        this.setOrderedToSit(false);
-                        TextComponent text = new TextComponent("I'll move around.");
-                        player.sendMessage(new TranslatableComponent("chat.type.text", this.getDisplayName(),
-                                text), this.getUUID());
-                    }
-                } else {
-                    if (this.isAlliedTo(player)) {
-                        this.openGui((ServerPlayer) player);
+                        if(!this.level.isClientSide()) {
+                            this.openGui((ServerPlayer) player);
+                        }
                     }
                 }
-                return InteractionResult.SUCCESS;
+                return InteractionResult.sidedSuccess(this.level.isClientSide);
             }
-            return InteractionResult.SUCCESS;
+            return InteractionResult.sidedSuccess(this.level.isClientSide);
         }
         return super.mobInteract(player, hand);
     }

@@ -3,6 +3,7 @@ package com.github.justinwon777.humancompanions.core;
 import com.github.justinwon777.humancompanions.HumanCompanions;
 import com.github.justinwon777.humancompanions.entity.Arbalist;
 import com.github.justinwon777.humancompanions.entity.Archer;
+import com.github.justinwon777.humancompanions.entity.Axeguard;
 import com.github.justinwon777.humancompanions.entity.Knight;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
@@ -31,4 +32,9 @@ public final class EntityInit {
             ENTITIES.register("arbalist", () -> EntityType.Builder.of(Arbalist::new, MobCategory.AMBIENT)
                     .sized(0.6F, 1.8F)
                     .build(new ResourceLocation(HumanCompanions.MOD_ID, "arbalist").toString()));
+
+    public static final RegistryObject<EntityType<com.github.justinwon777.humancompanions.entity.Axeguard>> Axeguard =
+            ENTITIES.register("axeguard", () -> EntityType.Builder.of(Axeguard::new, MobCategory.AMBIENT)
+                    .sized(0.6F, 1.8F)
+                    .build(new ResourceLocation(HumanCompanions.MOD_ID, "axeguard").toString()));
 }

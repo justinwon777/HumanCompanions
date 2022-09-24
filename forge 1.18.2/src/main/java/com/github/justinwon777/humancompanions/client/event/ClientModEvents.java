@@ -18,5 +18,6 @@ public final class ClientModEvents {
         event.registerEntityRenderer(EntityInit.Knight.get(), CompanionRenderer::new);
         event.registerEntityRenderer(EntityInit.Archer.get(), CompanionRenderer::new);
         event.registerEntityRenderer(EntityInit.Arbalist.get(), CompanionRenderer::new);
+        event.registerEntityRenderer(EntityInit.Axeguard.get(), CompanionRenderer::new);
     }
 }

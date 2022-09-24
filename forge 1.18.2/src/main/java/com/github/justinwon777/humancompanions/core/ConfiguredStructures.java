@@ -127,7 +127,8 @@ public class ConfiguredStructures {
                 new ResourceLocation("empty"), ImmutableList.of(
                 Pair.of(StructurePoolElement.legacy(HumanCompanions.MOD_ID + ":companions/knight"), 1),
                 Pair.of(StructurePoolElement.legacy(HumanCompanions.MOD_ID + ":companions/archer"), 1),
-                Pair.of(StructurePoolElement.legacy(HumanCompanions.MOD_ID + ":companions/arbalist"), 1)
+                Pair.of(StructurePoolElement.legacy(HumanCompanions.MOD_ID + ":companions/arbalist"), 1),
+                Pair.of(StructurePoolElement.legacy(HumanCompanions.MOD_ID + ":companions/axeguard"), 1)
         ), StructureTemplatePool.Projection.RIGID));
     }
     public static ConfiguredStructureFeature<?, ?> Configured_Oak_House = StructureInit.COMPANION_HOUSE.get()

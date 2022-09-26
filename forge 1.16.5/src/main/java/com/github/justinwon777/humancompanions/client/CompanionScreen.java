@@ -6,6 +6,7 @@ import com.github.justinwon777.humancompanions.core.PacketHandler;
 import com.github.justinwon777.humancompanions.entity.AbstractHumanCompanionEntity;
 import com.github.justinwon777.humancompanions.entity.Arbalist;
 import com.github.justinwon777.humancompanions.entity.Archer;
+import com.github.justinwon777.humancompanions.entity.Knight;
 import com.github.justinwon777.humancompanions.networking.*;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -130,8 +131,10 @@ public class CompanionScreen extends ContainerScreen<CompanionContainer> impleme
             this.font.draw(pPoseStack, "Arbalist", sidebarx, this.titleLabelY + 14, 4210752);
         } else if (companion instanceof Archer) {
             this.font.draw(pPoseStack, "Archer", sidebarx, this.titleLabelY + 14, 4210752);
-        } else {
+        } else if (companion instanceof Knight) {
             this.font.draw(pPoseStack, "Knight", sidebarx, this.titleLabelY + 14, 4210752);
+        } else {
+            this.font.draw(pPoseStack, "Axe", sidebarx, this.titleLabelY + 14, 4210752);
         }
         this.font.draw(pPoseStack, healthTitle.withStyle(TextFormatting.UNDERLINE), sidebarx, this.titleLabelY + 27,
                 4210752);

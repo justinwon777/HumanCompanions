@@ -66,6 +66,7 @@ public class HumanCompanions
         RenderingRegistry.registerEntityRenderingHandler(EntityInit.Archer.get(), CompanionRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityInit.Knight.get(), CompanionRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityInit.Arbalist.get(), CompanionRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntityInit.Axeguard.get(), CompanionRenderer::new);
     }
 
     public void biomeModification(final BiomeLoadingEvent event) {

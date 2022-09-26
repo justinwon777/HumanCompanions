@@ -3,7 +3,6 @@ package com.github.justinwon777.humancompanions.container;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
@@ -11,10 +10,6 @@ import net.minecraft.item.ItemStack;
 public class CompanionContainer extends Container {
     private final IInventory container;
     private final int containerRows;
-
-    public CompanionContainer(int p_39230_, PlayerInventory p_39231_) {
-        this(p_39230_, p_39231_, new Inventory(27));
-    };
 
     public CompanionContainer(int p_39230_, PlayerInventory p_39231_, IInventory p_39232_) {
         super(null, p_39230_);

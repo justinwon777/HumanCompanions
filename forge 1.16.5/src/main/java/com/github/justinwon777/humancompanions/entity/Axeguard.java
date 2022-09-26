@@ -1,43 +1,47 @@
 package com.github.justinwon777.humancompanions.entity;
 
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.ILivingEntityData;
+import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.entity.passive.TameableEntity;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.AxeItem;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
-import net.minecraft.world.item.AxeItem;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.IServerWorld;
+import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
 public class Axeguard extends AbstractHumanCompanionEntity {
 
-    public Axeguard(EntityType<? extends TamableAnimal> entityType, Level level) {
+    public Axeguard(EntityType<? extends TameableEntity> entityType, World level) {
         super(entityType, level);
         this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.0D, true));
     }
 
     public void checkAxe() {
-        ItemStack hand = this.getItemBySlot(EquipmentSlot.MAINHAND);
+        ItemStack hand = this.getItemBySlot(EquipmentSlotType.MAINHAND);
         for (int i = 0; i < this.inventory.getContainerSize(); ++i) {
             ItemStack itemstack = this.inventory.getItem(i);
             if (itemstack.getItem() instanceof AxeItem) {
                 if (hand.isEmpty()) {
-                    this.setItemSlot(EquipmentSlot.MAINHAND, itemstack);
+                    this.setItemSlot(EquipmentSlotType.MAINHAND, itemstack);
                 } else if (itemstack.getItem() instanceof AxeItem && hand.getItem() instanceof AxeItem) {
                     if (((AxeItem) itemstack.getItem()).getAttackDamage() > ((AxeItem) hand.getItem()).getAttackDamage()) {
-                        this.setItemSlot(EquipmentSlot.MAINHAND, itemstack);
+                        this.setItemSlot(EquipmentSlotType.MAINHAND, itemstack);
                     }
                 }
             }
         }
     }
 
-    public void readAdditionalSaveData(CompoundTag tag) {
+    public void readAdditionalSaveData(CompoundNBT tag) {
         super.readAdditionalSaveData(tag);
-        this.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
+        this.setItemSlot(EquipmentSlotType.MAINHAND, ItemStack.EMPTY);
         checkAxe();
     }
 
@@ -47,15 +51,14 @@ public class Axeguard extends AbstractHumanCompanionEntity {
         super.tick();
     }
 
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn,
-                                        MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn,
-                                        @Nullable CompoundTag dataTag) {
+    public ILivingEntityData finalizeSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn,
+                                           SpawnReason reason, @Nullable ILivingEntityData spawnDataIn,
+                                           @Nullable CompoundNBT dataTag) {
         ItemStack itemstack = getSpawnAxe();
         if(!itemstack.isEmpty()) {
             this.inventory.setItem(4, itemstack);
             checkAxe();
         }
-
         return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
     }
 

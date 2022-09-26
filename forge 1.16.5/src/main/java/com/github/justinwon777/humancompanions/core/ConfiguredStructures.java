@@ -101,7 +101,8 @@ public class ConfiguredStructures {
                 new ResourceLocation("empty"), ImmutableList.of(
                 Pair.of(JigsawPiece.legacy(HumanCompanions.MOD_ID + ":companions/knight"), 1),
                 Pair.of(JigsawPiece.legacy(HumanCompanions.MOD_ID + ":companions/archer"), 1),
-                Pair.of(JigsawPiece.legacy(HumanCompanions.MOD_ID + ":companions/arbalist"), 1)
+                Pair.of(JigsawPiece.legacy(HumanCompanions.MOD_ID + ":companions/arbalist"), 1),
+                Pair.of(JigsawPiece.legacy(HumanCompanions.MOD_ID + ":companions/axeguard"), 1)
         ), JigsawPattern.PlacementBehaviour.RIGID));
     }
     public static StructureFeature<?, ?> Configured_Oak_House = StructureInit.COMPANION_HOUSE.get()

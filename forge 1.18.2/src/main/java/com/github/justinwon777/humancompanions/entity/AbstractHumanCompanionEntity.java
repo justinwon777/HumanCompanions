@@ -356,6 +356,11 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
                 }
             }
         }
+
+        if (p_34288_ == DamageSource.FALL && !Config.FALL_DAMAGE.get()) {
+            return false;
+        }
+
         hurtArmor(p_34288_, p_34289_);
         return super.hurt(p_34288_, p_34289_);
     }

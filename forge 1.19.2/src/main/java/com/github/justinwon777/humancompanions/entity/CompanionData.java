@@ -127,6 +127,7 @@ public class CompanionData {
             MushroomCow.class,
             Pig.class,
             Rabbit.class,
+            Villager.class,
             Sheep.class
     };
 

@@ -53,6 +53,7 @@ public class CompanionData {
             CowEntity.class,
             MooshroomEntity.class,
             PigEntity.class,
+            VillagerEntity.class,
             RabbitEntity.class,
             SheepEntity.class
     };

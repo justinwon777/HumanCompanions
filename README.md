@@ -3,11 +3,11 @@
 [![Available](http://cf.way2muchnoise.eu/versions/full_570319_downloads.svg)](https://www.curseforge.com/minecraft/mc-mods/human-companions)
 # About
 
-This mod adds new human companions that can help you on your journey. Currently available for Forge 1.16.5 and 1.18.1.
+This mod adds new human companions that can help you on your journey. Currently available for Forge 1.16.5, 1.18.2, and 1.19.2.
 
 ## Features
 
-- Knight, archer, and arbalist (crossbow) companions
+- Knight, archer, axeguard, and arbalist (crossbow) companions
 - Find them in the wild by their house
 - Give them food to have them join you
 - Will fight for you and can carry items (don't recommend storing valuables in them as they die easily)
@@ -37,11 +37,10 @@ They live in a wide variety of biomes in houses like these (plus more!):
 
 ## Known Issues
 
-- Rare crash when companion is hit by an arrow. Please report details if seen.
-- While in follow mode, they will permanently despawn if you get too far away from them
+- While in follow mode, they might permanently despawn if you get too far away from them
 - When a companion dies, sometimes it drops a duplicate of an item or doesn't drop an item in its inventory at all.
 - Archers sometimes shoot at nothing after killing a mob. Use clear button to clear target.
-- When knights break their sword, it will show it's stil equipping. Reload game to fix.
+- When knights break their sword, it will show it's still equipping. Reload game to fix.
 - Knights sometimes hesitate while attacking.
 
 ## Links

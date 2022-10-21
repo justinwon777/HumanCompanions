@@ -15,7 +15,7 @@ apply plugin: 'org.parchmentmc.librarian.forgegradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = '1.19.2-1.5.0'
+version = '1.19.2-1.5.1'
 group = 'com.github.justinwon777.humancompanions'
 archivesBaseName = 'humancompanions'
 
@@ -34,7 +34,6 @@ minecraft {
 
             property 'forge.logging.markers', 'REGISTRIES'
 
-            // Please read: https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
             property 'forge.logging.console.level', 'debug'
 
             mods {

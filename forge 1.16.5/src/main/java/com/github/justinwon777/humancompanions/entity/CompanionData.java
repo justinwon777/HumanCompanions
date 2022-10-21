@@ -17,35 +17,23 @@ public class CompanionData {
 
     public static Class<?>[] alertMobs = new Class<?>[]{
             BlazeEntity.class,
-            CaveSpiderEntity.class,
-            DrownedEntity.class,
-            ElderGuardianEntity.class,
             EndermanEntity.class,
             EndermiteEntity.class,
-            EvokerEntity.class,
             GhastEntity.class,
             GiantEntity.class,
             GuardianEntity.class,
             HoglinEntity.class,
-            HuskEntity.class,
-            IllusionerEntity.class,
             MagmaCubeEntity.class,
             PhantomEntity.class,
-            PillagerEntity.class,
             ShulkerEntity.class,
             SilverfishEntity.class,
-            SkeletonEntity.class,
             SlimeEntity.class,
             SpiderEntity.class,
-            StrayEntity.class,
             VexEntity.class,
-            VindicatorEntity.class,
-            WitchEntity.class,
-            WitherSkeletonEntity.class,
+            AbstractSkeletonEntity.class,
             ZoglinEntity.class,
             ZombieEntity.class,
-            ZombieVillagerEntity.class,
-            ZombifiedPiglinEntity.class
+            AbstractRaiderEntity.class
     };
 
     public static Class<?>[] huntMobs = new Class<?>[]{

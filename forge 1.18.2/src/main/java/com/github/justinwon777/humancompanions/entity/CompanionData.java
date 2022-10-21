@@ -7,6 +7,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.animal.*;
 import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.monster.hoglin.Hoglin;
+import net.minecraft.world.entity.raid.Raider;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
@@ -89,35 +90,23 @@ public class CompanionData {
 
     public static Class<?>[] alertMobs = new Class<?>[]{
             Blaze.class,
-            CaveSpider.class,
-            Drowned.class,
-            ElderGuardian.class,
             EnderMan.class,
             Endermite.class,
-            Evoker.class,
             Ghast.class,
             Giant.class,
             Guardian.class,
             Hoglin.class,
-            Husk.class,
-            Illusioner.class,
             MagmaCube.class,
             Phantom.class,
-            Pillager.class,
             Shulker.class,
             Silverfish.class,
-            Skeleton.class,
             Slime.class,
             Spider.class,
-            Stray.class,
             Vex.class,
-            Vindicator.class,
-            Witch.class,
-            WitherSkeleton.class,
+            AbstractSkeleton.class,
             Zoglin.class,
             Zombie.class,
-            ZombieVillager.class,
-            ZombifiedPiglin.class
+            Raider.class
     };
 
     public static Class<?>[] huntMobs = new Class<?>[]{

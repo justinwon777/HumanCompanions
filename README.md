@@ -47,4 +47,4 @@ They live in a wide variety of biomes in houses like these (plus more!):
 
 Join the discord to ask questions or help contribute https://discord.gg/RmTYpsAhCV
 
-Support me on [Patreon.](https://www.patreon.com/humancompanions "patreon")
+Support me on [Patreon.](https://www.patreon.com/jus10wontons "patreon")

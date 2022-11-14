@@ -34,6 +34,7 @@ They live in a wide variety of biomes in houses like these (plus more!):
 - Toggle between follow, patrol, and guard states
 - Toggle stationery to keep archers and arbalists standing while shooting
 - You could do "/locate humancompanions:companion_house" to find a house quickly.
+- Track your companion locations with the [Pet Tracker](https://www.curseforge.com/minecraft/mc-mods/pet-tracker "pet tracker") mod.
 
 ## Known Issues
 

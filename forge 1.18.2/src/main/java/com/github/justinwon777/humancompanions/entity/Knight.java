@@ -1,5 +1,6 @@
 package com.github.justinwon777.humancompanions.entity;
 
+import com.github.justinwon777.humancompanions.core.Config;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.*;
@@ -50,10 +51,12 @@ public class Knight extends AbstractHumanCompanionEntity {
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn,
                                         MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn,
                                         @Nullable CompoundTag dataTag) {
-        ItemStack itemstack = getSpawnSword();
-        if(!itemstack.isEmpty()) {
-            this.inventory.setItem(4, itemstack);
-            checkSword();
+        if (Config.SPAWN_WEAPON.get()) {
+            ItemStack itemstack = getSpawnSword();
+            if (!itemstack.isEmpty()) {
+                this.inventory.setItem(4, itemstack);
+                checkSword();
+            }
         }
 
         return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);

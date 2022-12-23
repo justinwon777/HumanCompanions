@@ -151,14 +151,16 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
         this.goalSelector.addGoal(3, moveBackGoal);
         this.goalSelector.addGoal(3, patrolGoal);
 
-        for (int i = 0; i < 4; i++) {
-            EquipmentSlot armorType = armorTypes[i];
-            ItemStack itemstack = CompanionData.getSpawnArmor(armorType);
-            if(!itemstack.isEmpty()) {
-                this.inventory.setItem(i, itemstack);
+        if (Config.SPAWN_ARMOR.get()) {
+            for (int i = 0; i < 4; i++) {
+                EquipmentSlot armorType = armorTypes[i];
+                ItemStack itemstack = CompanionData.getSpawnArmor(armorType);
+                if (!itemstack.isEmpty()) {
+                    this.inventory.setItem(i, itemstack);
+                }
             }
+            checkArmor();
         }
-        checkArmor();
         return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
     }
 

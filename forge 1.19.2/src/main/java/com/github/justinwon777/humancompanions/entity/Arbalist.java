@@ -1,5 +1,6 @@
 package com.github.justinwon777.humancompanions.entity;
 
+import com.github.justinwon777.humancompanions.core.Config;
 import com.github.justinwon777.humancompanions.entity.ai.ArbalistRangedCrossbowAttackGoal;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -80,8 +81,10 @@ public class Arbalist extends AbstractHumanCompanionEntity implements CrossbowAt
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn,
                                         MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn,
                                         @Nullable CompoundTag dataTag) {
-        this.inventory.setItem(4, Items.CROSSBOW.getDefaultInstance());
-        checkCrossbow();
+        if (Config.SPAWN_WEAPON.get()) {
+            this.inventory.setItem(4, Items.CROSSBOW.getDefaultInstance());
+            checkCrossbow();
+        }
         return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
     }
 

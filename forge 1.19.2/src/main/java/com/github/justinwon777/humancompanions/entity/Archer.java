@@ -1,5 +1,6 @@
 package com.github.justinwon777.humancompanions.entity;
 
+import com.github.justinwon777.humancompanions.core.Config;
 import com.github.justinwon777.humancompanions.entity.ai.ArcherRangedBowAttackGoal;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -84,8 +85,10 @@ public class Archer extends AbstractHumanCompanionEntity implements RangedAttack
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn,
                                         MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn,
                                         @Nullable CompoundTag dataTag) {
-        this.inventory.setItem(4, Items.BOW.getDefaultInstance());
-        checkBow();
+        if (Config.SPAWN_WEAPON.get()) {
+            this.inventory.setItem(4, Items.BOW.getDefaultInstance());
+            checkBow();
+        }
         return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
     }
 }

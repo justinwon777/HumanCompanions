@@ -1,5 +1,6 @@
 package com.github.justinwon777.humancompanions.entity;
 
+import com.github.justinwon777.humancompanions.core.Config;
 import com.github.justinwon777.humancompanions.entity.ai.ArcherBowAttackGoal;
 import net.minecraft.entity.*;
 import net.minecraft.entity.passive.TameableEntity;
@@ -86,8 +87,10 @@ public class Archer extends AbstractHumanCompanionEntity implements IRangedAttac
     public ILivingEntityData finalizeSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn,
                                            SpawnReason reason, @Nullable ILivingEntityData spawnDataIn,
                                            @Nullable CompoundNBT dataTag) {
-        this.inventory.setItem(4, Items.BOW.getDefaultInstance());
-        checkBow();
+        if (Config.SPAWN_WEAPON.get()) {
+            this.inventory.setItem(4, Items.BOW.getDefaultInstance());
+            checkBow();
+        }
         return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
     }
 }

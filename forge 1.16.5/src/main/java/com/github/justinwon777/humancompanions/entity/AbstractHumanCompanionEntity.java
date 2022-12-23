@@ -46,6 +46,8 @@ import java.util.Optional;
 public class AbstractHumanCompanionEntity extends TameableEntity{
 
     private static final DataParameter<Integer> DATA_TYPE_ID = EntityDataManager.defineId(AbstractHumanCompanionEntity.class, DataSerializers.INT);
+    private static final DataParameter<Integer> SEX = EntityDataManager.defineId(AbstractHumanCompanionEntity.class,
+            DataSerializers.INT);
     private static final DataParameter<Boolean> EATING = EntityDataManager.defineId(AbstractHumanCompanionEntity.class,
             DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> ALERT = EntityDataManager.defineId(AbstractHumanCompanionEntity.class,
@@ -125,6 +127,7 @@ public class AbstractHumanCompanionEntity extends TameableEntity{
         this.entityData.define(STATIONERY, false);
         this.entityData.define(PATROL_POS, Optional.empty());
         this.entityData.define(PATROL_RADIUS, 10);
+        this.entityData.define(SEX, 0);
     }
 
     public ILivingEntityData finalizeSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn,
@@ -135,8 +138,9 @@ public class AbstractHumanCompanionEntity extends TameableEntity{
         ModifiableAttributeInstance attributeinstance = this.getAttribute(Attributes.MAX_HEALTH);
         attributeinstance.addPermanentModifier(SPAWN_HEALTH_MODIFIER);
         this.setHealth(this.getMaxHealth());
-        this.setCompanionSkin(this.random.nextInt(CompanionData.maleSkins.length));
-        this.setCustomName(new StringTextComponent(CompanionData.getRandomName()));
+        setSex(this.random.nextInt(2));
+        setCompanionSkin(this.random.nextInt(CompanionData.skins[getSex()].length));
+        setCustomName(new StringTextComponent(CompanionData.getRandomName(getSex())));
         setPatrolPos(this.blockPosition());
         setPatrolling(true);
         setPatrolRadius(15);
@@ -168,6 +172,7 @@ public class AbstractHumanCompanionEntity extends TameableEntity{
         tag.putBoolean("Guarding", this.isGuarding());
         tag.putBoolean("Stationery", this.isStationery());
         tag.putInt("radius", this.getPatrolRadius());
+        tag.putInt("sex", this.getSex());
         if (this.getPatrolPos() != null) {
             int[] patrolPos = {this.getPatrolPos().getX(), this.getPatrolPos().getY(), this.getPatrolPos().getZ()};
             tag.putIntArray("patrol_pos", patrolPos);
@@ -185,6 +190,7 @@ public class AbstractHumanCompanionEntity extends TameableEntity{
         this.setGuarding(tag.getBoolean("Guarding"));
         this.setStationery(tag.getBoolean("Stationery"));
         this.setPatrolRadius(tag.getInt("radius"));
+        this.setSex(tag.getInt("sex"));
         if (tag.getBoolean("Alert")) {
             this.addAlertGoals();
         }
@@ -447,11 +453,17 @@ public class AbstractHumanCompanionEntity extends TameableEntity{
 
     public int getPatrolRadius() { return this.entityData.get(PATROL_RADIUS); }
 
-    public ResourceLocation getResourceLocation() { return CompanionData.maleSkins[getCompanionSkin()]; }
+    public ResourceLocation getResourceLocation() { return CompanionData.skins[getSex()][getCompanionSkin()]; }
 
     public int getCompanionSkin() { return this.entityData.get(DATA_TYPE_ID); }
 
     public void setCompanionSkin(int skinIndex) { this.entityData.set(DATA_TYPE_ID, skinIndex); }
+
+    public void setSex(int sex) {
+        this.entityData.set(SEX, sex);
+    }
+
+    public int getSex() { return this.entityData.get(SEX); }
 
     public boolean isEating() { return this.entityData.get(EATING); }
 

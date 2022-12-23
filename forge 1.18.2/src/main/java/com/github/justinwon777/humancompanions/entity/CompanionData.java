@@ -118,33 +118,45 @@ public class CompanionData {
             Sheep.class
     };
 
-    public static ResourceLocation[] maleSkins = new ResourceLocation[]{
-            new ResourceLocation(HumanCompanions.MOD_ID, "textures/entities/medieval-man-hugh.png"),
-            new ResourceLocation(HumanCompanions.MOD_ID, "textures/entities/alexandros.png"),
-            new ResourceLocation(HumanCompanions.MOD_ID, "textures/entities/cyrus.png"),
-            new ResourceLocation(HumanCompanions.MOD_ID, "textures/entities/diokles.png"),
-            new ResourceLocation(HumanCompanions.MOD_ID, "textures/entities/dion.png"),
-            new ResourceLocation(HumanCompanions.MOD_ID, "textures/entities/georgios.png"),
-            new ResourceLocation(HumanCompanions.MOD_ID, "textures/entities/ioannis.png"),
-            new ResourceLocation(HumanCompanions.MOD_ID, "textures/entities/medieval-peasant-schwaechlich.png"),
-            new ResourceLocation(HumanCompanions.MOD_ID, "textures/entities/medieval-peasant-without-vest.png"),
-            new ResourceLocation(HumanCompanions.MOD_ID, "textures/entities/medieval-peasant-with-vest-on.png"),
-            new ResourceLocation(HumanCompanions.MOD_ID, "textures/entities/panos.png"),
-            new ResourceLocation(HumanCompanions.MOD_ID, "textures/entities/viking-blue-tunic.png"),
-            new ResourceLocation(HumanCompanions.MOD_ID, "textures/entities/cronos-jojo.png"),
-            new ResourceLocation(HumanCompanions.MOD_ID, "textures/entities/medieval-man-alard.png"),
-            new ResourceLocation(HumanCompanions.MOD_ID, "textures/entities/peasant-ginger.png"),
-            new ResourceLocation(HumanCompanions.MOD_ID, "textures/entities/townsman-green-tunic.png"),
-            new ResourceLocation(HumanCompanions.MOD_ID, "textures/entities/polish-farmer.png"),
-            new ResourceLocation(HumanCompanions.MOD_ID, "textures/entities/peasant.png"),
-            new ResourceLocation(HumanCompanions.MOD_ID, "textures/entities/rustic-farmer.png"),
-            new ResourceLocation(HumanCompanions.MOD_ID, "textures/entities/medieval-villager.png"),
+    // skins[0] == male, skins[1] == female
+    public static ResourceLocation[][] skins = new ResourceLocation[][] {
+            new ResourceLocation[] {
+                    new ResourceLocation(HumanCompanions.MOD_ID, "textures/entities/male/medieval-man-hugh.png"),
+                    new ResourceLocation(HumanCompanions.MOD_ID, "textures/entities/male/alexandros.png"),
+                    new ResourceLocation(HumanCompanions.MOD_ID, "textures/entities/male/cyrus.png"),
+                    new ResourceLocation(HumanCompanions.MOD_ID, "textures/entities/male/diokles.png"),
+                    new ResourceLocation(HumanCompanions.MOD_ID, "textures/entities/male/dion.png"),
+                    new ResourceLocation(HumanCompanions.MOD_ID, "textures/entities/male/georgios.png"),
+                    new ResourceLocation(HumanCompanions.MOD_ID, "textures/entities/male/ioannis.png"),
+                    new ResourceLocation(HumanCompanions.MOD_ID, "textures/entities/male/medieval-peasant-schwaechlich.png"),
+                    new ResourceLocation(HumanCompanions.MOD_ID, "textures/entities/male/medieval-peasant-without-vest.png"),
+                    new ResourceLocation(HumanCompanions.MOD_ID, "textures/entities/male/medieval-peasant-with-vest-on.png"),
+                    new ResourceLocation(HumanCompanions.MOD_ID, "textures/entities/male/panos.png"),
+                    new ResourceLocation(HumanCompanions.MOD_ID, "textures/entities/male/viking-blue-tunic.png"),
+                    new ResourceLocation(HumanCompanions.MOD_ID, "textures/entities/male/cronos-jojo.png"),
+                    new ResourceLocation(HumanCompanions.MOD_ID, "textures/entities/male/medieval-man-alard.png"),
+                    new ResourceLocation(HumanCompanions.MOD_ID, "textures/entities/male/peasant-ginger.png"),
+                    new ResourceLocation(HumanCompanions.MOD_ID, "textures/entities/male/townsman-green-tunic.png"),
+                    new ResourceLocation(HumanCompanions.MOD_ID, "textures/entities/male/polish-farmer.png"),
+                    new ResourceLocation(HumanCompanions.MOD_ID, "textures/entities/male/peasant.png"),
+                    new ResourceLocation(HumanCompanions.MOD_ID, "textures/entities/male/rustic-farmer.png"),
+                    new ResourceLocation(HumanCompanions.MOD_ID, "textures/entities/male/medieval-villager.png"),
+            },
+            new ResourceLocation[] {
+                    new ResourceLocation(HumanCompanions.MOD_ID, "textures/entities/female/a-rogue-i-guess.png"),
+                    new ResourceLocation(HumanCompanions.MOD_ID, "textures/entities/female/deidre-gramville.png"),
+                    new ResourceLocation(HumanCompanions.MOD_ID, "textures/entities/female/deidre-gramville2.png"),
+                    new ResourceLocation(HumanCompanions.MOD_ID, "textures/entities/female/eleora-halle.png"),
+                    new ResourceLocation(HumanCompanions.MOD_ID, "textures/entities/female/fantastic-blue.png"),
+                    new ResourceLocation(HumanCompanions.MOD_ID, "textures/entities/female/ftu-emma.png"),
+                    new ResourceLocation(HumanCompanions.MOD_ID, "textures/entities/female/girl-medieval-peasant.png"),
+                    new ResourceLocation(HumanCompanions.MOD_ID, "textures/entities/female/medieval-barmaid.png"),
+                    new ResourceLocation(HumanCompanions.MOD_ID, "textures/entities/female/runaway.png"),
+                    new ResourceLocation(HumanCompanions.MOD_ID, "textures/entities/female/shannon-flux.png"),
+                    new ResourceLocation(HumanCompanions.MOD_ID, "textures/entities/female/the-traveller.png"),
+                    new ResourceLocation(HumanCompanions.MOD_ID, "textures/entities/female/x-ayesha.png"),
+            }
     };
-
-//    public static ResourceLocation[] femaleSkins = new ResourceLocation[]{
-//            new ResourceLocation(HumanCompanions.MOD_ID, "textures/entities/girl-medieval-peasant.png"),
-//            new ResourceLocation(HumanCompanions.MOD_ID, "textures/entities/medieval-barmaid.png"),
-//    };
 
     public static TextComponent[] tameFail = new TextComponent[]{
             new TextComponent("I need more food."),
@@ -257,35 +269,71 @@ public class CompanionData {
         return ItemStack.EMPTY;
     }
 
-    public static String getRandomName() {
+    public static String getRandomName(int sex) {
         Random rand = new Random();
-        String firstName = maleFirstNames[rand.nextInt(maleFirstNames.length)];
+        String firstName = firstNames[sex][rand.nextInt(firstNames[sex].length)];
         String lastName = lastNames[rand.nextInt(lastNames.length)];
         return firstName + " " + lastName;
     }
 
-    public static String[] maleFirstNames = new String[] {
-            "Abraham", "Adam", "Acke", "Adolf", "Albert", "Albin", "Albrecht", "Alexander", "Alf", "Alfred", "Algot",
-            "Alvar", "Anders", "Andreas", "Arne", "Aron", "Arthur", "Arvid", "Axel",
-            "Bengt", "Bernhard", "Bernt", "Bertil", "Birger", "Bjarne", "Bo", "Bosse", "Bror", "Cai", "Caj", "Carl",
-            "Christer", "Christoffer", "Claes", "Dag", "Daniel", "Danne", "Ebbe", "Eilert", "Einar", "Elias", "Elis",
-            "Elmar", "Elof", "Elov", "Emil", "Emrik", "Enok", "Eric",
-            "Erik", "Erland", "Erling", "Eskil", "Evert", "Folke", "Frans", "Fredrik", "Frej", "Fritiof", "Fritjof",
-            "Gerhard", "Gottfrid", "Greger", "Gunnar", "Gunne", "Gustaf", "Gustav",
-            "Halsten", "Halvar", "Hampus", "Hans", "Harald", "Hasse", "Henrik", "Hilding", "Hjalmar", "Holger",
-            "Inge", "Ingemar", "Ingmar", "Ingvar", "Isac", "Isak", "Ivar",
-            "Jakob", "Jan", "Janne", "Jarl", "Jens", "Jerk", "Jerker", "Joakim", "Johan", "John", "Jon", "Jonas",
-            "Kalle", "Karl", "Kasper", "Kennet", "Kettil", "Kjell", "Klas", "Knut", "Krister", "Kristian", "Kristofer",
-            "Lage", "Lars", "Lasse", "Leif", "Lelle", "Lennart", "Lias", "Loke", "Lorens", "Loui", "Love", "Ludde", "Ludvig",
-            "Magnus", "Markus", "Martin", "Matheo", "Mats", "Matteus", "Mattias", "Mattis", "Matts", "Melker", "Micael", "Mikael", "Milian",
-            "Nicklas", "Niklas", "Nils", "Njord", "Noak",
-            "Ola", "Oliver", "Olle", "Olaf", "Olof", "Olov", "Orvar", "Osvald", "Otto", "Ove",
-            "Patrik", "Peder", "Pehr", "Pelle", "Per", "Peter", "Petter", "Pontus", "Ragnar", "Ragnvald", "Rickard",
-            "Rikard", "Robert", "Roffe", "Samuel", "Sigfrid", "Sigge", "Sigvard", "Sivert", "Sixten", "Staffan",
-            "Stefan", "Stellan", "Stig", "Sune", "Svante", "Sven",  "Tage", "Thor", "Thore", "Thorsten", "Thorvald",
-            "Tomas", "Tor", "Tore", "Torgny", "Torkel", "Torsten", "Torvald", "Truls", "Tryggve", "Ture", "Ulf",
-            "Ulrik", "Uno", "Urban", "Valdemar", "Valter", "Verg",  "Verner", "Victor", "Vidar", "Vide", "Viggo",
-            "Viktor", "Vilhelm", "Ville", "Vilmar", "Yngve",
+    // Names source: https://github.com/ironarachne/namegen/blob/main/swedishnames.go
+    // firstNames[0] == male, firstNames[1] == female
+    public static String[][] firstNames = new String[][]{
+            new String[] {
+                    "Abraham", "Adam", "Acke", "Adolf", "Albert", "Albin", "Albrecht", "Alexander", "Alf", "Alfred", "Algot",
+                    "Alvar", "Anders", "Andreas", "Arne", "Aron", "Arthur", "Arvid", "Axel",
+                    "Bengt", "Bernhard", "Bernt", "Bertil", "Birger", "Bjarne", "Bo", "Bosse", "Bror", "Cai", "Caj", "Carl",
+                    "Christer", "Christoffer", "Claes", "Dag", "Daniel", "Danne", "Ebbe", "Eilert", "Einar", "Elias", "Elis",
+                    "Elmar", "Elof", "Elov", "Emil", "Emrik", "Enok", "Eric",
+                    "Erik", "Erland", "Erling", "Eskil", "Evert", "Folke", "Frans", "Fredrik", "Frej", "Fritiof", "Fritjof",
+                    "Gerhard", "Gottfrid", "Greger", "Gunnar", "Gunne", "Gustaf", "Gustav",
+                    "Halsten", "Halvar", "Hampus", "Hans", "Harald", "Hasse", "Henrik", "Hilding", "Hjalmar", "Holger",
+                    "Inge", "Ingemar", "Ingmar", "Ingvar", "Isac", "Isak", "Ivar",
+                    "Jakob", "Jan", "Janne", "Jarl", "Jens", "Jerk", "Jerker", "Joakim", "Johan", "John", "Jon", "Jonas",
+                    "Kalle", "Karl", "Kasper", "Kennet", "Kettil", "Kjell", "Klas", "Knut", "Krister", "Kristian", "Kristofer",
+                    "Lage", "Lars", "Lasse", "Leif", "Lelle", "Lennart", "Lias", "Loke", "Lorens", "Loui", "Love", "Ludde", "Ludvig",
+                    "Magnus", "Markus", "Martin", "Matheo", "Mats", "Matteus", "Mattias", "Mattis", "Matts", "Melker", "Micael", "Mikael", "Milian",
+                    "Nicklas", "Niklas", "Nils", "Njord", "Noak",
+                    "Ola", "Oliver", "Olle", "Olaf", "Olof", "Olov", "Orvar", "Osvald", "Otto", "Ove",
+                    "Patrik", "Peder", "Pehr", "Pelle", "Per", "Peter", "Petter", "Pontus", "Ragnar", "Ragnvald", "Rickard",
+                    "Rikard", "Robert", "Roffe", "Samuel", "Sigfrid", "Sigge", "Sigvard", "Sivert", "Sixten", "Staffan",
+                    "Stefan", "Stellan", "Stig", "Sune", "Svante", "Sven",  "Tage", "Thor", "Thore", "Thorsten", "Thorvald",
+                    "Tomas", "Tor", "Tore", "Torgny", "Torkel", "Torsten", "Torvald", "Truls", "Tryggve", "Ture", "Ulf",
+                    "Ulrik", "Uno", "Urban", "Valdemar", "Valter", "Verg",  "Verner", "Victor", "Vidar", "Vide", "Viggo",
+                    "Viktor", "Vilhelm", "Ville", "Vilmar", "Yngve",
+            },
+            new String[] {
+                    "Agda", "Agneta", "Agnetha", "Aina", "Alfhild", "Alicia", "Alva", "Anette", "Anja", "Anneli", "Annika", "Asta", "Astrid",
+                    "Barbro", "Bengta", "Berit", "Birgit", "Birgitta", "Bodil", "Brita", "Britt", "Britta",
+                    "Cajsa", "Carin", "Carina", "Carita", "Catharina", "Cathrine", "Catrine", "Charlotta", "Christin", "Cilla",
+                    "Dagny",
+                    "Ebba", "Eira", "Eleonor", "Elin", "Elina","Ellinor", "Elna", "Elsa", "Elsie", "Embla",
+                    "Emelie", "Erica", "Erika", "Erna", "Evy",
+                    "Fredrika", "Freja", "Frida",
+                    "Gabriella", "Gerd", "Gerda", "Gertrud", "Gittan", "Greta", "Gry", "Gudrun", "Gull", "Gunborg",
+                    "Gunda", "Gunhild", "Gunhilda", "Gunilla", "Gunn", "Gunnel", "Gunvor",
+                    "Hanna", "Hanne", "Hedda", "Hedvig", "Helga", "Henrika", "Hillevi", "Hilma", "Hulda",
+                    "Idun", "Ingeborg", "Ingegerd", "Inger", "Ingrid",
+                    "Jannike", "Jennie", "Joline", "Jonna", "Josefin", "Josefina","Josefine", "Juni",
+                    "Kaja", "Kajsa", "Kamilla", "Karin", "Karita", "Karla", "Katja", "Katrin", "Kersti", "Kerstin",
+                    "Kia", "Kjerstin", "Klara", "Kristin", "Kristine",
+                    "Laila", "Linn", "Linnea", "Lis", "Lisbet", "Lisbeth", "Liselott", "Liselotte", "Liv",
+                    "Lo", "Lotta", "Lottie", "Lova", "Lovis", "Lovisa",
+                    "Maj", "Maja", "Majken", "Malena", "Malin", "Margaretha", "Margit", "Mari", "Mariann", "Marit",
+                    "Marita", "Mathilda", "Meja", "Merit", "Meta", "Mikaela", "Milla", "Milly", "Mimmi", "Minna", "Moa", "Mona",
+                    "Nanna", "Nea", "Nellie", "Nelly",
+                    "Ottilia",
+                    "Pernilla", "Petronella",
+                    "Ragna", "Ragnhild", "Rakel", "Rebecka", "Rigmor", "Rika", "Ronja", "Runa", "Rut",
+                    "Saga", "Sanna", "Sassa", "Signe", "Sigrid", "Siri", "Siv", "Sofie", "Solveig", "Solvig", "Stina"
+                    , "Susann", "Susanne", "Svea", "Sylvi",
+                    "Tanja", "Tekla", "Terese", "Teresia", "Tessan", "Thea", "Therese", "Thorborg", "Thyra", "Tilde"
+                    , "Tindra", "Tora", "Torborg", "Tova", "Tove", "Tuva", "Tyra",
+                    "Ulla", "Ulrica", "Ulrika",
+                    "Vanja", "Vendela", "Vilhelmina", "Viveka", "Vivi",
+                    "Ylva",
+            }
+
     };
 
     public static String[] lastNames = new String[] {

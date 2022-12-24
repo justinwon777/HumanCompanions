@@ -19,7 +19,7 @@ public class LowHealthGoal extends Goal {
 
     public boolean canUse() {
         if (Config.LOW_HEALTH_FOOD.get()) {
-            if (this.mob.getHealth() < 10 && this.mob.isTame()) {
+            if (this.mob.getHealth() < this.mob.getMaxHealth() / 2 && this.mob.isTame()) {
                 food = mob.checkFood();
                 return food.isEmpty();
             }

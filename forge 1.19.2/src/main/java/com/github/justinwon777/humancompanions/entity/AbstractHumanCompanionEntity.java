@@ -9,6 +9,7 @@ import com.github.justinwon777.humancompanions.networking.OpenInventoryPacket;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -35,6 +36,7 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerContainerEvent;
 import net.minecraftforge.network.PacketDistributor;
+import org.apache.commons.lang3.ArrayUtils;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -46,6 +48,8 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
     private static final EntityDataAccessor<Integer> DATA_TYPE_ID = SynchedEntityData.defineId(AbstractHumanCompanionEntity.class,
             EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> SEX = SynchedEntityData.defineId(AbstractHumanCompanionEntity.class,
+            EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> FOOD_GROUP = SynchedEntityData.defineId(AbstractHumanCompanionEntity.class,
             EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> EATING = SynchedEntityData.defineId(AbstractHumanCompanionEntity.class,
             EntityDataSerializers.BOOLEAN);
@@ -129,6 +133,7 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
         this.entityData.define(PATROL_POS, Optional.empty());
         this.entityData.define(PATROL_RADIUS, 10);
         this.entityData.define(SEX, 0);
+        this.entityData.define(FOOD_GROUP, 0);
     }
 
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn,
@@ -140,6 +145,7 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
         attributeinstance.addPermanentModifier(SPAWN_HEALTH_MODIFIER);
         this.setHealth(this.getMaxHealth());
         setSex(this.random.nextInt(2));
+        setFoodGroup(this.random.nextInt(CompanionData.FOOD_GROUPS.size()));
         setCompanionSkin(this.random.nextInt(CompanionData.skins[getSex()].length));
         setCustomName(Component.literal(CompanionData.getRandomName(getSex())));
         setPatrolPos(this.blockPosition());
@@ -176,6 +182,7 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
         tag.putBoolean("Stationery", this.isStationery());
         tag.putInt("radius", this.getPatrolRadius());
         tag.putInt("sex", this.getSex());
+        tag.putInt("food", this.getFoodGroup());
         if (this.getPatrolPos() != null) {
             int[] patrolPos = {this.getPatrolPos().getX(), this.getPatrolPos().getY(), this.getPatrolPos().getZ()};
             tag.putIntArray("patrol_pos", patrolPos);
@@ -194,6 +201,7 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
         this.setStationery(tag.getBoolean("Stationery"));
         this.setPatrolRadius(tag.getInt("radius"));
         this.setSex(tag.getInt("sex"));
+        this.setFoodGroup(tag.getInt("food"));
         if (tag.getBoolean("Alert")) {
             addAlertGoals();
         }
@@ -230,27 +238,43 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
         ItemStack itemstack = player.getItemInHand(hand);
         if (hand == InteractionHand.MAIN_HAND) {
             if (!this.isTame() && !this.level.isClientSide()) {
+                Item[] foods = CompanionData.FOOD_GROUPS.get(getFoodGroup());
                 if (itemstack.isEdible()) {
-                    itemstack.shrink(1);
-                    if (this.random.nextInt(tameIdx) == 0) {
-                        this.tame(player);
-                        player.sendSystemMessage(Component.literal("Companion added"));
-                        setPatrolPos(null);
-                        setPatrolling(false);
-                        setFollowing(true);
-                        setPatrolRadius(4);
-                        patrolGoal.radius = 4;
-                        moveBackGoal.radius = 4;
-                    } else {
-                        if (tameIdx > 1) {
-                            tameIdx--;
+                    if (ArrayUtils.contains(foods, itemstack.getItem())) {
+                        itemstack.shrink(1);
+                        if (this.random.nextInt(tameIdx) == 0) {
+                            this.tame(player);
+                            player.sendSystemMessage(Component.translatable("chat.type.text", this.getDisplayName(),
+                                    Component.literal("Thanks!")));
+                            player.sendSystemMessage(Component.literal("Companion added"));
+                            setPatrolPos(null);
+                            setPatrolling(false);
+                            setFollowing(true);
+                            setPatrolRadius(4);
+                            patrolGoal.radius = 4;
+                            moveBackGoal.radius = 4;
+                        } else {
+                            if (tameIdx > 1) {
+                                tameIdx--;
+                            }
+                            player.sendSystemMessage(Component.translatable("chat.type.text", this.getDisplayName(),
+                                    CompanionData.tameFail[this.random.nextInt(CompanionData.tameFail.length)]));
                         }
+                    } else {
+                        MutableComponent[] wrongFoodMessages = CompanionData.FOOD_MESSAGES.get(5);
                         player.sendSystemMessage(Component.translatable("chat.type.text", this.getDisplayName(),
-                                CompanionData.tameFail[this.random.nextInt(CompanionData.tameFail.length)]));
+                                wrongFoodMessages[this.random.nextInt(wrongFoodMessages.length)]));
                     }
                 } else {
+                    MutableComponent[] messages = CompanionData.FOOD_MESSAGES.get(getFoodGroup());
+
+                    String task = this.getDisplayName().getString() + " wants one of the following:";
+                    for (Item food: foods) {
+                        task += " " + food.getDescription().getString() + ",";
+                    }
                     player.sendSystemMessage(Component.translatable("chat.type.text", this.getDisplayName(),
-                            CompanionData.notTamed[this.random.nextInt(CompanionData.notTamed.length)]));
+                            messages[this.random.nextInt(messages.length)]));
+                    player.sendSystemMessage(Component.literal(task));
                 }
             } else {
                 if (this.isAlliedTo(player)) {
@@ -478,7 +502,17 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
         this.entityData.set(SEX, sex);
     }
 
-    public int getSex() { return this.entityData.get(SEX); }
+    public int getSex() {
+        return this.entityData.get(SEX);
+    }
+
+    public void setFoodGroup(int foodGroup) {
+        this.entityData.set(FOOD_GROUP, foodGroup);
+    }
+
+    public int getFoodGroup() {
+        return this.entityData.get(FOOD_GROUP);
+    }
 
     public boolean isEating() {
         return this.entityData.get(EATING);
@@ -492,11 +526,17 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
         return this.entityData.get(HUNTING);
     }
 
-    public boolean isPatrolling() { return this.entityData.get(PATROLLING); }
+    public boolean isPatrolling() {
+        return this.entityData.get(PATROLLING);
+    }
 
-    public boolean isGuarding() { return this.entityData.get(GUARDING); }
+    public boolean isGuarding() {
+        return this.entityData.get(GUARDING);
+    }
 
-    public boolean isStationery() { return this.entityData.get(STATIONERY); }
+    public boolean isStationery() {
+        return this.entityData.get(STATIONERY);
+    }
 
     public boolean isFollowing() {
         return this.entityData.get(FOLLOWING);

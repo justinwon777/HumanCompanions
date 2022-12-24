@@ -4,16 +4,151 @@ import com.github.justinwon777.humancompanions.HumanCompanions;
 import net.minecraft.entity.monster.*;
 import net.minecraft.entity.passive.*;
 import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 public class CompanionData {
 
     public static Random rand = new Random();
+
+    public static Item[] MEAT = new Item[] {
+            Items.COOKED_MUTTON,
+            Items.COOKED_PORKCHOP,
+            Items.COOKED_BEEF,
+            Items.COOKED_CHICKEN,
+            Items.COOKED_RABBIT,
+//            Items.MUTTON,
+//            Items.PORKCHOP,
+//            Items.BEEF,
+//            Items.CHICKEN,
+//            Items.RABBIT,
+//            Items.RABBIT_STEW
+    };
+
+    public static Item[] SEAFOOD = new Item[] {
+            Items.COOKED_SALMON,
+            Items.COOKED_COD,
+            Items.SALMON,
+            Items.COD,
+            Items.TROPICAL_FISH
+    };
+
+    public static Item[] VEGETABLE = new Item[] {
+//            Items.GOLDEN_CARROT,
+            Items.BEETROOT,
+            Items.CARROT,
+            Items.POTATO,
+            Items.BAKED_POTATO,
+            Items.BROWN_MUSHROOM,
+            Items.RED_MUSHROOM,
+//            Items.DRIED_KELP,
+//            Items.MUSHROOM_STEW,
+//            Items.BEETROOT_SOUP,
+            Items.PUMPKIN
+    };
+
+    public static Item[] FRUIT = new Item[] {
+//            Items.GOLDEN_APPLE,
+//            Items.ENCHANTED_GOLDEN_APPLE,
+//            Items.MELON,
+            Items.MELON_SLICE,
+            Items.APPLE,
+            Items.SWEET_BERRIES,
+            Items.CHORUS_FRUIT
+    };
+
+    public static Item[] BAKED = new Item[] {
+            Items.CAKE,
+            Items.COOKIE,
+            Items.BREAD,
+            Items.PUMPKIN_PIE
+    };
+
+    public static StringTextComponent[] tameFail = new StringTextComponent[]{
+            new StringTextComponent("I need more food."),
+            new StringTextComponent("Is that all you got?"),
+            new StringTextComponent("I'm still hungry."),
+            new StringTextComponent("Can I have some more?"),
+            new StringTextComponent("I'm going to need a bit more."),
+            new StringTextComponent("That's not enough."),
+    };
+
+//    public static StringTextComponent[] notTamed = new StringTextComponent[]{
+//            new StringTextComponent("Do you have any food?"),
+//            new StringTextComponent("I'm hungry."),
+//            new StringTextComponent("Have you seen any food around here?"),
+//            new StringTextComponent("I could use some food."),
+//            new StringTextComponent("I wish I had some food."),
+//            new StringTextComponent("I'm starving."),
+//    };
+
+    public static StringTextComponent[] WRONG_FOOD = new StringTextComponent[]{
+            new StringTextComponent("That's not what I asked for."),
+            new StringTextComponent("I didn't ask for that."),
+            new StringTextComponent("Looks like you didn't understand my request."),
+            new StringTextComponent("Did you forget what I asked for?"),
+            new StringTextComponent("I don't remember asking for that")
+    };
+
+    public static StringTextComponent[] MEAT_MESSAGES = new StringTextComponent[]{
+            new StringTextComponent("I've been craving some meat."),
+            new StringTextComponent("I haven't had animal flesh in a while,"),
+            new StringTextComponent("Do you have any meat?"),
+            new StringTextComponent("Could you get some meat for me?")
+    };
+
+    public static StringTextComponent[] SEAFOOD_MESSAGES = new StringTextComponent[]{
+            new StringTextComponent("I've been craving some seafood."),
+            new StringTextComponent("I haven't had seafood in a while,"),
+            new StringTextComponent("Do you have any seafood?"),
+            new StringTextComponent("Could you get some seafood for me?")
+    };
+
+    public static StringTextComponent[] VEGETABLE_MESSAGES = new StringTextComponent[]{
+            new StringTextComponent("I've been craving some vegetables."),
+            new StringTextComponent("I haven't had vegetables in a while,"),
+            new StringTextComponent("Do you have any vegetables?"),
+            new StringTextComponent("Could you get some vegetables for me?")
+    };
+
+    public static StringTextComponent[] FRUIT_MESSAGES = new StringTextComponent[]{
+            new StringTextComponent("I've been craving some fruits."),
+            new StringTextComponent("I haven't had fruits in a while,"),
+            new StringTextComponent("Do you have any fruits?"),
+            new StringTextComponent("Could you get some fruits for me?")
+    };
+
+    public static StringTextComponent[] BAKED_MESSAGES = new StringTextComponent[]{
+            new StringTextComponent("I've been craving something baked."),
+            new StringTextComponent("Do you have any baked goods?"),
+            new StringTextComponent("I haven't had baked food in a while."),
+            new StringTextComponent("I wish there was a bakery around here?"),
+            new StringTextComponent("Could you bake something for me?")
+    };
+
+    public static Map<Integer, Item[]> FOOD_GROUPS = new HashMap<Integer, Item[]>() {{
+        put(0, MEAT);
+        put(1, SEAFOOD);
+        put(2, VEGETABLE);
+        put(3, FRUIT);
+        put(4, BAKED);
+    }};
+
+    public static Map<Integer, StringTextComponent[]> FOOD_MESSAGES = new HashMap<Integer, StringTextComponent[]>() {{
+        put(0, MEAT_MESSAGES);
+        put(1, SEAFOOD_MESSAGES);
+        put(2, VEGETABLE_MESSAGES);
+        put(3, FRUIT_MESSAGES);
+        put(4, BAKED_MESSAGES);
+        put(5, WRONG_FOOD);
+    }};
 
     public static Class<?>[] alertMobs = new Class<?>[]{
             BlazeEntity.class,
@@ -83,24 +218,6 @@ public class CompanionData {
                     new ResourceLocation(HumanCompanions.MOD_ID, "textures/entities/female/the-traveller.png"),
                     new ResourceLocation(HumanCompanions.MOD_ID, "textures/entities/female/x-ayesha.png"),
             }
-    };
-
-    public static final StringTextComponent[] tameFail = new StringTextComponent[] {
-            new StringTextComponent("I need more food."),
-            new StringTextComponent("Is that all you got?"),
-            new StringTextComponent("I'm still hungry."),
-            new StringTextComponent("Can I have some more?"),
-            new StringTextComponent("I'm going to need a bit more."),
-            new StringTextComponent("That's not enough."),
-    };
-    public static final StringTextComponent[] notTamed = new StringTextComponent[]{
-            new StringTextComponent("Do you have any food?"),
-            new StringTextComponent("I'm hungry"),
-            new StringTextComponent("I'm starving"),
-            new StringTextComponent("Have you seen any food around here?"),
-            new StringTextComponent("I could use some food"),
-            new StringTextComponent("I wish I had some food"),
-            new StringTextComponent("I'm starving"),
     };
 
     public static int getHealthModifier() {

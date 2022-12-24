@@ -36,6 +36,7 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerContainerEvent;
 import net.minecraftforge.fml.network.PacketDistributor;
+import org.apache.commons.lang3.ArrayUtils;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -47,6 +48,8 @@ public class AbstractHumanCompanionEntity extends TameableEntity{
 
     private static final DataParameter<Integer> DATA_TYPE_ID = EntityDataManager.defineId(AbstractHumanCompanionEntity.class, DataSerializers.INT);
     private static final DataParameter<Integer> SEX = EntityDataManager.defineId(AbstractHumanCompanionEntity.class,
+            DataSerializers.INT);
+    private static final DataParameter<Integer> FOOD_GROUP = EntityDataManager.defineId(AbstractHumanCompanionEntity.class,
             DataSerializers.INT);
     private static final DataParameter<Boolean> EATING = EntityDataManager.defineId(AbstractHumanCompanionEntity.class,
             DataSerializers.BOOLEAN);
@@ -128,6 +131,7 @@ public class AbstractHumanCompanionEntity extends TameableEntity{
         this.entityData.define(PATROL_POS, Optional.empty());
         this.entityData.define(PATROL_RADIUS, 10);
         this.entityData.define(SEX, 0);
+        this.entityData.define(FOOD_GROUP, 0);
     }
 
     public ILivingEntityData finalizeSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn,
@@ -139,6 +143,7 @@ public class AbstractHumanCompanionEntity extends TameableEntity{
         attributeinstance.addPermanentModifier(SPAWN_HEALTH_MODIFIER);
         this.setHealth(this.getMaxHealth());
         setSex(this.random.nextInt(2));
+        setFoodGroup(this.random.nextInt(CompanionData.FOOD_GROUPS.size()));
         setCompanionSkin(this.random.nextInt(CompanionData.skins[getSex()].length));
         setCustomName(new StringTextComponent(CompanionData.getRandomName(getSex())));
         setPatrolPos(this.blockPosition());
@@ -175,6 +180,7 @@ public class AbstractHumanCompanionEntity extends TameableEntity{
         tag.putBoolean("Stationery", this.isStationery());
         tag.putInt("radius", this.getPatrolRadius());
         tag.putInt("sex", this.getSex());
+        tag.putInt("food", this.getFoodGroup());
         if (this.getPatrolPos() != null) {
             int[] patrolPos = {this.getPatrolPos().getX(), this.getPatrolPos().getY(), this.getPatrolPos().getZ()};
             tag.putIntArray("patrol_pos", patrolPos);
@@ -193,6 +199,7 @@ public class AbstractHumanCompanionEntity extends TameableEntity{
         this.setStationery(tag.getBoolean("Stationery"));
         this.setPatrolRadius(tag.getInt("radius"));
         this.setSex(tag.getInt("sex"));
+        this.setFoodGroup(tag.getInt("food"));
         if (tag.getBoolean("Alert")) {
             this.addAlertGoals();
         }
@@ -229,27 +236,43 @@ public class AbstractHumanCompanionEntity extends TameableEntity{
         ItemStack itemstack = player.getItemInHand(hand);
         if (hand == Hand.MAIN_HAND) {
             if (!this.isTame() && !this.level.isClientSide()) {
+                Item[] foods = CompanionData.FOOD_GROUPS.get(getFoodGroup());
                 if (itemstack.isEdible()) {
-                    itemstack.shrink(1);
-                    if (this.random.nextInt(tameIdx) == 0) {
-                        this.tame(player);
-                        player.sendMessage(new StringTextComponent("Companion added"), this.getUUID());
-                        setPatrolPos(null);
-                        setPatrolling(false);
-                        setFollowing(true);
-                        setPatrolRadius(4);
-                        patrolGoal.radius = 4;
-                        moveBackGoal.radius = 4;
-                    } else {
-                        if (tameIdx > 1) {
-                            tameIdx--;
+                    if (ArrayUtils.contains(foods, itemstack.getItem())) {
+                        itemstack.shrink(1);
+                        if (this.random.nextInt(tameIdx) == 0) {
+                            this.tame(player);
+                            player.sendMessage(new TranslationTextComponent("chat.type.text", this.getDisplayName(),
+                                    new StringTextComponent("Thanks!")), this.getUUID());
+                            player.sendMessage(new StringTextComponent("Companion added"), this.getUUID());
+                            setPatrolPos(null);
+                            setPatrolling(false);
+                            setFollowing(true);
+                            setPatrolRadius(4);
+                            patrolGoal.radius = 4;
+                            moveBackGoal.radius = 4;
+                        } else {
+                            if (tameIdx > 1) {
+                                tameIdx--;
+                            }
+                            player.sendMessage(new TranslationTextComponent("chat.type.text", this.getDisplayName(),
+                                    CompanionData.tameFail[this.random.nextInt(CompanionData.tameFail.length)]), this.getUUID());
                         }
+                    } else {
+                        StringTextComponent[] wrongFoodMessages = CompanionData.FOOD_MESSAGES.get(5);
                         player.sendMessage(new TranslationTextComponent("chat.type.text", this.getDisplayName(),
-                                CompanionData.tameFail[this.random.nextInt(CompanionData.tameFail.length)]), this.getUUID());
+                                wrongFoodMessages[this.random.nextInt(wrongFoodMessages.length)]), this.getUUID());
                     }
                 } else {
+                    StringTextComponent[] messages = CompanionData.FOOD_MESSAGES.get(getFoodGroup());
+
+                    String task = this.getDisplayName().getString() + " wants one of the following:";
+                    for (Item food: foods) {
+                        task += " " + food.getDescription().getString() + ",";
+                    }
                     player.sendMessage(new TranslationTextComponent("chat.type.text", this.getDisplayName(),
-                            CompanionData.notTamed[this.random.nextInt(CompanionData.notTamed.length)]), this.getUUID());
+                            messages[this.random.nextInt(messages.length)]), this.getUUID());
+                    player.sendMessage(new StringTextComponent(task), this.getUUID());
                 }
             } else {
                 if (this.isAlliedTo(player)) {
@@ -465,35 +488,73 @@ public class AbstractHumanCompanionEntity extends TameableEntity{
         this.entityData.set(SEX, sex);
     }
 
-    public int getSex() { return this.entityData.get(SEX); }
+    public int getSex() {
+        return this.entityData.get(SEX);
+    }
 
-    public boolean isEating() { return this.entityData.get(EATING); }
+    public void setFoodGroup(int foodGroup) {
+        this.entityData.set(FOOD_GROUP, foodGroup);
+    }
 
-    public boolean isAlert() { return this.entityData.get(ALERT); }
+    public int getFoodGroup() {
+        return this.entityData.get(FOOD_GROUP);
+    }
 
-    public boolean isHunting() { return this.entityData.get(HUNTING); }
+    public boolean isEating() {
+        return this.entityData.get(EATING);
+    }
 
-    public boolean isPatrolling() { return this.entityData.get(PATROLLING); }
+    public boolean isAlert() {
+        return this.entityData.get(ALERT);
+    }
 
-    public boolean isGuarding() { return this.entityData.get(GUARDING); }
+    public boolean isHunting() {
+        return this.entityData.get(HUNTING);
+    }
 
-    public boolean isStationery() { return this.entityData.get(STATIONERY); }
+    public boolean isPatrolling() {
+        return this.entityData.get(PATROLLING);
+    }
 
-    public boolean isFollowing() { return this.entityData.get(FOLLOWING); }
+    public boolean isGuarding() {
+        return this.entityData.get(GUARDING);
+    }
 
-    public void setEating(boolean eating) { this.entityData.set(EATING, eating); }
+    public boolean isStationery() {
+        return this.entityData.get(STATIONERY);
+    }
 
-    public void setAlert(boolean alert) { this.entityData.set(ALERT, alert); }
+    public boolean isFollowing() {
+        return this.entityData.get(FOLLOWING);
+    }
 
-    public void setHunting(boolean hunting) { this.entityData.set(HUNTING, hunting); }
+    public void setEating(boolean eating) {
+        this.entityData.set(EATING, eating);
+    }
 
-    public void setPatrolling(boolean patrolling) { this.entityData.set(PATROLLING, patrolling); }
+    public void setAlert(boolean alert) {
+        this.entityData.set(ALERT, alert);
+    }
 
-    public void setGuarding(boolean guarding) { this.entityData.set(GUARDING, guarding); }
+    public void setHunting(boolean hunting) {
+        this.entityData.set(HUNTING, hunting);
+    }
 
-    public void setStationery(boolean stationery) { this.entityData.set(STATIONERY, stationery); }
+    public void setPatrolling(boolean patrolling) {
+        this.entityData.set(PATROLLING, patrolling);
+    }
 
-    public void setFollowing(boolean following) { this.entityData.set(FOLLOWING, following); }
+    public void setGuarding(boolean guarding) {
+        this.entityData.set(GUARDING, guarding);
+    }
+
+    public void setStationery(boolean stationery) {
+        this.entityData.set(STATIONERY, stationery);
+    }
+
+    public void setFollowing(boolean following) {
+        this.entityData.set(FOLLOWING, following);
+    }
 
     public void addAlertGoals() {
         for (NearestAttackableTargetGoal alertMobGoal : alertMobGoals) {

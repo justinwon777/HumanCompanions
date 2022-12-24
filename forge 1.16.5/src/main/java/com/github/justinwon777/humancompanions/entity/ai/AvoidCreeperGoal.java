@@ -1,5 +1,6 @@
 package com.github.justinwon777.humancompanions.entity.ai;
 
+import com.github.justinwon777.humancompanions.core.Config;
 import net.minecraft.entity.EntityPredicate;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.RandomPositionGenerator;
@@ -68,11 +69,13 @@ public class AvoidCreeperGoal<T extends LivingEntity> extends Goal {
     }
 
     public void start() {
-        StringTextComponent text = new StringTextComponent("Creeper!");
-        if (this.mob.isTame()) {
-            if (this.mob.blockPosition().closerThan(this.mob.getOwner().blockPosition(), 15)) {
-                this.mob.getOwner().sendMessage(new TranslationTextComponent("chat.type.text", this.mob.getDisplayName(), text),
-                        this.mob.getUUID());
+        if (Config.CREEPER_WARNING.get()) {
+            StringTextComponent text = new StringTextComponent("Creeper!");
+            if (this.mob.isTame()) {
+                if (this.mob.blockPosition().closerThan(this.mob.getOwner().blockPosition(), 15)) {
+                    this.mob.getOwner().sendMessage(new TranslationTextComponent("chat.type.text", this.mob.getDisplayName(), text),
+                            this.mob.getUUID());
+                }
             }
         }
         this.pathNav.moveTo(this.path, this.walkSpeedModifier);

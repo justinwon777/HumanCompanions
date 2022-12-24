@@ -11,6 +11,9 @@ public class Config {
     public static ForgeConfigSpec.BooleanValue FALL_DAMAGE;
     public static ForgeConfigSpec.BooleanValue SPAWN_ARMOR;
     public static ForgeConfigSpec.BooleanValue SPAWN_WEAPON;
+    public static ForgeConfigSpec.IntValue BASE_HEALTH;
+    public static ForgeConfigSpec.BooleanValue LOW_HEALTH_FOOD;
+    public static ForgeConfigSpec.BooleanValue CREEPER_WARNING;
 
     public static void register() {
         registerCommonConfig();
@@ -37,6 +40,15 @@ public class Config {
         SPAWN_WEAPON = COMMON_BUILDER
                 .comment("Toggles whether companions spawn with a weapon")
                 .define("spawnWeapon", true);
+        BASE_HEALTH = COMMON_BUILDER
+                .comment("Sets the base health of each companion. Companions spawn with up to +-4 from the base health")
+                .defineInRange("baseHealth", 20, 5, Integer.MAX_VALUE);
+        LOW_HEALTH_FOOD = COMMON_BUILDER
+                .comment("Toggles whether companions ask for food if their health goes below half.")
+                .define("lowHealthFood", true);
+        CREEPER_WARNING = COMMON_BUILDER
+                .comment("Toggles whether companions alert you if a creeper is nearby.")
+                .define("creeperWarning", true);
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, COMMON_BUILDER.build());
     }
 }

@@ -3,6 +3,7 @@ package com.github.justinwon777.humancompanions.entity.ai;
 import java.util.EnumSet;
 import java.util.function.Predicate;
 
+import com.github.justinwon777.humancompanions.core.Config;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.entity.EntitySelector;
@@ -67,11 +68,13 @@ public class AvoidCreeperGoal<T extends LivingEntity> extends Goal {
     }
 
     public void start() {
-        TextComponent text = new TextComponent("Creeper!");
-        if (this.mob.isTame()) {
-            if (this.mob.blockPosition().closerThan(this.mob.getOwner().blockPosition(), 15)) {
-                this.mob.getOwner().sendMessage(new TranslatableComponent("chat.type.text", this.mob.getDisplayName(), text),
-                        this.mob.getUUID());
+        if (Config.CREEPER_WARNING.get()) {
+            TextComponent text = new TextComponent("Creeper!");
+            if (this.mob.isTame()) {
+                if (this.mob.blockPosition().closerThan(this.mob.getOwner().blockPosition(), 15)) {
+                    this.mob.getOwner().sendMessage(new TranslatableComponent("chat.type.text", this.mob.getDisplayName(), text),
+                            this.mob.getUUID());
+                }
             }
         }
         this.pathNav.moveTo(this.path, this.walkSpeedModifier);

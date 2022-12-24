@@ -139,9 +139,12 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn,
                                         MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn,
                                         @Nullable CompoundTag dataTag) {
+        AttributeModifier CONFIG_HEALTH_MODIFIER = new AttributeModifier("config_health",
+                Config.BASE_HEALTH.get() - 20, AttributeModifier.Operation.ADDITION);
         AttributeModifier SPAWN_HEALTH_MODIFIER = new AttributeModifier("health",
                 CompanionData.getHealthModifier(), AttributeModifier.Operation.ADDITION);
         AttributeInstance attributeinstance = this.getAttribute(Attributes.MAX_HEALTH);
+        attributeinstance.addPermanentModifier(CONFIG_HEALTH_MODIFIER);
         attributeinstance.addPermanentModifier(SPAWN_HEALTH_MODIFIER);
         this.setHealth(this.getMaxHealth());
         setSex(this.random.nextInt(2));

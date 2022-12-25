@@ -149,10 +149,10 @@ public class AbstractHumanCompanionEntity extends TameableEntity{
     public ILivingEntityData finalizeSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn,
                                            SpawnReason reason, @Nullable ILivingEntityData spawnDataIn,
                                            @Nullable CompoundNBT dataTag) {
-        modifyMaxHealth(Config.BASE_HEALTH.get() - 20);
-        modifyMaxHealth(CompanionData.getHealthModifier());
+        int baseHealth = Config.BASE_HEALTH.get() + CompanionData.getHealthModifier();
+        modifyMaxHealth(baseHealth - 20);
         this.setHealth(this.getMaxHealth());
-        setBaseHealth((int) this.getMaxHealth());
+        setBaseHealth(baseHealth);
         setSex(this.random.nextInt(2));
         setFoodGroup(this.random.nextInt(CompanionData.FOOD_GROUPS.size()));
         setCompanionSkin(this.random.nextInt(CompanionData.skins[getSex()].length));
@@ -513,9 +513,6 @@ public class AbstractHumanCompanionEntity extends TameableEntity{
 
     public void giveExperienceLevels(int pLevels) {
         this.experienceLevel += pLevels;
-        if (this.experienceLevel % 3 == 0) {
-            modifyMaxHealth(pLevels);
-        }
         if (this.experienceLevel < 0) {
             this.experienceLevel = 0;
             this.experienceProgress = 0.0F;
@@ -551,6 +548,19 @@ public class AbstractHumanCompanionEntity extends TameableEntity{
                 change, AttributeModifier.Operation.ADDITION);
         ModifiableAttributeInstance attributeinstance = this.getAttribute(Attributes.MAX_HEALTH);
         attributeinstance.addPermanentModifier(HEALTH_MODIFIER);
+    }
+
+    public void checkStats() {
+        if ((int) this.getMaxHealth() != getBaseHealth() + (getExpLvl() / 3 )) {
+            modifyMaxHealth(getBaseHealth() + (getExpLvl() / 3 ) - (int) this.getMaxHealth());
+        }
+    }
+
+    public void tick() {
+        if (!this.level.isClientSide()) {
+            checkStats();
+        }
+        super.tick();
     }
 
     public void setExpLvl(int lvl) {

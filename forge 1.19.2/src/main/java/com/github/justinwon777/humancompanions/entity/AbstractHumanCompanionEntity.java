@@ -151,10 +151,10 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn,
                                         MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn,
                                         @Nullable CompoundTag dataTag) {
-        modifyMaxHealth(Config.BASE_HEALTH.get() - 20);
-        modifyMaxHealth(CompanionData.getHealthModifier());
+        int baseHealth = Config.BASE_HEALTH.get() + CompanionData.getHealthModifier();
+        modifyMaxHealth(baseHealth - 20);
         this.setHealth(this.getMaxHealth());
-        setBaseHealth((int) this.getMaxHealth());
+        setBaseHealth(baseHealth);
         setSex(this.random.nextInt(2));
         setFoodGroup(this.random.nextInt(CompanionData.FOOD_GROUPS.size()));
         setCompanionSkin(this.random.nextInt(CompanionData.skins[getSex()].length));
@@ -514,9 +514,6 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
 
     public void giveExperienceLevels(int pLevels) {
         this.experienceLevel += pLevels;
-        if (this.experienceLevel % 3 == 0) {
-            modifyMaxHealth(pLevels);
-        }
         if (this.experienceLevel < 0) {
             this.experienceLevel = 0;
             this.experienceProgress = 0.0F;
@@ -554,13 +551,18 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
         attributeinstance.addPermanentModifier(HEALTH_MODIFIER);
     }
 
-//    public void checkStats() {
-//        if (this.getMaxHealth() != getBaseHealth() + this.experienceLevel) {
-//            System.out.println("max: "+this.getMaxHealth() + " base: "+getBaseHealth() + " level: "+this.experienceLevel);
-//            modifyMaxHealth(getBaseHealth() + this.experienceLevel - (int) this.getMaxHealth());
-//            this.setHealth(this.getMaxHealth());
-//        }
-//    }
+    public void checkStats() {
+        if ((int) this.getMaxHealth() != getBaseHealth() + (getExpLvl() / 3 )) {
+            modifyMaxHealth(getBaseHealth() + (getExpLvl() / 3 ) - (int) this.getMaxHealth());
+        }
+    }
+
+    public void tick() {
+        if (!this.level.isClientSide()) {
+            checkStats();
+        }
+        super.tick();
+    }
 
     public void setExpLvl(int lvl) {
         this.entityData.set(EXP_LVL, lvl);

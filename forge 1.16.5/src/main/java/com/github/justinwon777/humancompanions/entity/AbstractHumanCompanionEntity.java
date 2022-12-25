@@ -558,6 +558,7 @@ public class AbstractHumanCompanionEntity extends TameableEntity{
 
     public void tick() {
         if (!this.level.isClientSide()) {
+            checkArmor();
             checkStats();
         }
         super.tick();

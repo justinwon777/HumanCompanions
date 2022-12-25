@@ -47,8 +47,9 @@ public class Axeguard extends AbstractHumanCompanionEntity {
     }
 
     public void tick() {
-        checkArmor();
-        checkAxe();
+        if (!this.level.isClientSide()) {
+            checkAxe();
+        }
         super.tick();
     }
 

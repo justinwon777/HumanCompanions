@@ -27,9 +27,11 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.GroundPathNavigator;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.GameRules;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
@@ -50,6 +52,10 @@ public class AbstractHumanCompanionEntity extends TameableEntity{
     private static final DataParameter<Integer> SEX = EntityDataManager.defineId(AbstractHumanCompanionEntity.class,
             DataSerializers.INT);
     private static final DataParameter<Integer> FOOD_GROUP = EntityDataManager.defineId(AbstractHumanCompanionEntity.class,
+            DataSerializers.INT);
+    private static final DataParameter<Integer> BASE_HEALTH = EntityDataManager.defineId(AbstractHumanCompanionEntity.class,
+            DataSerializers.INT);
+    private static final DataParameter<Integer> EXP_LVL = EntityDataManager.defineId(AbstractHumanCompanionEntity.class,
             DataSerializers.INT);
     private static final DataParameter<Boolean> EATING = EntityDataManager.defineId(AbstractHumanCompanionEntity.class,
             DataSerializers.BOOLEAN);
@@ -78,6 +84,10 @@ public class AbstractHumanCompanionEntity extends TameableEntity{
     public PatrolGoal patrolGoal;
     public MoveBackToPatrolGoal moveBackGoal;
     public int tameIdx = 5;
+    public int experienceLevel;
+    public int totalExperience;
+    public float experienceProgress;
+    private int lastLevelUpTime;
 
     public AbstractHumanCompanionEntity(EntityType<? extends TameableEntity> entityType, World level) {
         super(entityType, level);
@@ -132,19 +142,17 @@ public class AbstractHumanCompanionEntity extends TameableEntity{
         this.entityData.define(PATROL_RADIUS, 10);
         this.entityData.define(SEX, 0);
         this.entityData.define(FOOD_GROUP, 0);
+        this.entityData.define(BASE_HEALTH, 20);
+        this.entityData.define(EXP_LVL, 0);
     }
 
     public ILivingEntityData finalizeSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn,
                                            SpawnReason reason, @Nullable ILivingEntityData spawnDataIn,
                                            @Nullable CompoundNBT dataTag) {
-        AttributeModifier CONFIG_HEALTH_MODIFIER = new AttributeModifier("config_health",
-                Config.BASE_HEALTH.get() - 20, AttributeModifier.Operation.ADDITION);
-        AttributeModifier SPAWN_HEALTH_MODIFIER = new AttributeModifier("health",
-                CompanionData.getHealthModifier(), AttributeModifier.Operation.ADDITION);
-        ModifiableAttributeInstance attributeinstance = this.getAttribute(Attributes.MAX_HEALTH);
-        attributeinstance.addPermanentModifier(CONFIG_HEALTH_MODIFIER);
-        attributeinstance.addPermanentModifier(SPAWN_HEALTH_MODIFIER);
+        modifyMaxHealth(Config.BASE_HEALTH.get() - 20);
+        modifyMaxHealth(CompanionData.getHealthModifier());
         this.setHealth(this.getMaxHealth());
+        setBaseHealth((int) this.getMaxHealth());
         setSex(this.random.nextInt(2));
         setFoodGroup(this.random.nextInt(CompanionData.FOOD_GROUPS.size()));
         setCompanionSkin(this.random.nextInt(CompanionData.skins[getSex()].length));
@@ -184,6 +192,10 @@ public class AbstractHumanCompanionEntity extends TameableEntity{
         tag.putInt("radius", this.getPatrolRadius());
         tag.putInt("sex", this.getSex());
         tag.putInt("food", this.getFoodGroup());
+        tag.putInt("baseHealth", this.getBaseHealth());
+        tag.putFloat("XpP", this.experienceProgress);
+        tag.putInt("XpLevel", this.experienceLevel);
+        tag.putInt("XpTotal", this.totalExperience);
         if (this.getPatrolPos() != null) {
             int[] patrolPos = {this.getPatrolPos().getX(), this.getPatrolPos().getY(), this.getPatrolPos().getZ()};
             tag.putIntArray("patrol_pos", patrolPos);
@@ -203,6 +215,11 @@ public class AbstractHumanCompanionEntity extends TameableEntity{
         this.setPatrolRadius(tag.getInt("radius"));
         this.setSex(tag.getInt("sex"));
         this.setFoodGroup(tag.getInt("food"));
+        this.setBaseHealth(tag.getInt("baseHealth"));
+        this.experienceProgress = tag.getFloat("XpP");
+        this.experienceLevel = tag.getInt("XpLevel");
+        this.setExpLvl(tag.getInt("XpLevel"));
+        this.totalExperience = tag.getInt("XpTotal");
         if (tag.getBoolean("Alert")) {
             this.addAlertGoals();
         }
@@ -471,6 +488,79 @@ public class AbstractHumanCompanionEntity extends TameableEntity{
         this.setTarget(null);
     }
 
+    public void giveExperiencePoints(int pXpPoints) {
+        this.experienceProgress += (float)pXpPoints / (float)this.getXpNeededForNextLevel();
+        this.totalExperience = MathHelper.clamp(this.totalExperience + pXpPoints, 0, Integer.MAX_VALUE);
+
+        while(this.experienceProgress < 0.0F) {
+            float f = this.experienceProgress * (float)this.getXpNeededForNextLevel();
+            if (this.experienceLevel > 0) {
+                this.giveExperienceLevels(-1);
+                this.experienceProgress = 1.0F + f / (float)this.getXpNeededForNextLevel();
+            } else {
+                this.giveExperienceLevels(-1);
+                this.experienceProgress = 0.0F;
+            }
+        }
+
+        while(this.experienceProgress >= 1.0F) {
+            this.experienceProgress = (this.experienceProgress - 1.0F) * (float)this.getXpNeededForNextLevel();
+            this.giveExperienceLevels(1);
+            this.experienceProgress /= (float)this.getXpNeededForNextLevel();
+        }
+
+    }
+
+    public void giveExperienceLevels(int pLevels) {
+        this.experienceLevel += pLevels;
+        if (this.experienceLevel % 3 == 0) {
+            modifyMaxHealth(pLevels);
+        }
+        if (this.experienceLevel < 0) {
+            this.experienceLevel = 0;
+            this.experienceProgress = 0.0F;
+            this.totalExperience = 0;
+        }
+        setExpLvl(this.experienceLevel);
+
+        if (pLevels > 0 && this.experienceLevel % 5 == 0 && (float)this.lastLevelUpTime < (float)this.tickCount - 100.0F) {
+            this.lastLevelUpTime = this.tickCount;
+        }
+
+    }
+
+    public int getXpNeededForNextLevel() {
+        if (this.experienceLevel >= 30) {
+            return 112 + (this.experienceLevel - 30) * 9;
+        } else {
+            return this.experienceLevel >= 15 ? 37 + (this.experienceLevel - 15) * 5 : 7 + this.experienceLevel * 2;
+        }
+    }
+
+    public int getExperienceReward(PlayerEntity player) {
+        if (!this.level.getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY) && !this.isSpectator()) {
+            int i = this.experienceLevel * 7;
+            return Math.min(i, 100);
+        } else {
+            return 0;
+        }
+    }
+
+    public void modifyMaxHealth(int change) {
+        AttributeModifier HEALTH_MODIFIER = new AttributeModifier("health",
+                change, AttributeModifier.Operation.ADDITION);
+        ModifiableAttributeInstance attributeinstance = this.getAttribute(Attributes.MAX_HEALTH);
+        attributeinstance.addPermanentModifier(HEALTH_MODIFIER);
+    }
+
+    public void setExpLvl(int lvl) {
+        this.entityData.set(EXP_LVL, lvl);
+    }
+
+    public int getExpLvl() {
+        return this.entityData.get(EXP_LVL);
+    }
+
     @Nullable
     public void setPatrolPos(BlockPos position) { this.entityData.set(PATROL_POS, Optional.ofNullable(position)); }
 
@@ -501,6 +591,14 @@ public class AbstractHumanCompanionEntity extends TameableEntity{
 
     public int getFoodGroup() {
         return this.entityData.get(FOOD_GROUP);
+    }
+
+    public void setBaseHealth(int health) {
+        this.entityData.set(BASE_HEALTH, health);
+    }
+
+    public int getBaseHealth() {
+        return this.entityData.get(BASE_HEALTH);
     }
 
     public boolean isEating() {
@@ -572,14 +670,14 @@ public class AbstractHumanCompanionEntity extends TameableEntity{
     }
 
     public void addHuntingGoals() {
-        for (int i = 0; i < huntMobGoals.size(); i++) {
-            this.targetSelector.addGoal(4, huntMobGoals.get(i));
+        for (NearestAttackableTargetGoal huntMobGoal : huntMobGoals) {
+            this.targetSelector.addGoal(4, huntMobGoal);
         }
     }
 
     public void removeHuntingGoals() {
-        for (int i = 0; i < huntMobGoals.size(); i++) {
-            this.targetSelector.removeGoal(huntMobGoals.get(i));
+        for (NearestAttackableTargetGoal huntMobGoal : huntMobGoals) {
+            this.targetSelector.removeGoal(huntMobGoal);
         }
     }
 }

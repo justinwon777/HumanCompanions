@@ -87,21 +87,21 @@ public class CompanionScreen extends AbstractContainerScreen<CompanionContainer>
     @Override
     protected void init() {
         super.init();
-        this.alertButton = addRenderableWidget(new CompanionButton("alert", leftPos + sidebarx + 2, topPos + 70, 16,
+        this.alertButton = addRenderableWidget(new CompanionButton("alert", leftPos + sidebarx + 3, topPos + 79, 16,
                 12, 0
                 , 0, 13,
                 ALERT_BUTTON,
                 btn -> {
                     PacketHandler.INSTANCE.sendToServer(new SetAlertPacket(companion.getId()));
         }));
-        this.huntingButton = addRenderableWidget(new CompanionButton("hunting", leftPos + sidebarx + 21, topPos + 70,
+        this.huntingButton = addRenderableWidget(new CompanionButton("hunting", leftPos + sidebarx + 22, topPos + 79,
                 16,
                 12, 0, 0,13,
                 HUNTING_BUTTON,
                 btn -> {
                     PacketHandler.INSTANCE.sendToServer(new SetHuntingPacket(companion.getId()));
                 }));
-        this.patrolButton = addRenderableWidget(new CompanionButton("patrolling", leftPos + sidebarx + 2, topPos + 85,
+        this.patrolButton = addRenderableWidget(new CompanionButton("patrolling", leftPos + sidebarx + 3, topPos + 94,
                 16,
                 12,
                 0, 0
@@ -111,8 +111,8 @@ public class CompanionScreen extends AbstractContainerScreen<CompanionContainer>
                     PacketHandler.INSTANCE.sendToServer(new SetPatrolingPacket(companion.getId()));
                 }));
         if (companion instanceof Archer || companion instanceof Arbalist) {
-            this.stationeryButton = addRenderableWidget(new CompanionButton("stationery", leftPos + sidebarx + 21,
-                    topPos + 85,
+            this.stationeryButton = addRenderableWidget(new CompanionButton("stationery", leftPos + sidebarx + 22,
+                    topPos + 94,
                     16,
                     12,
                     0, 0
@@ -122,7 +122,7 @@ public class CompanionScreen extends AbstractContainerScreen<CompanionContainer>
                         PacketHandler.INSTANCE.sendToServer(new SetStationeryPacket(companion.getId()));
                     }));
         }
-        this.clearButton = addRenderableWidget(new CompanionButton("clear", leftPos + sidebarx + 4, topPos + 56, 31,
+        this.clearButton = addRenderableWidget(new CompanionButton("clear", leftPos + sidebarx + 5, topPos + 65, 31,
                 12, 0, 0
                 ,13,
                 CLEAR_BUTTON,
@@ -134,24 +134,29 @@ public class CompanionScreen extends AbstractContainerScreen<CompanionContainer>
     @Override
     protected void renderLabels(PoseStack pPoseStack, int pMouseX, int pMouseY) {
         super.renderLabels(pPoseStack, pMouseX, pMouseY);
-        MutableComponent healthTitle = Component.literal("Health");
         MutableComponent classTitle = Component.literal("Class");
+        MutableComponent healthTitle = Component.literal("Health");
         MutableComponent health =
                 Component.literal(df.format(companion.getHealth()) + "/" + (int) companion.getMaxHealth());
-        this.font.draw(pPoseStack, classTitle.withStyle(ChatFormatting.UNDERLINE), sidebarx, this.titleLabelY + 3,
+
+        this.font.draw(pPoseStack, classTitle.withStyle(ChatFormatting.UNDERLINE), sidebarx + 4, this.titleLabelY + 3,
                 4210752);
         if (companion instanceof Arbalist) {
-            this.font.draw(pPoseStack, "Arbalist", sidebarx, this.titleLabelY + 14, 4210752);
+            this.font.draw(pPoseStack, "Arbalist", sidebarx + 4, this.titleLabelY + 14, 4210752);
         } else if (companion instanceof Archer) {
-            this.font.draw(pPoseStack, "Archer", sidebarx, this.titleLabelY + 14, 4210752);
+            this.font.draw(pPoseStack, "Archer", sidebarx + 4, this.titleLabelY + 14, 4210752);
         } else if (companion instanceof Knight) {
-            this.font.draw(pPoseStack, "Knight", sidebarx, this.titleLabelY + 14, 4210752);
+            this.font.draw(pPoseStack, "Knight", sidebarx + 4, this.titleLabelY + 14, 4210752);
         } else {
-            this.font.draw(pPoseStack, "Axe", sidebarx, this.titleLabelY + 14, 4210752);
+            this.font.draw(pPoseStack, "Axe", sidebarx + 4, this.titleLabelY + 14, 4210752);
         }
-        this.font.draw(pPoseStack, healthTitle.withStyle(ChatFormatting.UNDERLINE), sidebarx, this.titleLabelY + 27,
+
+        this.font.draw(pPoseStack, healthTitle.withStyle(ChatFormatting.UNDERLINE), sidebarx + 4, this.titleLabelY + 26,
                 4210752);
-        this.font.draw(pPoseStack, health, sidebarx, this.titleLabelY + 38, 4210752);
+        this.font.draw(pPoseStack, health, sidebarx + 4, this.titleLabelY + 37, 4210752);
+
+        this.font.draw(pPoseStack, "Level " + companion.getExpLvl(), sidebarx, this.titleLabelY + 49,
+                4210752);
     }
 
     @Override

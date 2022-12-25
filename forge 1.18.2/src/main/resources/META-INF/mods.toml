@@ -30,7 +30,7 @@ displayName="Human Companions" #mandatory
 logoFile="examplemod.png" #optional
 # A text field displayed in the mod UI
 credits='''
-            Skins: schwaechlich, LukyLucaz, ShudderShockBailiff, Tankrid, Chronomize, traxll, Soloveigo, RiserSkin, and jojohebbeker
+            Skins: schwaechlich, LukyLucaz, ShudderShockBailiff, Tankrid, Chronomize, traxll, Soloveigo, RiserSkin, jojohebbeker, Mcc, CrumbleCupcake, neji101, Fieee, Gunshykiki, ShannonGood, sunborn, and deerrie
             Structures: Dr_Bond, Lemon-Fox, BrokenGamer, barrel_maker, Life of the Party, McKorova, Trickn_Nuggets, and Pufficles
             ''' #optional
 # A text field displayed in the mod UI

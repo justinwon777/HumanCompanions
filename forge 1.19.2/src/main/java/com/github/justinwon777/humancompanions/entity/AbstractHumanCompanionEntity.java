@@ -41,17 +41,13 @@ import net.minecraftforge.network.PacketDistributor;
 import org.apache.commons.lang3.ArrayUtils;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class AbstractHumanCompanionEntity extends TamableAnimal {
 
     private static final EntityDataAccessor<Integer> DATA_TYPE_ID = SynchedEntityData.defineId(AbstractHumanCompanionEntity.class,
             EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> SEX = SynchedEntityData.defineId(AbstractHumanCompanionEntity.class,
-            EntityDataSerializers.INT);
-    private static final EntityDataAccessor<Integer> FOOD_GROUP = SynchedEntityData.defineId(AbstractHumanCompanionEntity.class,
             EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> BASE_HEALTH = SynchedEntityData.defineId(AbstractHumanCompanionEntity.class,
             EntityDataSerializers.INT);
@@ -76,6 +72,14 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
             EntityDataSerializers.OPTIONAL_BLOCK_POS);
     private static final EntityDataAccessor<Integer> PATROL_RADIUS = SynchedEntityData.defineId(AbstractHumanCompanionEntity.class,
             EntityDataSerializers.INT);
+    private static final EntityDataAccessor<String> FOOD1 = SynchedEntityData.defineId(AbstractHumanCompanionEntity.class,
+            EntityDataSerializers.STRING);
+    private static final EntityDataAccessor<String> FOOD2 = SynchedEntityData.defineId(AbstractHumanCompanionEntity.class,
+            EntityDataSerializers.STRING);
+    private static final EntityDataAccessor<Integer> FOOD1_AMT = SynchedEntityData.defineId(AbstractHumanCompanionEntity.class,
+            EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> FOOD2_AMT = SynchedEntityData.defineId(AbstractHumanCompanionEntity.class,
+            EntityDataSerializers.INT);
 
     public SimpleContainer inventory = new SimpleContainer(27);
     public EquipmentSlot[] armorTypes = new EquipmentSlot[]{EquipmentSlot.FEET, EquipmentSlot.LEGS,
@@ -84,11 +88,13 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
     public List<NearestAttackableTargetGoal> huntMobGoals = new ArrayList<>();
     public PatrolGoal patrolGoal;
     public MoveBackToPatrolGoal moveBackGoal;
-    public int tameIdx = 5;
     public int experienceLevel;
     public int totalExperience;
     public float experienceProgress;
     private int lastLevelUpTime;
+    public static Map<String, Integer> foodRequirements = new HashMap<>();
+    private String food1;
+    private String food2;
 
     public AbstractHumanCompanionEntity(EntityType<? extends TamableAnimal> entityType, Level level) {
         super(entityType, level);
@@ -143,9 +149,12 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
         this.entityData.define(PATROL_POS, Optional.empty());
         this.entityData.define(PATROL_RADIUS, 10);
         this.entityData.define(SEX, 0);
-        this.entityData.define(FOOD_GROUP, 0);
         this.entityData.define(BASE_HEALTH, 20);
         this.entityData.define(EXP_LVL, 0);
+        this.entityData.define(FOOD1, "");
+        this.entityData.define(FOOD2, "");
+        this.entityData.define(FOOD1_AMT, 0);
+        this.entityData.define(FOOD2_AMT, 0);
     }
 
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn,
@@ -156,7 +165,6 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
         this.setHealth(this.getMaxHealth());
         setBaseHealth(baseHealth);
         setSex(this.random.nextInt(2));
-        setFoodGroup(this.random.nextInt(CompanionData.FOOD_GROUPS.size()));
         setCompanionSkin(this.random.nextInt(CompanionData.skins[getSex()].length));
         setCustomName(Component.literal(CompanionData.getRandomName(getSex())));
         setPatrolPos(this.blockPosition());
@@ -166,6 +174,14 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
         moveBackGoal = new MoveBackToPatrolGoal(this, getPatrolRadius());
         this.goalSelector.addGoal(3, moveBackGoal);
         this.goalSelector.addGoal(3, patrolGoal);
+        Item[] allFoods = CompanionData.ALL_FOODS;
+        food1 = allFoods[random.nextInt(allFoods.length)].getDescription().getString();
+        food2 = allFoods[random.nextInt(allFoods.length)].getDescription().getString();
+        while (food1.equals(food2)) {
+            food2 = allFoods[random.nextInt(allFoods.length)].getDescription().getString();
+        }
+        foodRequirements.put(food1, random.nextInt(5) + 1);
+        foodRequirements.put(food2, random.nextInt(5) + 1);
 
         if (Config.SPAWN_ARMOR.get()) {
             for (int i = 0; i < 4; i++) {
@@ -193,11 +209,14 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
         tag.putBoolean("Stationery", this.isStationery());
         tag.putInt("radius", this.getPatrolRadius());
         tag.putInt("sex", this.getSex());
-        tag.putInt("food", this.getFoodGroup());
         tag.putInt("baseHealth", this.getBaseHealth());
         tag.putFloat("XpP", this.experienceProgress);
         tag.putInt("XpLevel", this.experienceLevel);
         tag.putInt("XpTotal", this.totalExperience);
+        tag.putString("food1", food1);
+        tag.putString("food2", food2);
+        tag.putInt("food1_amt", foodRequirements.get(food1));
+        tag.putInt("food2_amt", foodRequirements.get(food2));
         if (this.getPatrolPos() != null) {
             int[] patrolPos = {this.getPatrolPos().getX(), this.getPatrolPos().getY(), this.getPatrolPos().getZ()};
             tag.putIntArray("patrol_pos", patrolPos);
@@ -216,12 +235,15 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
         this.setStationery(tag.getBoolean("Stationery"));
         this.setPatrolRadius(tag.getInt("radius"));
         this.setSex(tag.getInt("sex"));
-        this.setFoodGroup(tag.getInt("food"));
         this.setBaseHealth(tag.getInt("baseHealth"));
         this.experienceProgress = tag.getFloat("XpP");
         this.experienceLevel = tag.getInt("XpLevel");
         this.setExpLvl(tag.getInt("XpLevel"));
         this.totalExperience = tag.getInt("XpTotal");
+        food1 = tag.getString("food1");
+        food2 = tag.getString("food2");
+        foodRequirements.put(food1, tag.getInt("food1_amt"));
+        foodRequirements.put(food2, tag.getInt("food2_amt"));
         if (tag.getBoolean("Alert")) {
             addAlertGoals();
         }
@@ -258,42 +280,40 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
         ItemStack itemstack = player.getItemInHand(hand);
         if (hand == InteractionHand.MAIN_HAND) {
             if (!this.isTame() && !this.level.isClientSide()) {
-                Item[] foods = CompanionData.FOOD_GROUPS.get(getFoodGroup());
                 if (itemstack.isEdible()) {
-                    if (ArrayUtils.contains(foods, itemstack.getItem())) {
-                        itemstack.shrink(1);
-                        if (this.random.nextInt(tameIdx) == 0) {
-                            this.tame(player);
-                            player.sendSystemMessage(Component.translatable("chat.type.text", this.getDisplayName(),
-                                    Component.literal("Thanks!")));
-                            player.sendSystemMessage(Component.literal("Companion added"));
-                            setPatrolPos(null);
-                            setPatrolling(false);
-                            setFollowing(true);
-                            setPatrolRadius(4);
-                            patrolGoal.radius = 4;
-                            moveBackGoal.radius = 4;
-                        } else {
-                            if (tameIdx > 1) {
-                                tameIdx--;
+                    String itemFood = itemstack.getItem().getDescription().getString();
+                    if (ArrayUtils.contains(foodRequirements.keySet().toArray(new String[0]), itemFood)) {
+                        if (foodRequirements.get(itemFood) > 0) {
+                            itemstack.shrink(1);
+                            foodRequirements.put(itemFood, foodRequirements.get(itemFood) - 1);
+                            if (foodRequirements.get(food1) <= 0 && foodRequirements.get(food2) <= 0) {
+                                this.tame(player);
+                                player.sendSystemMessage(Component.translatable("chat.type.text", this.getDisplayName(),
+                                        Component.literal("Thanks!")));
+                                player.sendSystemMessage(Component.literal("Companion added"));
+                                setPatrolPos(null);
+                                setPatrolling(false);
+                                setFollowing(true);
+                                setPatrolRadius(4);
+                                patrolGoal.radius = 4;
+                                moveBackGoal.radius = 4;
+                            } else {
+                                player.sendSystemMessage(Component.translatable("chat.type.text", this.getDisplayName(),
+                                        CompanionData.tameFail[this.random.nextInt(CompanionData.tameFail.length)]));
                             }
+                        } else {
                             player.sendSystemMessage(Component.translatable("chat.type.text", this.getDisplayName(),
-                                    CompanionData.tameFail[this.random.nextInt(CompanionData.tameFail.length)]));
+                                    CompanionData.ENOUGH_FOOD[this.random.nextInt(CompanionData.ENOUGH_FOOD.length)]));
                         }
                     } else {
-                        MutableComponent[] wrongFoodMessages = CompanionData.FOOD_MESSAGES.get(5);
                         player.sendSystemMessage(Component.translatable("chat.type.text", this.getDisplayName(),
-                                wrongFoodMessages[this.random.nextInt(wrongFoodMessages.length)]));
+                                CompanionData.WRONG_FOOD[this.random.nextInt(CompanionData.WRONG_FOOD.length)]));
                     }
                 } else {
-                    MutableComponent[] messages = CompanionData.FOOD_MESSAGES.get(getFoodGroup());
-
-                    String task = this.getDisplayName().getString() + " wants one of the following:";
-                    for (Item food: foods) {
-                        task += " " + food.getDescription().getString() + ",";
-                    }
+                    String task =
+                            this.getDisplayName().getString().split(" ")[0] + " wants: " + foodRequirements.get(food1) + " " + food1 + ", " + foodRequirements.get(food2) + " "  + food2;
                     player.sendSystemMessage(Component.translatable("chat.type.text", this.getDisplayName(),
-                            messages[this.random.nextInt(messages.length)]));
+                            CompanionData.notTamed[this.random.nextInt(CompanionData.notTamed.length)]));
                     player.sendSystemMessage(Component.literal(task));
                 }
             } else {
@@ -608,14 +628,6 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
 
     public int getSex() {
         return this.entityData.get(SEX);
-    }
-
-    public void setFoodGroup(int foodGroup) {
-        this.entityData.set(FOOD_GROUP, foodGroup);
-    }
-
-    public int getFoodGroup() {
-        return this.entityData.get(FOOD_GROUP);
     }
 
     public void setBaseHealth(int health) {

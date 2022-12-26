@@ -21,7 +21,35 @@ public class CompanionData {
 
     public static Random rand = new Random();
 
-    public static Item[] MEAT = new Item[] {
+    public static Item[] ALL_FOODS = new Item[] {
+//            Items.CAKE,
+            Items.COOKIE,
+            Items.BREAD,
+            Items.PUMPKIN_PIE,
+//            Items.GOLDEN_APPLE,
+//            Items.ENCHANTED_GOLDEN_APPLE,
+//            Items.MELON,
+            Items.MELON_SLICE,
+            Items.APPLE,
+            Items.GLOW_BERRIES,
+            Items.SWEET_BERRIES,
+//            Items.CHORUS_FRUIT,
+//            Items.GOLDEN_CARROT,
+//            Items.BEETROOT,
+            Items.CARROT,
+            Items.POTATO,
+            Items.BAKED_POTATO,
+            Items.BROWN_MUSHROOM,
+            Items.RED_MUSHROOM,
+//            Items.DRIED_KELP,
+//            Items.MUSHROOM_STEW,
+//            Items.BEETROOT_SOUP,
+            Items.PUMPKIN,
+            Items.COOKED_SALMON,
+            Items.COOKED_COD,
+            Items.SALMON,
+            Items.COD,
+            Items.TROPICAL_FISH,
             Items.COOKED_MUTTON,
             Items.COOKED_PORKCHOP,
             Items.COOKED_BEEF,
@@ -35,46 +63,6 @@ public class CompanionData {
 //            Items.RABBIT_STEW
     };
 
-    public static Item[] SEAFOOD = new Item[] {
-            Items.COOKED_SALMON,
-            Items.COOKED_COD,
-            Items.SALMON,
-            Items.COD,
-            Items.TROPICAL_FISH
-    };
-
-    public static Item[] VEGETABLE = new Item[] {
-//            Items.GOLDEN_CARROT,
-            Items.BEETROOT,
-            Items.CARROT,
-            Items.POTATO,
-            Items.BAKED_POTATO,
-            Items.BROWN_MUSHROOM,
-            Items.RED_MUSHROOM,
-//            Items.DRIED_KELP,
-//            Items.MUSHROOM_STEW,
-//            Items.BEETROOT_SOUP,
-            Items.PUMPKIN
-    };
-
-    public static Item[] FRUIT = new Item[] {
-//            Items.GOLDEN_APPLE,
-//            Items.ENCHANTED_GOLDEN_APPLE,
-//            Items.MELON,
-            Items.MELON_SLICE,
-            Items.APPLE,
-            Items.GLOW_BERRIES,
-            Items.SWEET_BERRIES,
-            Items.CHORUS_FRUIT
-    };
-
-    public static Item[] BAKED = new Item[] {
-            Items.CAKE,
-            Items.COOKIE,
-            Items.BREAD,
-            Items.PUMPKIN_PIE
-    };
-
     public static MutableComponent[] tameFail = new MutableComponent[]{
             Component.literal("I need more food."),
             Component.literal("Is that all you got?"),
@@ -84,14 +72,14 @@ public class CompanionData {
             Component.literal("That's not enough."),
     };
 
-//    public static MutableComponent[] notTamed = new MutableComponent[]{
-//            Component.literal("Do you have any food?"),
-//            Component.literal("I'm hungry."),
-//            Component.literal("Have you seen any food around here?"),
-//            Component.literal("I could use some food."),
-//            Component.literal("I wish I had some food."),
-//            Component.literal("I'm starving."),
-//    };
+    public static MutableComponent[] notTamed = new MutableComponent[]{
+            Component.literal("Do you have any food?"),
+            Component.literal("I'm hungry."),
+            Component.literal("Have you seen any food around here?"),
+            Component.literal("I could use some food."),
+            Component.literal("I wish I had some food."),
+            Component.literal("I'm starving."),
+    };
 
     public static MutableComponent[] WRONG_FOOD = new MutableComponent[]{
             Component.literal("That's not what I asked for."),
@@ -101,58 +89,11 @@ public class CompanionData {
             Component.literal("I don't remember asking for that")
     };
 
-    public static MutableComponent[] MEAT_MESSAGES = new MutableComponent[]{
-            Component.literal("I've been craving some meat."),
-            Component.literal("I haven't had animal flesh in a while."),
-            Component.literal("Do you have any meat?"),
-            Component.literal("Could you get some meat for me?")
+    public static MutableComponent[] ENOUGH_FOOD = new MutableComponent[]{
+            Component.literal("I have enough of that."),
+            Component.literal("I don't want that anymore."),
+            Component.literal("I want something else now."),
     };
-
-    public static MutableComponent[] SEAFOOD_MESSAGES = new MutableComponent[]{
-            Component.literal("I've been craving some seafood."),
-            Component.literal("I haven't had seafood in a while."),
-            Component.literal("Do you have any seafood?"),
-            Component.literal("Could you get some seafood for me?")
-    };
-
-    public static MutableComponent[] VEGETABLE_MESSAGES = new MutableComponent[]{
-            Component.literal("I've been craving some vegetables."),
-            Component.literal("I haven't had vegetables in a while."),
-            Component.literal("Do you have any vegetables?"),
-            Component.literal("Could you get some vegetables for me?")
-    };
-
-    public static MutableComponent[] FRUIT_MESSAGES = new MutableComponent[]{
-            Component.literal("I've been craving some fruits."),
-            Component.literal("I haven't had fruits in a while."),
-            Component.literal("Do you have any fruits?"),
-            Component.literal("Could you get some fruits for me?")
-    };
-
-    public static MutableComponent[] BAKED_MESSAGES = new MutableComponent[]{
-            Component.literal("I've been craving something baked."),
-            Component.literal("Do you have any baked goods?"),
-            Component.literal("I haven't had baked food in a while."),
-            Component.literal("I wish there was a bakery around here."),
-            Component.literal("Could you bake something for me?")
-    };
-
-    public static Map<Integer, Item[]> FOOD_GROUPS = new HashMap<>() {{
-        put(0, MEAT);
-        put(1, SEAFOOD);
-        put(2, VEGETABLE);
-        put(3, FRUIT);
-        put(4, BAKED);
-    }};
-
-    public static Map<Integer, MutableComponent[]> FOOD_MESSAGES = new HashMap<>() {{
-        put(0, MEAT_MESSAGES);
-        put(1, SEAFOOD_MESSAGES);
-        put(2, VEGETABLE_MESSAGES);
-        put(3, FRUIT_MESSAGES);
-        put(4, BAKED_MESSAGES);
-        put(5, WRONG_FOOD);
-    }};
 
     public static Class<?>[] alertMobs = new Class<?>[]{
             Blaze.class,

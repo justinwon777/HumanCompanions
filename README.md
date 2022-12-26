@@ -23,7 +23,8 @@ They live in a wide variety of biomes in houses like these (plus more!):
 
 <img src="https://github.com/justinwon777/HumanCompanions/blob/main/houses.png" alt="house" width="800">
 
-- Give them something edible and they might join you as a companion.
+- Right click on them to see what food they want.
+- Give them food by right clicking them with the food in hand and once their request is fulfilled, they will become your companion.
 - Once they join you, you can access their inventory with right click.
 - They have names, but you can rename them with tags.
 - Shift+right click to toggle "sit", making them stay in place and not do anything.
@@ -35,13 +36,14 @@ They live in a wide variety of biomes in houses like these (plus more!):
 - Toggle stationery to keep archers and arbalists standing while shooting
 - You could do "/locate humancompanions:companion_house" to find a house quickly.
 - Track your companion locations with the [Pet Tracker](https://www.curseforge.com/minecraft/mc-mods/pet-tracker "pet tracker") mod.
+- Companions level up by killing mobs (friendly or hostile). Every 3 levels, their health will increases by 1.
 
 ## Known Issues
 
 - While in follow mode, they might permanently despawn if you get too far away from them
 - When a companion dies, sometimes it drops a duplicate of an item or doesn't drop an item in its inventory at all.
 - Archers sometimes shoot at nothing after killing a mob. Use clear button to clear target.
-- When knights break their sword, it will show it's still equipping. Reload game to fix.
+- Spawn eggs might spawn a baby. They can't do anything and will despawn when the game reloads.
 - Knights sometimes hesitate while attacking.
 
 ## Links

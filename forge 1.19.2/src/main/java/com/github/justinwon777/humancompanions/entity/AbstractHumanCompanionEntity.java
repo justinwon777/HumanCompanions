@@ -9,7 +9,6 @@ import com.github.justinwon777.humancompanions.networking.OpenInventoryPacket;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -92,7 +91,7 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
     public int totalExperience;
     public float experienceProgress;
     private int lastLevelUpTime;
-    public static Map<String, Integer> foodRequirements = new HashMap<>();
+    private final Map<String, Integer> foodRequirements = new HashMap<>();
     private String food1;
     private String food2;
 

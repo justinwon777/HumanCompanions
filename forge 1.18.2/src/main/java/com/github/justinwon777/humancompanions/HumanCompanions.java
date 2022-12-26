@@ -17,6 +17,7 @@ public class HumanCompanions {
         IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         EntityInit.ENTITIES.register(eventBus);
+        ItemInit.ITEMS.register(eventBus);
         StructureInit.DEFERRED_REGISTRY_STRUCTURE.register(eventBus);
         PacketHandler.register();
         Config.register();

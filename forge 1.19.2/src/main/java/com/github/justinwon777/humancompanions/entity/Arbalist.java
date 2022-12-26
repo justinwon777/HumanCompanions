@@ -46,8 +46,9 @@ public class Arbalist extends AbstractHumanCompanionEntity implements CrossbowAt
     }
 
     public void tick() {
-        checkArmor();
-        checkCrossbow();
+        if (!this.level.isClientSide()) {
+            checkCrossbow();
+        }
         super.tick();
     }
 

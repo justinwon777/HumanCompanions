@@ -18,7 +18,34 @@ public class CompanionData {
 
     public static Random rand = new Random();
 
-    public static Item[] MEAT = new Item[] {
+    public static Item[] ALL_FOODS = new Item[] {
+//            Items.CAKE,
+            Items.COOKIE,
+            Items.BREAD,
+            Items.PUMPKIN_PIE,
+//            Items.GOLDEN_APPLE,
+//            Items.ENCHANTED_GOLDEN_APPLE,
+//            Items.MELON,
+            Items.MELON_SLICE,
+            Items.APPLE,
+            Items.SWEET_BERRIES,
+//            Items.CHORUS_FRUIT,
+//            Items.GOLDEN_CARROT,
+//            Items.BEETROOT,
+            Items.CARROT,
+            Items.POTATO,
+            Items.BAKED_POTATO,
+            Items.BROWN_MUSHROOM,
+            Items.RED_MUSHROOM,
+//            Items.DRIED_KELP,
+//            Items.MUSHROOM_STEW,
+//            Items.BEETROOT_SOUP,
+            Items.PUMPKIN,
+            Items.COOKED_SALMON,
+            Items.COOKED_COD,
+            Items.SALMON,
+            Items.COD,
+            Items.TROPICAL_FISH,
             Items.COOKED_MUTTON,
             Items.COOKED_PORKCHOP,
             Items.COOKED_BEEF,
@@ -32,45 +59,6 @@ public class CompanionData {
 //            Items.RABBIT_STEW
     };
 
-    public static Item[] SEAFOOD = new Item[] {
-            Items.COOKED_SALMON,
-            Items.COOKED_COD,
-            Items.SALMON,
-            Items.COD,
-            Items.TROPICAL_FISH
-    };
-
-    public static Item[] VEGETABLE = new Item[] {
-//            Items.GOLDEN_CARROT,
-            Items.BEETROOT,
-            Items.CARROT,
-            Items.POTATO,
-            Items.BAKED_POTATO,
-            Items.BROWN_MUSHROOM,
-            Items.RED_MUSHROOM,
-//            Items.DRIED_KELP,
-//            Items.MUSHROOM_STEW,
-//            Items.BEETROOT_SOUP,
-            Items.PUMPKIN
-    };
-
-    public static Item[] FRUIT = new Item[] {
-//            Items.GOLDEN_APPLE,
-//            Items.ENCHANTED_GOLDEN_APPLE,
-//            Items.MELON,
-            Items.MELON_SLICE,
-            Items.APPLE,
-            Items.SWEET_BERRIES,
-            Items.CHORUS_FRUIT
-    };
-
-    public static Item[] BAKED = new Item[] {
-            Items.CAKE,
-            Items.COOKIE,
-            Items.BREAD,
-            Items.PUMPKIN_PIE
-    };
-
     public static StringTextComponent[] tameFail = new StringTextComponent[]{
             new StringTextComponent("I need more food."),
             new StringTextComponent("Is that all you got?"),
@@ -80,14 +68,14 @@ public class CompanionData {
             new StringTextComponent("That's not enough."),
     };
 
-//    public static StringTextComponent[] notTamed = new StringTextComponent[]{
-//            new StringTextComponent("Do you have any food?"),
-//            new StringTextComponent("I'm hungry."),
-//            new StringTextComponent("Have you seen any food around here?"),
-//            new StringTextComponent("I could use some food."),
-//            new StringTextComponent("I wish I had some food."),
-//            new StringTextComponent("I'm starving."),
-//    };
+    public static StringTextComponent[] notTamed = new StringTextComponent[]{
+            new StringTextComponent("Do you have any food?"),
+            new StringTextComponent("I'm hungry."),
+            new StringTextComponent("Have you seen any food around here?"),
+            new StringTextComponent("I could use some food."),
+            new StringTextComponent("I wish I had some food."),
+            new StringTextComponent("I'm starving."),
+    };
 
     public static StringTextComponent[] WRONG_FOOD = new StringTextComponent[]{
             new StringTextComponent("That's not what I asked for."),
@@ -97,58 +85,11 @@ public class CompanionData {
             new StringTextComponent("I don't remember asking for that")
     };
 
-    public static StringTextComponent[] MEAT_MESSAGES = new StringTextComponent[]{
-            new StringTextComponent("I've been craving some meat."),
-            new StringTextComponent("I haven't had animal flesh in a while,"),
-            new StringTextComponent("Do you have any meat?"),
-            new StringTextComponent("Could you get some meat for me?")
+    public static StringTextComponent[] ENOUGH_FOOD = new StringTextComponent[]{
+            new StringTextComponent("I have enough of that."),
+            new StringTextComponent("I don't want that anymore."),
+            new StringTextComponent("I want something else now."),
     };
-
-    public static StringTextComponent[] SEAFOOD_MESSAGES = new StringTextComponent[]{
-            new StringTextComponent("I've been craving some seafood."),
-            new StringTextComponent("I haven't had seafood in a while,"),
-            new StringTextComponent("Do you have any seafood?"),
-            new StringTextComponent("Could you get some seafood for me?")
-    };
-
-    public static StringTextComponent[] VEGETABLE_MESSAGES = new StringTextComponent[]{
-            new StringTextComponent("I've been craving some vegetables."),
-            new StringTextComponent("I haven't had vegetables in a while,"),
-            new StringTextComponent("Do you have any vegetables?"),
-            new StringTextComponent("Could you get some vegetables for me?")
-    };
-
-    public static StringTextComponent[] FRUIT_MESSAGES = new StringTextComponent[]{
-            new StringTextComponent("I've been craving some fruits."),
-            new StringTextComponent("I haven't had fruits in a while,"),
-            new StringTextComponent("Do you have any fruits?"),
-            new StringTextComponent("Could you get some fruits for me?")
-    };
-
-    public static StringTextComponent[] BAKED_MESSAGES = new StringTextComponent[]{
-            new StringTextComponent("I've been craving something baked."),
-            new StringTextComponent("Do you have any baked goods?"),
-            new StringTextComponent("I haven't had baked food in a while."),
-            new StringTextComponent("I wish there was a bakery around here?"),
-            new StringTextComponent("Could you bake something for me?")
-    };
-
-    public static Map<Integer, Item[]> FOOD_GROUPS = new HashMap<Integer, Item[]>() {{
-        put(0, MEAT);
-        put(1, SEAFOOD);
-        put(2, VEGETABLE);
-        put(3, FRUIT);
-        put(4, BAKED);
-    }};
-
-    public static Map<Integer, StringTextComponent[]> FOOD_MESSAGES = new HashMap<Integer, StringTextComponent[]>() {{
-        put(0, MEAT_MESSAGES);
-        put(1, SEAFOOD_MESSAGES);
-        put(2, VEGETABLE_MESSAGES);
-        put(3, FRUIT_MESSAGES);
-        put(4, BAKED_MESSAGES);
-        put(5, WRONG_FOOD);
-    }};
 
     public static Class<?>[] alertMobs = new Class<?>[]{
             BlazeEntity.class,

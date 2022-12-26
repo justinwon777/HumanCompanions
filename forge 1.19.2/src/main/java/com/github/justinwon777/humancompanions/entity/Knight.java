@@ -43,8 +43,9 @@ public class Knight extends AbstractHumanCompanionEntity {
     }
 
     public void tick() {
-        checkArmor();
-        checkSword();
+        if (!this.level.isClientSide()) {
+            checkSword();
+        }
         super.tick();
     }
 

@@ -42,8 +42,9 @@ public class Archer extends AbstractHumanCompanionEntity implements IRangedAttac
     }
 
     public void tick() {
-        checkArmor();
-        checkBow();
+        if (!this.level.isClientSide()) {
+            checkBow();
+        }
         super.tick();
     }
 

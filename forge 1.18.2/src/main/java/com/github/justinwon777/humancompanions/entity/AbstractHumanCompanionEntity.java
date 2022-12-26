@@ -94,7 +94,7 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
     public int totalExperience;
     public float experienceProgress;
     private int lastLevelUpTime;
-    public static Map<String, Integer> foodRequirements = new HashMap<>();
+    private final Map<String, Integer> foodRequirements = new HashMap<>();
     private String food1;
     private String food2;
 

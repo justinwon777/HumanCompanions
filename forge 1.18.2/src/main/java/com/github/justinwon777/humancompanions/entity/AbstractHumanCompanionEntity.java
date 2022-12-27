@@ -151,7 +151,7 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
         this.entityData.define(PATROL_POS, Optional.empty());
         this.entityData.define(PATROL_RADIUS, 10);
         this.entityData.define(SEX, 0);
-        this.entityData.define(BASE_HEALTH, 20);
+        this.entityData.define(BASE_HEALTH, Config.BASE_HEALTH.get());
         this.entityData.define(EXP_LVL, 0);
         this.entityData.define(FOOD1, "");
         this.entityData.define(FOOD2, "");
@@ -237,7 +237,6 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
         this.setStationery(tag.getBoolean("Stationery"));
         this.setPatrolRadius(tag.getInt("radius"));
         this.setSex(tag.getInt("sex"));
-        this.setBaseHealth(tag.getInt("baseHealth"));
         this.experienceProgress = tag.getFloat("XpP");
         this.experienceLevel = tag.getInt("XpLevel");
         this.setExpLvl(tag.getInt("XpLevel"));
@@ -246,6 +245,11 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
         food2 = tag.getString("food2");
         foodRequirements.put(food1, tag.getInt("food1_amt"));
         foodRequirements.put(food2, tag.getInt("food2_amt"));
+        if (tag.getInt("baseHealth") == 0) {
+            this.setBaseHealth(Config.BASE_HEALTH.get());
+        } else {
+            this.setBaseHealth(tag.getInt("baseHealth"));
+        }
         if (tag.getBoolean("Alert")) {
             addAlertGoals();
         }

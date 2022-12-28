@@ -160,7 +160,7 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
                                         MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn,
                                         @Nullable CompoundTag dataTag) {
         int baseHealth = Config.BASE_HEALTH.get() + CompanionData.getHealthModifier();
-        modifyMaxHealth(baseHealth - 20);
+        modifyMaxHealth(baseHealth - 20, "companion base health", true);
         this.setHealth(this.getMaxHealth());
         setBaseHealth(baseHealth);
         setSex(this.random.nextInt(2));
@@ -567,27 +567,31 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
         }
     }
 
-    public void modifyMaxHealth(int change) {
+    public void modifyMaxHealth(int change, String name, boolean permanent) {
         AttributeInstance attributeinstance = this.getAttribute(Attributes.MAX_HEALTH);
         Set<AttributeModifier> modifiers = attributeinstance.getModifiers();
         if (!modifiers.isEmpty()) {
             Iterator<AttributeModifier> iterator = modifiers.iterator();
             while (iterator.hasNext()) {
                 AttributeModifier attributeModifier = iterator.next();
-                if (attributeModifier != null && attributeModifier.getName().equals("human companion health")) {
+                if (attributeModifier != null && attributeModifier.getName().equals(name)) {
                     this.getAttribute(Attributes.MAX_HEALTH).removeModifier(attributeModifier);
                 }
             }
         }
-        AttributeModifier HEALTH_MODIFIER = new AttributeModifier("human companion health",
+        AttributeModifier HEALTH_MODIFIER = new AttributeModifier(name,
                 change, AttributeModifier.Operation.ADDITION);
-        attributeinstance.addTransientModifier(HEALTH_MODIFIER);
+        if (permanent) {
+            attributeinstance.addPermanentModifier(HEALTH_MODIFIER);
+        } else {
+            attributeinstance.addTransientModifier(HEALTH_MODIFIER);
+        }
     }
 
     public void checkStats() {
         if ((int) this.getMaxHealth() != getBaseHealth() + (getExpLvl() / 3)) {
             if (getExpLvl() / 3 != 0) {
-                modifyMaxHealth(getExpLvl() / 3);
+                modifyMaxHealth(getExpLvl() / 3, "companion level health", false);
             }
         }
     }

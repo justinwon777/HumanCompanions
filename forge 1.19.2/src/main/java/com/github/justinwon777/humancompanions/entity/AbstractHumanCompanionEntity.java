@@ -586,7 +586,9 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
 
     public void checkStats() {
         if ((int) this.getMaxHealth() != getBaseHealth() + (getExpLvl() / 3)) {
-            modifyMaxHealth(getExpLvl() / 3);
+            if (getExpLvl() / 3 != 0) {
+                modifyMaxHealth(getExpLvl() / 3);
+            }
         }
     }
 

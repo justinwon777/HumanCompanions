@@ -301,8 +301,13 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
                                 patrolGoal.radius = 4;
                                 moveBackGoal.radius = 4;
                             } else {
-                                player.sendSystemMessage(Component.translatable("chat.type.text", this.getDisplayName(),
-                                        CompanionData.tameFail[this.random.nextInt(CompanionData.tameFail.length)]));
+                                if (foodRequirements.get(itemFood) == 0) {
+                                    player.sendSystemMessage(Component.translatable("chat.type.text", this.getDisplayName(),
+                                            CompanionData.ENOUGH_FOOD[this.random.nextInt(CompanionData.ENOUGH_FOOD.length)]));
+                                } else {
+                                    player.sendSystemMessage(Component.translatable("chat.type.text", this.getDisplayName(),
+                                            CompanionData.tameFail[this.random.nextInt(CompanionData.tameFail.length)]));
+                                }
                             }
                         } else {
                             player.sendSystemMessage(Component.translatable("chat.type.text", this.getDisplayName(),

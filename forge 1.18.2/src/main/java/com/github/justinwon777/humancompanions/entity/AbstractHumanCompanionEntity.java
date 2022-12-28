@@ -571,22 +571,34 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
     }
 
     public void modifyMaxHealth(int change) {
-        AttributeModifier HEALTH_MODIFIER = new AttributeModifier("health",
-                change, AttributeModifier.Operation.ADDITION);
         AttributeInstance attributeinstance = this.getAttribute(Attributes.MAX_HEALTH);
-        attributeinstance.addPermanentModifier(HEALTH_MODIFIER);
+        Set<AttributeModifier> modifiers = attributeinstance.getModifiers();
+        if (!modifiers.isEmpty()) {
+            Iterator<AttributeModifier> iterator = modifiers.iterator();
+            while (iterator.hasNext()) {
+                AttributeModifier attributeModifier = iterator.next();
+                if (attributeModifier != null && attributeModifier.getName().equals("human companion health")) {
+                    this.getAttribute(Attributes.MAX_HEALTH).removeModifier(attributeModifier);
+                }
+            }
+        }
+        AttributeModifier HEALTH_MODIFIER = new AttributeModifier("human companion health",
+                change, AttributeModifier.Operation.ADDITION);
+        attributeinstance.addTransientModifier(HEALTH_MODIFIER);
     }
 
     public void checkStats() {
-        if ((int) this.getMaxHealth() != getBaseHealth() + (getExpLvl() / 3 )) {
-            modifyMaxHealth(getBaseHealth() + (getExpLvl() / 3 ) - (int) this.getMaxHealth());
+        if ((int) this.getMaxHealth() != getBaseHealth() + (getExpLvl() / 3)) {
+            modifyMaxHealth(getExpLvl() / 3);
         }
     }
 
     public void tick() {
         if (!this.level.isClientSide()) {
             checkArmor();
-            checkStats();
+            if (this.tickCount % 10 == 0) {
+                checkStats();
+            }
         }
         super.tick();
     }

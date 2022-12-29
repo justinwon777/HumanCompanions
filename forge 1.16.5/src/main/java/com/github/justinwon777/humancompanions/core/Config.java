@@ -7,7 +7,8 @@ import net.minecraftforge.fml.config.ModConfig;
 public class Config {
 
     public static ForgeConfigSpec.IntValue AVERAGE_HOUSE_SEPARATION;
-    public static ForgeConfigSpec.BooleanValue FRIENDLY_FIRE;
+    public static ForgeConfigSpec.BooleanValue FRIENDLY_FIRE_COMPANIONS;
+    public static ForgeConfigSpec.BooleanValue FRIENDLY_FIRE_PLAYER;
     public static ForgeConfigSpec.BooleanValue FALL_DAMAGE;
     public static ForgeConfigSpec.BooleanValue SPAWN_ARMOR;
     public static ForgeConfigSpec.BooleanValue SPAWN_WEAPON;
@@ -27,9 +28,12 @@ public class Config {
                 .defineInRange("averageHouseSeparation", 20, 11, Integer.MAX_VALUE);
         COMMON_BUILDER.pop();
         COMMON_BUILDER.push("Companion config");
-        FRIENDLY_FIRE = COMMON_BUILDER
+        FRIENDLY_FIRE_COMPANIONS = COMMON_BUILDER
                 .comment("Toggles friendly fire between companions")
-                .define("friendlyFire", false);
+                .define("friendlyFireCompanions", false);
+        FRIENDLY_FIRE_PLAYER = COMMON_BUILDER
+                .comment("Toggles friendly fire between player and companion")
+                .define("friendlyFirePlayer", true);
         FALL_DAMAGE = COMMON_BUILDER
                 .comment("Toggles fall damage for companions")
                 .define("fallDamage", true);

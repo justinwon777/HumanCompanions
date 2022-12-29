@@ -32,7 +32,7 @@ public class CustomOwnerHurtByTargetGoal extends TargetGoal {
                         LivingEntity owner1 = ((TamableAnimal) this.ownerLastHurtBy).getOwner();
                         LivingEntity owner2 = this.tameAnimal.getOwner();
                         if (owner1 == owner2) {
-                            if (!Config.FRIENDLY_FIRE.get()) {
+                            if (!Config.FRIENDLY_FIRE_COMPANIONS.get()) {
                                 return false;
                             }
                         }

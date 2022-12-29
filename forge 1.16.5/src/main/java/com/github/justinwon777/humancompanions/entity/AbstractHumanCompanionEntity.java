@@ -423,16 +423,8 @@ public class AbstractHumanCompanionEntity extends TameableEntity{
     }
 
     public boolean hurt(DamageSource p_34288_, float p_34289_) {
-        if (p_34288_.getEntity() instanceof TameableEntity) {
-            if (this.isTame() && ((TameableEntity) p_34288_.getEntity()).isTame()) {
-                LivingEntity owner1 = ((TameableEntity) p_34288_.getEntity()).getOwner();
-                LivingEntity owner2 = this.getOwner();
-                if (owner1 == owner2) {
-                    if (!Config.FRIENDLY_FIRE.get()) {
-                        return false;
-                    }
-                }
-            }
+        if (p_34288_.getEntity() == this.getOwner() && !Config.FRIENDLY_FIRE_PLAYER.get()) {
+            return false;
         }
 
         if (p_34288_ == DamageSource.FALL && !Config.FALL_DAMAGE.get()) {

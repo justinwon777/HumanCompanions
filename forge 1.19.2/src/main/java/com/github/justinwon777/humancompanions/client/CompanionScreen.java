@@ -43,6 +43,8 @@ public class CompanionScreen extends AbstractContainerScreen<CompanionContainer>
             "/clearbutton.png");
     private static final ResourceLocation STATIONERY_BUTTON = new ResourceLocation(HumanCompanions.MOD_ID, "textures" +
             "/stationerybutton.png");
+    private static final ResourceLocation RELEASE_BUTTON = new ResourceLocation(HumanCompanions.MOD_ID, "textures" +
+            "/releasebutton.png");
     private final int containerRows;
     private final AbstractHumanCompanionEntity companion;
     private CompanionButton alertButton;
@@ -50,8 +52,16 @@ public class CompanionScreen extends AbstractContainerScreen<CompanionContainer>
     private CompanionButton patrolButton;
     private CompanionButton clearButton;
     private CompanionButton stationeryButton;
+    private CompanionButton releaseButton;
     DecimalFormat df = new DecimalFormat("#.#");
     int sidebarx;
+    int rowHeight;
+    int colwidth;
+    int row1;
+    int row2;
+    int row3;
+    int col1;
+    int col2;
 
     public CompanionScreen(CompanionContainer p_98409_, Inventory p_98410_,
                            AbstractHumanCompanionEntity companion) {
@@ -64,6 +74,8 @@ public class CompanionScreen extends AbstractContainerScreen<CompanionContainer>
         this.imageWidth = 226;
         df.setRoundingMode(RoundingMode.CEILING);
         sidebarx = 174;
+        rowHeight = 15;
+        colwidth = 19;
     }
 
     @Override
@@ -87,21 +99,26 @@ public class CompanionScreen extends AbstractContainerScreen<CompanionContainer>
     @Override
     protected void init() {
         super.init();
-        this.alertButton = addRenderableWidget(new CompanionButton("alert", leftPos + sidebarx + 3, topPos + 79, 16,
+        row1 = topPos + 66;
+        row2 = row1 + rowHeight;
+        row3 = row2 + rowHeight;
+        col1 = leftPos + sidebarx + 3;
+        col2 = col1 + colwidth;
+        this.alertButton = addRenderableWidget(new CompanionButton("alert", col1, row1, 16,
                 12, 0
                 , 0, 13,
                 ALERT_BUTTON,
                 btn -> {
                     PacketHandler.INSTANCE.sendToServer(new SetAlertPacket(companion.getId()));
         }));
-        this.huntingButton = addRenderableWidget(new CompanionButton("hunting", leftPos + sidebarx + 22, topPos + 79,
+        this.huntingButton = addRenderableWidget(new CompanionButton("hunting", col2, row1,
                 16,
                 12, 0, 0,13,
                 HUNTING_BUTTON,
                 btn -> {
                     PacketHandler.INSTANCE.sendToServer(new SetHuntingPacket(companion.getId()));
                 }));
-        this.patrolButton = addRenderableWidget(new CompanionButton("patrolling", leftPos + sidebarx + 3, topPos + 94,
+        this.patrolButton = addRenderableWidget(new CompanionButton("patrolling", col1, row2,
                 16,
                 12,
                 0, 0
@@ -111,8 +128,8 @@ public class CompanionScreen extends AbstractContainerScreen<CompanionContainer>
                     PacketHandler.INSTANCE.sendToServer(new SetPatrolingPacket(companion.getId()));
                 }));
         if (companion instanceof Archer || companion instanceof Arbalist) {
-            this.stationeryButton = addRenderableWidget(new CompanionButton("stationery", leftPos + sidebarx + 22,
-                    topPos + 94,
+            this.stationeryButton = addRenderableWidget(new CompanionButton("stationery", col2,
+                    row2,
                     16,
                     12,
                     0, 0
@@ -122,18 +139,29 @@ public class CompanionScreen extends AbstractContainerScreen<CompanionContainer>
                         PacketHandler.INSTANCE.sendToServer(new SetStationeryPacket(companion.getId()));
                     }));
         }
-        this.clearButton = addRenderableWidget(new CompanionButton("clear", leftPos + sidebarx + 5, topPos + 65, 31,
+        this.clearButton = addRenderableWidget(new CompanionButton("clear", leftPos + sidebarx + 5, row3, 31,
                 12, 0, 0
                 ,13,
                 CLEAR_BUTTON,
                 btn -> {
                     PacketHandler.INSTANCE.sendToServer(new ClearTargetPacket(companion.getId()));
                 }));
+        this.releaseButton = addRenderableWidget(new CompanionButton("release", leftPos + sidebarx + 3, topPos + 148,
+                34,
+                12, 0, 0
+                ,13,
+                RELEASE_BUTTON,
+                btn -> {
+                    PacketHandler.INSTANCE.sendToServer(new ReleasePacket(companion.getId()));
+                    this.onClose();
+                }));
     }
 
     @Override
     protected void renderLabels(PoseStack pPoseStack, int pMouseX, int pMouseY) {
         super.renderLabels(pPoseStack, pMouseX, pMouseY);
+        int classHeight = this.titleLabelY + 14;
+        int classLeft = sidebarx + 4;
         MutableComponent classTitle = Component.literal("Class");
         MutableComponent healthTitle = Component.literal("Health");
         MutableComponent health =
@@ -142,13 +170,13 @@ public class CompanionScreen extends AbstractContainerScreen<CompanionContainer>
         this.font.draw(pPoseStack, classTitle.withStyle(ChatFormatting.UNDERLINE), sidebarx + 4, this.titleLabelY + 3,
                 4210752);
         if (companion instanceof Arbalist) {
-            this.font.draw(pPoseStack, "Arbalist", sidebarx + 4, this.titleLabelY + 14, 4210752);
+            this.font.draw(pPoseStack, "Arbalist", classLeft, classHeight, 4210752);
         } else if (companion instanceof Archer) {
-            this.font.draw(pPoseStack, "Archer", sidebarx + 4, this.titleLabelY + 14, 4210752);
+            this.font.draw(pPoseStack, "Archer", classLeft, classHeight, 4210752);
         } else if (companion instanceof Knight) {
-            this.font.draw(pPoseStack, "Knight", sidebarx + 4, this.titleLabelY + 14, 4210752);
+            this.font.draw(pPoseStack, "Knight", classLeft, classHeight, 4210752);
         } else {
-            this.font.draw(pPoseStack, "Axe", sidebarx + 4, this.titleLabelY + 14, 4210752);
+            this.font.draw(pPoseStack, "Axe", classLeft, classHeight, 4210752);
         }
 
         this.font.draw(pPoseStack, healthTitle.withStyle(ChatFormatting.UNDERLINE), sidebarx + 4, this.titleLabelY + 26,
@@ -205,6 +233,14 @@ public class CompanionScreen extends AbstractContainerScreen<CompanionContainer>
             List<Component> tooltips = new ArrayList<>();
             tooltips.add(Component.literal("Clear target"));
             tooltips.add(Component.literal("Useful if it gets stuck attacking").withStyle(ChatFormatting.GRAY).withStyle(ChatFormatting.ITALIC));
+
+            this.renderTooltip(stack, tooltips, Optional.empty(), x, y);
+        }
+
+        if (this.releaseButton.isHoveredOrFocused()) {
+            List<Component> tooltips = new ArrayList<>();
+            tooltips.add(Component.literal("Release Companion"));
+            tooltips.add(Component.literal("Releases companion from your command. It can be tamed again.").withStyle(ChatFormatting.GRAY).withStyle(ChatFormatting.ITALIC));
 
             this.renderTooltip(stack, tooltips, Optional.empty(), x, y);
         }

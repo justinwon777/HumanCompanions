@@ -173,14 +173,7 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
         moveBackGoal = new MoveBackToPatrolGoal(this, getPatrolRadius());
         this.goalSelector.addGoal(3, moveBackGoal);
         this.goalSelector.addGoal(3, patrolGoal);
-        Item[] allFoods = CompanionData.ALL_FOODS;
-        food1 = allFoods[random.nextInt(allFoods.length)].getDescription().getString();
-        food2 = allFoods[random.nextInt(allFoods.length)].getDescription().getString();
-        while (food1.equals(food2)) {
-            food2 = allFoods[random.nextInt(allFoods.length)].getDescription().getString();
-        }
-        foodRequirements.put(food1, random.nextInt(5) + 1);
-        foodRequirements.put(food2, random.nextInt(5) + 1);
+        setFoodRequirements();
 
         if (Config.SPAWN_ARMOR.get()) {
             for (int i = 0; i < 4; i++) {
@@ -601,6 +594,36 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
             }
         }
         super.tick();
+    }
+
+    public void setFoodRequirements() {
+        foodRequirements.clear();
+        Item[] allFoods = CompanionData.ALL_FOODS;
+        food1 = allFoods[random.nextInt(allFoods.length)].getDescription().getString();
+        food2 = allFoods[random.nextInt(allFoods.length)].getDescription().getString();
+        while (food1.equals(food2)) {
+            food2 = allFoods[random.nextInt(allFoods.length)].getDescription().getString();
+        }
+        foodRequirements.put(food1, random.nextInt(5) + 1);
+        foodRequirements.put(food2, random.nextInt(5) + 1);
+    }
+
+    public void release() {
+        this.setTame(false);
+        this.setOwnerUUID(null);
+        setFollowing(false);
+        setAlert(false);
+        removeAlertGoals();
+        setHunting(false);
+        removeHuntingGoals();
+        setPatrolPos(this.blockPosition());
+        setPatrolling(true);
+        setStationery(false);
+        setPatrolRadius(15);
+        setFoodRequirements();
+        if (this.isOrderedToSit()) {
+            this.setOrderedToSit(false);
+        }
     }
 
     public void setExpLvl(int lvl) {

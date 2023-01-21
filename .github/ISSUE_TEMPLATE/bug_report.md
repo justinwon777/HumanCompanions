@@ -15,6 +15,7 @@ Reproduction steps are important for me to fix the issue. Please include if you 
 
 **Versions (Please fill this out)**
 Minecraft version:
+Forge version:
 Human Companions version:
 
 **Additional info**

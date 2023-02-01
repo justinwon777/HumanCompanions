@@ -276,7 +276,7 @@ public class AbstractHumanCompanionEntity extends TameableEntity{
         if (hand == Hand.MAIN_HAND) {
             if (!this.isTame() && !this.level.isClientSide()) {
                 if (itemstack.isEdible()) {
-                    String itemFood = itemstack.getItem().getDescription().getString();
+                    String itemFood = getDescription(itemstack.getItem());
                     if (ArrayUtils.contains(foodRequirements.keySet().toArray(new String[0]), itemFood)) {
                         if (foodRequirements.get(itemFood) > 0) {
                             itemstack.shrink(1);
@@ -599,10 +599,10 @@ public class AbstractHumanCompanionEntity extends TameableEntity{
     public void setFoodRequirements() {
         foodRequirements.clear();
         Item[] allFoods = CompanionData.ALL_FOODS;
-        food1 = allFoods[random.nextInt(allFoods.length)].getDescription().getString();
-        food2 = allFoods[random.nextInt(allFoods.length)].getDescription().getString();
+        food1 = getDescription(allFoods[random.nextInt(allFoods.length)]);
+        food2 = getDescription(allFoods[random.nextInt(allFoods.length)]);
         while (food1.equals(food2)) {
-            food2 = allFoods[random.nextInt(allFoods.length)].getDescription().getString();
+            food2 = getDescription(allFoods[random.nextInt(allFoods.length)]);
         }
         foodRequirements.put(food1, random.nextInt(5) + 1);
         foodRequirements.put(food2, random.nextInt(5) + 1);
@@ -744,5 +744,9 @@ public class AbstractHumanCompanionEntity extends TameableEntity{
         for (NearestAttackableTargetGoal huntMobGoal : huntMobGoals) {
             this.targetSelector.removeGoal(huntMobGoal);
         }
+    }
+
+    private String getDescription(Item item) {
+        return new TranslationTextComponent(item.getDescriptionId()).toString();
     }
 }

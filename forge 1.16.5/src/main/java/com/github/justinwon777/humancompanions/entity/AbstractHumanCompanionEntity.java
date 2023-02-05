@@ -747,6 +747,6 @@ public class AbstractHumanCompanionEntity extends TameableEntity{
     }
 
     private String getDescription(Item item) {
-        return new TranslationTextComponent(item.getDescriptionId()).toString();
+        return new TranslationTextComponent(item.getDescriptionId()).getString();
     }
 }

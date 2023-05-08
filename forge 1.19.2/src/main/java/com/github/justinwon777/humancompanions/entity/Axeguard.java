@@ -6,6 +6,7 @@ import com.github.justinwon777.humancompanions.core.ModTags;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.ItemStack;
@@ -21,14 +22,11 @@ public class Axeguard extends AbstractHumanCompanionEntity {
         super(entityType, level);
         this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.0D, true));
     }
-    
-    
-    
+
     //returns true if the item is tagged as an axe, or if it isn't, true if it is an AxeItem AND not tagged as a sword.
     public boolean isAxe(ItemStack iStack) {
     	return iStack.is(ModTags.Items.AXE_WEAPONS) | (!iStack.is(ModTags.Items.SWORD_WEAPONS) & iStack.getItem() instanceof AxeItem);
     }
-    
     
     
     public void checkAxe() {

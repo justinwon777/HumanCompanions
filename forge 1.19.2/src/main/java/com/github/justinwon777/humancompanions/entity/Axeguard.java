@@ -20,6 +20,8 @@ public class Axeguard extends AbstractHumanCompanionEntity {
         this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.0D, true));
     }
 
+    //testing commit (i have no idea what i'm doing)
+
     public void checkAxe() {
         ItemStack hand = this.getItemBySlot(EquipmentSlot.MAINHAND);
         for (int i = 0; i < this.inventory.getContainerSize(); ++i) {

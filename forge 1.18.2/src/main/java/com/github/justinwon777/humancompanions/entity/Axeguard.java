@@ -21,16 +21,11 @@ public class Axeguard extends AbstractHumanCompanionEntity {
         super(entityType, level);
         this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.0D, true));
     }
-    
-    
-    
-    //returns true if the item is tagged as an axe, or if it isn't, true if it is an AxeItem AND not tagged as a sword.
-    public boolean isAxe(ItemStack iStack) {
-    	return iStack.is(ModTags.Items.AXE_WEAPONS) | (!iStack.is(ModTags.Items.SWORD_WEAPONS) & iStack.getItem() instanceof AxeItem);
+
+    public boolean isAxe(ItemStack stack) {
+    	return stack.is(ModTags.Items.AXES) || (!stack.is(ModTags.Items.SWORDS) && stack.getItem() instanceof AxeItem);
     }
-    
-    
-    
+
     public void checkAxe() {
         ItemStack hand = this.getItemBySlot(EquipmentSlot.MAINHAND);
         for (int i = 0; i < this.inventory.getContainerSize(); ++i) {
@@ -39,7 +34,7 @@ public class Axeguard extends AbstractHumanCompanionEntity {
                 if (hand.isEmpty()) {
                     this.setItemSlot(EquipmentSlot.MAINHAND, itemstack);
                 } else if (isAxe(itemstack) && isAxe(hand)) {
-                    if (totalAttack(itemstack) > totalAttack(hand)) {
+                    if (getTotalAttackDamage(itemstack) > getTotalAttackDamage(hand)) {
                         this.setItemSlot(EquipmentSlot.MAINHAND, itemstack);
                     }
                 }

@@ -22,12 +22,10 @@ public class Knight extends AbstractHumanCompanionEntity {
         this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.0D, true));
     }
 
-    
-    public boolean isSword(ItemStack iStack) {
-    	return iStack.is(ModTags.Items.SWORD_WEAPONS) | (!iStack.is(ModTags.Items.AXE_WEAPONS) & iStack.getItem() instanceof SwordItem);
+    public boolean isSword(ItemStack stack) {
+    	return stack.is(ModTags.Items.SWORDS) || (!stack.is(ModTags.Items.AXES) && stack.getItem() instanceof SwordItem);
     }
-    
-    
+
     public void checkSword() {
         ItemStack hand = this.getItemBySlot(EquipmentSlot.MAINHAND);
         for (int i = 0; i < this.inventory.getContainerSize(); ++i) {
@@ -36,7 +34,7 @@ public class Knight extends AbstractHumanCompanionEntity {
                 if (hand.isEmpty()) {
                     this.setItemSlot(EquipmentSlot.MAINHAND, itemstack);
                 } else if (isSword(itemstack) && isSword(hand)) {
-                    if (totalAttack(itemstack) > totalAttack(hand)) {
+                    if (getTotalAttackDamage(itemstack) > getTotalAttackDamage(hand)) {
                         this.setItemSlot(EquipmentSlot.MAINHAND, itemstack);
                     }
                 }

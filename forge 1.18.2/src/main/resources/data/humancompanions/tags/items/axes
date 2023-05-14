@@ -30,8 +30,6 @@
 			"id":"magistuarmory:wood_guisarm",
 			"required":false
 		},
-		
-		
 		{
 			"id":"magistuarmory:stone_lochaberaxe",
 			"required":false
@@ -60,8 +58,6 @@
 			"id":"magistuarmory:stone_guisarm",
 			"required":false
 		},
-		
-		
 		{
 			"id":"magistuarmory:iron_lochaberaxe",
 			"required":false
@@ -90,8 +86,6 @@
 			"id":"magistuarmory:iron_guisarm",
 			"required":false
 		},
-		
-		
 		{
 			"id":"magistuarmory:copper_lochaberaxe",
 			"required":false
@@ -120,8 +114,6 @@
 			"id":"magistuarmory:copper_guisarm",
 			"required":false
 		},
-		
-		
 		{
 			"id":"magistuarmory:gold_lochaberaxe",
 			"required":false
@@ -150,8 +142,6 @@
 			"id":"magistuarmory:gold_guisarm",
 			"required":false
 		},
-		
-		
 		{
 			"id":"magistuarmory:diamond_lochaberaxe",
 			"required":false
@@ -180,10 +170,6 @@
 			"id":"magistuarmory:diamond_guisarm",
 			"required":false
 		},
-		
-		
-		
-		
 		{
 			"id":"magistuarmory:netherite_lochaberaxe",
 			"required":false
@@ -212,9 +198,6 @@
 			"id":"magistuarmory:netherite_guisarm",
 			"required":false
 		},
-		
-		
-		
 		{
 			"id":"magistuarmory:steel_lochaberaxe",
 			"required":false
@@ -243,8 +226,6 @@
 			"id":"magistuarmory:steel_guisarm",
 			"required":false
 		},
-		
-		
 		{
 			"id":"magistuarmory:silver_lochaberaxe",
 			"required":false
@@ -273,10 +254,6 @@
 			"id":"magistuarmory:silver_guisarm",
 			"required":false
 		},
-		
-		
-		
-		
 		{
 			"id":"magistuarmory:tin_lochaberaxe",
 			"required":false
@@ -305,9 +282,6 @@
 			"id":"magistuarmory:tin_guisarm",
 			"required":false
 		},
-		
-		
-		
 		{
 			"id":"magistuarmory:bronze_lochaberaxe",
 			"required":false

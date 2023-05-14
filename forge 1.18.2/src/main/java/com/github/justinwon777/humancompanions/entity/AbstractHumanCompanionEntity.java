@@ -128,33 +128,6 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
         this.targetSelector.addGoal(3, (new HurtByTargetGoal(this)).setAlertOthers());
     }
 
-    //calculates an item's attack stat by reading its attributes. dunno if this allows it to work with enchantments.
-    public double totalAttack(ItemStack stk) {
-    	var ret = 0.0;
-    	var mtot = 1;
-    	for (AttributeModifier modifier : stk.getAttributeModifiers(EquipmentSlot.MAINHAND).get(Attributes.ATTACK_DAMAGE))
-    	{
-    		switch (modifier.getOperation()){
-    		case MULTIPLY_TOTAL:
-    			mtot*=modifier.getAmount();
-    			break;
-    		case ADDITION:
-    			ret += modifier.getAmount();
-    			break;
-    		case MULTIPLY_BASE:
-    			ret *=modifier.getAmount();
-    			break;
-			default:
-				break;
-    		}
-    		
-    	}
-    	
-    	return ret*mtot;
-    }
-    
-    
-    
     public static AttributeSupplier.Builder createAttributes() {
         return Mob.createMobAttributes()
                 .add(Attributes.FOLLOW_RANGE, 20.0D)
@@ -652,6 +625,23 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
         if (this.isOrderedToSit()) {
             this.setOrderedToSit(false);
         }
+    }
+
+    public double getTotalAttackDamage(ItemStack stack) {
+        double damage = 0.0;
+        double multiplier = 1;
+        for (AttributeModifier modifier : stack.getAttributeModifiers(EquipmentSlot.MAINHAND).get(Attributes.ATTACK_DAMAGE))
+        {
+            switch (modifier.getOperation()) {
+                case ADDITION -> damage += modifier.getAmount();
+                case MULTIPLY_BASE -> damage += damage * modifier.getAmount();
+                case MULTIPLY_TOTAL -> multiplier *= modifier.getAmount();
+            }
+
+        }
+        double enchantment = EnchantmentHelper.getDamageBonus(stack, MobType.UNDEFINED);
+
+        return damage * multiplier + enchantment;
     }
 
     public void setExpLvl(int lvl) {

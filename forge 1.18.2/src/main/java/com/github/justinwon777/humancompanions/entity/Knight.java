@@ -1,6 +1,8 @@
 package com.github.justinwon777.humancompanions.entity;
 
 import com.github.justinwon777.humancompanions.core.Config;
+import com.github.justinwon777.humancompanions.core.ModTags;
+
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.*;
@@ -20,15 +22,21 @@ public class Knight extends AbstractHumanCompanionEntity {
         this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.0D, true));
     }
 
+    
+    public boolean isSword(ItemStack iStack) {
+    	return iStack.is(ModTags.Items.SWORD_WEAPONS) | (!iStack.is(ModTags.Items.AXE_WEAPONS) & iStack.getItem() instanceof SwordItem);
+    }
+    
+    
     public void checkSword() {
         ItemStack hand = this.getItemBySlot(EquipmentSlot.MAINHAND);
         for (int i = 0; i < this.inventory.getContainerSize(); ++i) {
             ItemStack itemstack = this.inventory.getItem(i);
-            if (itemstack.getItem() instanceof SwordItem) {
+            if (isSword(itemstack)) {
                 if (hand.isEmpty()) {
                     this.setItemSlot(EquipmentSlot.MAINHAND, itemstack);
-                } else if (itemstack.getItem() instanceof SwordItem && hand.getItem() instanceof SwordItem) {
-                    if (((SwordItem) itemstack.getItem()).getDamage() > ((SwordItem) hand.getItem()).getDamage()) {
+                } else if (isSword(itemstack) && isSword(hand)) {
+                    if (totalAttack(itemstack) > totalAttack(hand)) {
                         this.setItemSlot(EquipmentSlot.MAINHAND, itemstack);
                     }
                 }

@@ -1,9 +1,12 @@
 package com.github.justinwon777.humancompanions.entity;
 
 import com.github.justinwon777.humancompanions.core.Config;
+import com.github.justinwon777.humancompanions.core.ModTags;
+
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.ItemStack;
@@ -20,15 +23,21 @@ public class Axeguard extends AbstractHumanCompanionEntity {
         this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.0D, true));
     }
 
+    //returns true if the item is tagged as an axe, or if it isn't, true if it is an AxeItem AND not tagged as a sword.
+    public boolean isAxe(ItemStack iStack) {
+    	return iStack.is(ModTags.Items.AXE_WEAPONS) | (!iStack.is(ModTags.Items.SWORD_WEAPONS) & iStack.getItem() instanceof AxeItem);
+    }
+    
+    
     public void checkAxe() {
         ItemStack hand = this.getItemBySlot(EquipmentSlot.MAINHAND);
         for (int i = 0; i < this.inventory.getContainerSize(); ++i) {
             ItemStack itemstack = this.inventory.getItem(i);
-            if (itemstack.getItem() instanceof AxeItem) {
+            if (isAxe(itemstack)) {
                 if (hand.isEmpty()) {
                     this.setItemSlot(EquipmentSlot.MAINHAND, itemstack);
-                } else if (itemstack.getItem() instanceof AxeItem && hand.getItem() instanceof AxeItem) {
-                    if (((AxeItem) itemstack.getItem()).getAttackDamage() > ((AxeItem) hand.getItem()).getAttackDamage()) {
+                } else if (isAxe(itemstack) && isAxe(hand)) {
+                    if (totalAttack(itemstack) > totalAttack(hand)) {
                         this.setItemSlot(EquipmentSlot.MAINHAND, itemstack);
                     }
                 }

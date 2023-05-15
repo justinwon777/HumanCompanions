@@ -40,7 +40,6 @@ They live in a wide variety of biomes in houses like these (plus more!):
 
 ## Known Issues
 
-- While in follow mode, they might permanently despawn if you get too far away from them
 - When a companion dies, sometimes it drops a duplicate of an item or doesn't drop an item in its inventory at all.
 - Archers sometimes shoot at nothing after killing a mob. Use clear button to clear target.
 - Spawn eggs might spawn a baby. They can't do anything and will despawn when the game reloads.

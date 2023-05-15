@@ -1,19 +1,24 @@
 package com.github.justinwon777.humancompanions.entity;
 
+import com.github.justinwon777.humancompanions.HumanCompanions;
 import com.github.justinwon777.humancompanions.core.Config;
+import com.github.justinwon777.humancompanions.core.TagsInit;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ILivingEntityData;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.SwordItem;
+import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tags.ITag;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.Tag;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
+import net.minecraftforge.common.Tags;
 
 import javax.annotation.Nullable;
 
@@ -24,15 +29,19 @@ public class Knight extends AbstractHumanCompanionEntity {
         this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.0D, true));
     }
 
+    public boolean isSword(ItemStack stack) {
+        return stack.getItem().is(TagsInit.Items.SWORDS) | (!stack.getItem().is(TagsInit.Items.AXES) & stack.getItem() instanceof SwordItem);
+    }
+
     public void checkSword() {
         ItemStack hand = this.getItemBySlot(EquipmentSlotType.MAINHAND);
         for (int i = 0; i < this.inventory.getContainerSize(); ++i) {
             ItemStack itemstack = this.inventory.getItem(i);
-            if (itemstack.getItem() instanceof SwordItem) {
+            if (isSword(itemstack)) {
                 if (hand.isEmpty()) {
                     this.setItemSlot(EquipmentSlotType.MAINHAND, itemstack);
-                } else if (itemstack.getItem() instanceof SwordItem && hand.getItem() instanceof SwordItem) {
-                    if (((SwordItem) itemstack.getItem()).getDamage() > ((SwordItem) hand.getItem()).getDamage()) {
+                } else if (isSword(hand)) {
+                    if (getTotalAttackDamage(itemstack) > getTotalAttackDamage(hand)) {
                         this.setItemSlot(EquipmentSlotType.MAINHAND, itemstack);
                     }
                 }

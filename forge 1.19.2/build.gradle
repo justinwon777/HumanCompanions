@@ -36,6 +36,9 @@ minecraft {
 
             property 'forge.logging.console.level', 'debug'
 
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
+
             mods {
                 companions {
                     source sourceSets.main
@@ -113,7 +116,9 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
     // implementation fg.deobf("curse.maven:jei-238222:3723913")
-    // implementation fg.deobf("curse.maven:epic-knights-armor-and-weapons-509041:3713960")
+//    implementation fg.deobf("curse.maven:epic-knights-armor-and-weapons-509041:4423962")
+//    implementation fg.deobf("curse.maven:architectury-api-419699:4521273")
+//    implementation fg.deobf("curse.maven:cloth-config-348521:3972423")
 }
 
 // Example for how to get properties into the manifest for reading at runtime.

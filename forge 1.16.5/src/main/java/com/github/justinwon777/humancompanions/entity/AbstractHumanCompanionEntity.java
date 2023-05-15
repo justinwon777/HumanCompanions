@@ -626,6 +626,25 @@ public class AbstractHumanCompanionEntity extends TameableEntity{
         }
     }
 
+    public double getTotalAttackDamage(ItemStack stack) {
+        double damage = 0.0;
+        double multiplier = 1;
+        for (AttributeModifier modifier : stack.getAttributeModifiers(EquipmentSlotType.MAINHAND).get(Attributes.ATTACK_DAMAGE)) {
+            switch (modifier.getOperation()) {
+                case ADDITION:
+                    damage += modifier.getAmount();
+                case MULTIPLY_BASE:
+                    damage += damage * modifier.getAmount();
+                case MULTIPLY_TOTAL:
+                    multiplier *= modifier.getAmount();
+            }
+
+        }
+        double enchantment = EnchantmentHelper.getDamageBonus(stack, CreatureAttribute.UNDEFINED);
+
+        return damage * multiplier + enchantment;
+    }
+
     public void setExpLvl(int lvl) {
         this.entityData.set(EXP_LVL, lvl);
     }

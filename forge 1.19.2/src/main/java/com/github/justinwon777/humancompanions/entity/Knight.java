@@ -1,7 +1,7 @@
 package com.github.justinwon777.humancompanions.entity;
 
 import com.github.justinwon777.humancompanions.core.Config;
-import com.github.justinwon777.humancompanions.core.ModTags;
+import com.github.justinwon777.humancompanions.core.TagsInit;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.DifficultyInstance;
@@ -23,7 +23,7 @@ public class Knight extends AbstractHumanCompanionEntity {
     }
 
     public boolean isSword(ItemStack stack) {
-    	return stack.is(ModTags.Items.SWORDS) || (!stack.is(ModTags.Items.AXES) && stack.getItem() instanceof SwordItem);
+    	return stack.is(TagsInit.Items.SWORDS) || (!stack.is(TagsInit.Items.AXES) && stack.getItem() instanceof SwordItem);
     }
 
     public void checkSword() {

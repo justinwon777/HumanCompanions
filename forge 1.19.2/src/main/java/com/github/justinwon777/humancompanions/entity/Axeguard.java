@@ -1,7 +1,7 @@
 package com.github.justinwon777.humancompanions.entity;
 
 import com.github.justinwon777.humancompanions.core.Config;
-import com.github.justinwon777.humancompanions.core.ModTags;
+import com.github.justinwon777.humancompanions.core.TagsInit;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.DifficultyInstance;
@@ -23,7 +23,7 @@ public class Axeguard extends AbstractHumanCompanionEntity {
     }
 
     public boolean isAxe(ItemStack stack) {
-    	return stack.is(ModTags.Items.AXES) || (!stack.is(ModTags.Items.SWORDS) && stack.getItem() instanceof AxeItem);
+    	return stack.is(TagsInit.Items.AXES) || (!stack.is(TagsInit.Items.SWORDS) && stack.getItem() instanceof AxeItem);
     }
     
     public void checkAxe() {

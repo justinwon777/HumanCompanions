@@ -1,6 +1,8 @@
 package com.github.justinwon777.humancompanions.entity;
 
+import com.github.justinwon777.humancompanions.HumanCompanions;
 import com.github.justinwon777.humancompanions.core.Config;
+import com.github.justinwon777.humancompanions.core.TagsInit;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ILivingEntityData;
 import net.minecraft.entity.SpawnReason;
@@ -11,6 +13,8 @@ import net.minecraft.item.AxeItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
@@ -24,15 +28,19 @@ public class Axeguard extends AbstractHumanCompanionEntity {
         this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.0D, true));
     }
 
+    public boolean isAxe(ItemStack stack) {
+        return stack.getItem().is(TagsInit.Items.AXES) | (!stack.getItem().is(TagsInit.Items.SWORDS) & stack.getItem() instanceof AxeItem);
+    }
+
     public void checkAxe() {
         ItemStack hand = this.getItemBySlot(EquipmentSlotType.MAINHAND);
         for (int i = 0; i < this.inventory.getContainerSize(); ++i) {
             ItemStack itemstack = this.inventory.getItem(i);
-            if (itemstack.getItem() instanceof AxeItem) {
+            if (isAxe(itemstack)) {
                 if (hand.isEmpty()) {
                     this.setItemSlot(EquipmentSlotType.MAINHAND, itemstack);
-                } else if (itemstack.getItem() instanceof AxeItem && hand.getItem() instanceof AxeItem) {
-                    if (((AxeItem) itemstack.getItem()).getAttackDamage() > ((AxeItem) hand.getItem()).getAttackDamage()) {
+                } else if (isAxe(hand)) {
+                    if (getTotalAttackDamage(itemstack) > getTotalAttackDamage(hand)) {
                         this.setItemSlot(EquipmentSlotType.MAINHAND, itemstack);
                     }
                 }

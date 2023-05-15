@@ -33,7 +33,7 @@ public class Axeguard extends AbstractHumanCompanionEntity {
             if (isAxe(itemstack)) {
                 if (hand.isEmpty()) {
                     this.setItemSlot(EquipmentSlot.MAINHAND, itemstack);
-                } else if (isAxe(itemstack) && isAxe(hand)) {
+                } else if (isAxe(hand)) {
                     if (getTotalAttackDamage(itemstack) > getTotalAttackDamage(hand)) {
                         this.setItemSlot(EquipmentSlot.MAINHAND, itemstack);
                     }

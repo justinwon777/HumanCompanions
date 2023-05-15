@@ -1,7 +1,6 @@
 {
 	"replace":false,
 	"values": [
-		"#forge:tools/axes",
 		{
 			"id":"magistuarmory:wood_lochaberaxe",
 			"required":false

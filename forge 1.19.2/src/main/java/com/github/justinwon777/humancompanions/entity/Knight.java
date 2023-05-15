@@ -33,7 +33,7 @@ public class Knight extends AbstractHumanCompanionEntity {
             if (isSword(itemstack)) {
                 if (hand.isEmpty()) {
                     this.setItemSlot(EquipmentSlot.MAINHAND, itemstack);
-                } else if (isSword(itemstack) && isSword(hand)) {
+                } else if (isSword(hand)) {
                     if (getTotalAttackDamage(itemstack) > getTotalAttackDamage(hand)) {
                         this.setItemSlot(EquipmentSlot.MAINHAND, itemstack);
                     }

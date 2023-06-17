@@ -1,6 +1,7 @@
 {
 	"replace":false,
 	"values": [
+		"#forge:tools/axes",
 		{
 			"id":"magistuarmory:wood_lochaberaxe",
 			"required":false
@@ -307,6 +308,94 @@
 		},
 		{
 			"id":"magistuarmory:bronze_guisarm",
+			"required":false
+		},
+		{
+			"id":"dungeons_gear:gauntlet",
+			"required":false
+		},
+        {
+			"id":"dungeons_gear:fighters_binding",
+			"required":false
+		},
+        {
+			"id":"dungeons_gear:mauler",
+			"required":false
+		},
+        {
+			"id":"dungeons_gear:soul_fist",
+			"required":false
+		},
+        {
+			"id":"dungeons_gear:axe",
+			"required":false
+		},
+        {
+			"id":"dungeons_gear:gold_axe",
+			"required":false
+		},
+        {
+			"id":"dungeons_gear:firebrand",
+			"required":false
+		},
+        {
+			"id":"dungeons_gear:highland_axe",
+			"required":false
+		},
+        {
+			"id":"dungeons_gear:highland_axe",
+			"required":false
+		},
+        {
+			"id":"dungeons_gear:cursed_axe",
+			"required":false
+		},
+        {
+			"id":"dungeons_gear:whirlwind",
+			"required":false
+		},
+        {
+			"id":"dungeons_gear:mace",
+			"required":false
+		},
+        {
+			"id":"dungeons_gear:flail",
+			"required":false
+		},
+        {
+			"id":"dungeons_gear:suns_grace",
+			"required":false
+		},
+        {
+			"id":"dungeons_gear:great_hammer",
+			"required":false
+		},
+        {
+			"id":"dungeons_gear:hammer_of_gravity",
+			"required":false
+		},
+        {
+			"id":"dungeons_gear:stormlander",
+			"required":false
+		},
+        {
+			"id":"dungeons_gear:great_axeblade",
+			"required":false
+		},
+        {
+			"id":"dungeons_gear:boneclub",
+			"required":false
+		},
+        {
+			"id":"dungeons_gear:bone_cudgel",
+			"required":false
+		},
+        {
+			"id":"dungeons_gear:anchor",
+			"required":false
+		},
+        {
+			"id":"dungeons_gear:encrusted_anchor",
 			"required":false
 		}
 	]

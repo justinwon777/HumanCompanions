@@ -40,7 +40,7 @@ public class Archer extends AbstractHumanCompanionEntity implements RangedAttack
     }
 
     public void tick() {
-        if (!this.level.isClientSide()) {
+        if (!this.level().isClientSide()) {
             checkBow();
         }
         super.tick();
@@ -56,10 +56,10 @@ public class Archer extends AbstractHumanCompanionEntity implements RangedAttack
         double d1 = p_32141_.getY(0.3333333333333333D) - abstractarrow.getY();
         double d2 = p_32141_.getZ() - this.getZ();
         double d3 = Math.sqrt(d0 * d0 + d2 * d2);
-        abstractarrow.shoot(d0, d1 + d3 * (double)0.20F, d2, 1.6F, (float)(this.level.getDifficulty().getId() * 3));
+        abstractarrow.shoot(d0, d1 + d3 * (double)0.20F, d2, 1.6F, (float)(this.level().getDifficulty().getId() * 3));
         this.playSound(SoundEvents.ARROW_SHOOT, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
-        this.level.addFreshEntity(abstractarrow);
-        if (!this.level.isClientSide) {
+        this.level().addFreshEntity(abstractarrow);
+        if (!this.level().isClientSide) {
             this.getMainHandItem().hurtAndBreak(1, this, (p_43296_) -> {
                 p_43296_.broadcastBreakEvent(EquipmentSlot.MAINHAND);
             });

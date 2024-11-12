@@ -33,8 +33,8 @@ public class SetAlertPacket {
             if (msg != null) {
                 context.get().enqueueWork(() -> {
                     ServerPlayer player = context.get().getSender();
-                    if (player != null && player.level instanceof ServerLevel) {
-                        Entity entity = player.level.getEntity(msg.getEntityId());
+                    if (player != null && player.level() instanceof ServerLevel) {
+                        Entity entity = player.level().getEntity(msg.getEntityId());
                         if (entity instanceof AbstractHumanCompanionEntity) {
                             AbstractHumanCompanionEntity companion = (AbstractHumanCompanionEntity) entity;
                             companion.setAlert(!companion.isAlert());

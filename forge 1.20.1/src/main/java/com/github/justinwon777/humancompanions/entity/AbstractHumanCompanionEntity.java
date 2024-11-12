@@ -15,6 +15,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.*;
 import net.minecraft.world.damagesource.DamageSource;
@@ -124,7 +125,7 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
         this.goalSelector.addGoal(9, new LowHealthGoal(this));
         this.targetSelector.addGoal(1, new CustomOwnerHurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new CustomOwnerHurtTargetGoal(this));
-        this.targetSelector.addGoal(3, (new HurtByTargetGoal(this)).setAlertOthers());
+        this.targetSelector.addGoal(3, (new CustomHurtByTargetGoal(this)));
     }
     
     public static AttributeSupplier.Builder createAttributes() {
@@ -275,7 +276,7 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
         if (hand == InteractionHand.MAIN_HAND) {
-            if (!this.isTame() && !this.level.isClientSide()) {
+            if (!this.isTame() && !this.level().isClientSide()) {
                 if (itemstack.isEdible()) {
                     String itemFood = itemstack.getItem().getDescription().getString();
                     if (ArrayUtils.contains(foodRequirements.keySet().toArray(new String[0]), itemFood)) {
@@ -320,7 +321,7 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
             } else {
                 if (this.isAlliedTo(player)) {
                     if(player.isShiftKeyDown()) {
-                        if(!this.level.isClientSide()) {
+                        if(!this.level().isClientSide()) {
                             if (!this.isOrderedToSit()) {
                                 this.setOrderedToSit(true);
                                 Component text = Component.literal("I'll stand here.");
@@ -334,14 +335,14 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
                             }
                         }
                     } else {
-                        if(!this.level.isClientSide()) {
+                        if(!this.level().isClientSide()) {
                             this.openGui((ServerPlayer) player);
                         }
                     }
                 }
-                return InteractionResult.sidedSuccess(this.level.isClientSide);
+                return InteractionResult.sidedSuccess(this.level().isClientSide);
             }
-            return InteractionResult.sidedSuccess(this.level.isClientSide);
+            return InteractionResult.sidedSuccess(this.level().isClientSide);
         }
         return super.mobInteract(player, hand);
     }
@@ -366,7 +367,7 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
         for (int i = 0; i < this.inventory.getContainerSize(); ++i) {
             ItemStack itemstack = this.inventory.getItem(i);
             if (itemstack.getItem() instanceof ArmorItem) {
-                switch (((ArmorItem) itemstack.getItem()).getSlot()) {
+                switch (((ArmorItem) itemstack.getItem()).getEquipmentSlot()) {
                     case HEAD:
                         if (head.isEmpty()) {
                             this.setItemSlot(EquipmentSlot.HEAD, itemstack);
@@ -421,7 +422,7 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
             return false;
         }
 
-        if (p_34288_ == DamageSource.FALL && !Config.FALL_DAMAGE.get()) {
+        if (p_34288_.is(DamageTypeTags.IS_FALL) && !Config.FALL_DAMAGE.get()) {
             return false;
         }
 
@@ -437,9 +438,9 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
             }
 
             for(ItemStack itemstack : this.getArmorSlots()) {
-                if ((!p_150073_.isFire() || !itemstack.getItem().isFireResistant()) && itemstack.getItem() instanceof ArmorItem) {
+                if ((!p_150073_.is(DamageTypeTags.IS_FIRE) || !itemstack.getItem().isFireResistant()) && itemstack.getItem() instanceof ArmorItem) {
                     itemstack.hurtAndBreak((int)p_150074_, this, (p_35997_) -> {
-                        p_35997_.broadcastBreakEvent(((ArmorItem) itemstack.getItem()).getSlot());
+                        p_35997_.broadcastBreakEvent(((ArmorItem) itemstack.getItem()).getEquipmentSlot());
                     });
                 }
             }
@@ -462,12 +463,12 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
 
     public boolean doHurtTarget(Entity entity) {
         ItemStack itemstack = this.getMainHandItem();
-        if (!this.level.isClientSide && !itemstack.isEmpty() && entity instanceof LivingEntity) {
+        if (!this.level().isClientSide && !itemstack.isEmpty() && entity instanceof LivingEntity) {
             itemstack.hurtAndBreak(1, this, (p_43296_) -> {
                 p_43296_.broadcastBreakEvent(EquipmentSlot.MAINHAND);
             });
             if (this.getMainHandItem().isEmpty()) {
-                Component broken = Component.literal("My sword broke!");
+                Component broken = Component.literal("My weapon broke!");
                 if (this.isTame()) {
                     this.getOwner().sendSystemMessage(Component.translatable("chat.type.text", this.getDisplayName(),
                             broken));
@@ -549,7 +550,7 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
     }
 
     public int getExperienceReward() {
-        if (!this.level.getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY) && !this.isSpectator()) {
+        if (!this.level().getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY) && !this.isSpectator()) {
             int i = this.experienceLevel * 7;
             return Math.min(i, 100);
         } else {
@@ -587,10 +588,14 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
     }
 
     public void tick() {
-        if (!this.level.isClientSide()) {
+        if (!this.level().isClientSide()) {
             checkArmor();
             if (this.tickCount % 10 == 0) {
                 checkStats();
+                LivingEntity target = this.getTarget();
+                if (target != null && !target.isAlive()) {
+                    this.clearTarget();
+                }
             }
         }
         super.tick();

@@ -11,6 +11,7 @@ import com.github.justinwon777.humancompanions.networking.*;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -63,12 +64,11 @@ public class CompanionScreen extends AbstractContainerScreen<CompanionContainer>
     int col1;
     int col2;
 
-    public CompanionScreen(CompanionContainer p_98409_, Inventory p_98410_,
+    public CompanionScreen(CompanionContainer container, Inventory pPlayerInventory,
                            AbstractHumanCompanionEntity companion) {
-        super(p_98409_, p_98410_, companion.getName());
+        super(container, pPlayerInventory, companion.getName());
         this.companion = companion;
-        this.passEvents = false;
-        this.containerRows = p_98409_.getRowCount();
+        this.containerRows = container.getRowCount();
         this.imageHeight = 114 + this.containerRows * 18;
         this.inventoryLabelY = this.imageHeight - 94;
         this.imageWidth = 226;
@@ -79,21 +79,21 @@ public class CompanionScreen extends AbstractContainerScreen<CompanionContainer>
     }
 
     @Override
-    public void render(PoseStack p_98418_, int p_98419_, int p_98420_, float p_98421_) {
-        this.renderBackground(p_98418_);
-        super.render(p_98418_, p_98419_, p_98420_, p_98421_);
-        this.renderTooltip(p_98418_, p_98419_, p_98420_);
+    public void render(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
+        this.renderBackground(pGuiGraphics);
+        super.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
+        this.renderTooltip(pGuiGraphics, pMouseX, pMouseY);
     }
 
     @Override
-    protected void renderBg(PoseStack p_98413_, float p_98414_, int p_98415_, int p_98416_) {
+    protected void renderBg(GuiGraphics pGuiGraphics, float pPartialTick, int pMouseX, int pMouseY) {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.setShaderTexture(0, CONTAINER_BACKGROUND);
         int i = (this.width - this.imageWidth) / 2;
         int j = (this.height - this.imageHeight) / 2;
-        this.blit(p_98413_, i, j, 0, 0, this.imageWidth, this.containerRows * 18 + 17);
-        this.blit(p_98413_, i, j + this.containerRows * 18 + 17, 0, 126, this.imageWidth, 96);
+        pGuiGraphics.blit(CONTAINER_BACKGROUND, i, j, 0, 0, this.imageWidth, this.containerRows * 18 + 17);
+        pGuiGraphics.blit(CONTAINER_BACKGROUND, i, j + this.containerRows * 18 + 17, 0, 126, this.imageWidth, 96);
     }
 
     @Override
@@ -158,8 +158,8 @@ public class CompanionScreen extends AbstractContainerScreen<CompanionContainer>
     }
 
     @Override
-    protected void renderLabels(PoseStack pPoseStack, int pMouseX, int pMouseY) {
-        super.renderLabels(pPoseStack, pMouseX, pMouseY);
+    protected void renderLabels(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY) {
+        super.renderLabels(pGuiGraphics, pMouseX, pMouseY);
         int classHeight = this.titleLabelY + 14;
         int classLeft = sidebarx + 4;
         MutableComponent classTitle = Component.literal("Class");
@@ -167,30 +167,30 @@ public class CompanionScreen extends AbstractContainerScreen<CompanionContainer>
         MutableComponent health =
                 Component.literal(df.format(companion.getHealth()) + "/" + (int) companion.getMaxHealth());
 
-        this.font.draw(pPoseStack, classTitle.withStyle(ChatFormatting.UNDERLINE), sidebarx + 4, this.titleLabelY + 3,
-                4210752);
+        pGuiGraphics.drawString(this.font, classTitle.withStyle(ChatFormatting.UNDERLINE), sidebarx + 4, this.titleLabelY + 3,
+                4210752, false);
         if (companion instanceof Arbalist) {
-            this.font.draw(pPoseStack, "Arbalist", classLeft, classHeight, 4210752);
+            pGuiGraphics.drawString(this.font, "Arbalist", classLeft, classHeight, 4210752, false);
         } else if (companion instanceof Archer) {
-            this.font.draw(pPoseStack, "Archer", classLeft, classHeight, 4210752);
+            pGuiGraphics.drawString(this.font, "Archer", classLeft, classHeight, 4210752, false);
         } else if (companion instanceof Knight) {
-            this.font.draw(pPoseStack, "Knight", classLeft, classHeight, 4210752);
+            pGuiGraphics.drawString(this.font, "Knight", classLeft, classHeight, 4210752, false);
         } else {
-            this.font.draw(pPoseStack, "Axe", classLeft, classHeight, 4210752);
+            pGuiGraphics.drawString(this.font, "Axe", classLeft, classHeight, 4210752, false);
         }
 
-        this.font.draw(pPoseStack, healthTitle.withStyle(ChatFormatting.UNDERLINE), sidebarx + 4, this.titleLabelY + 26,
-                4210752);
-        this.font.draw(pPoseStack, health, sidebarx + 4, this.titleLabelY + 37, 4210752);
+        pGuiGraphics.drawString(this.font, healthTitle.withStyle(ChatFormatting.UNDERLINE), sidebarx + 4, this.titleLabelY + 26,
+                4210752, false);
+        pGuiGraphics.drawString(this.font, health, sidebarx + 4, this.titleLabelY + 37, 4210752, false);
 
-        this.font.draw(pPoseStack, "Level " + companion.getExpLvl(), sidebarx, this.titleLabelY + 49,
-                4210752);
+        pGuiGraphics.drawString(this.font, "Level " + companion.getExpLvl(), sidebarx, this.titleLabelY + 49,
+                4210752, false);
     }
 
     @Override
-    protected void renderTooltip(PoseStack stack, int x, int y) {
-        super.renderTooltip(stack, x, y);
-        if (this.alertButton.isHoveredOrFocused()) {
+    protected void renderTooltip(GuiGraphics pGuiGraphics, int x, int y) {
+        super.renderTooltip(pGuiGraphics, x, y);
+        if (this.alertButton.isHovered()) {
             List<Component> tooltips = new ArrayList<>();
             if (this.companion.isAlert()) {
                 tooltips.add(Component.literal("Alert mode: On"));
@@ -199,9 +199,9 @@ public class CompanionScreen extends AbstractContainerScreen<CompanionContainer>
             }
             tooltips.add(Component.literal("Attacks nearby hostile mobs").withStyle(ChatFormatting.GRAY).withStyle(ChatFormatting.ITALIC));
 
-            this.renderTooltip(stack, tooltips, Optional.empty(), x, y);
+            pGuiGraphics.renderTooltip(this.font, tooltips, Optional.empty(), x, y);
         }
-        if (this.huntingButton.isHoveredOrFocused()) {
+        if (this.huntingButton.isHovered()) {
             List<Component> tooltips = new ArrayList<>();
             if (this.companion.isHunting()) {
                 tooltips.add(Component.literal("Hunting mode: On"));
@@ -210,10 +210,10 @@ public class CompanionScreen extends AbstractContainerScreen<CompanionContainer>
             }
             tooltips.add(Component.literal("Attacks nearby mobs for food").withStyle(ChatFormatting.GRAY).withStyle(ChatFormatting.ITALIC));
 
-            this.renderTooltip(stack, tooltips, Optional.empty(), x, y);
+            pGuiGraphics.renderTooltip(this.font, tooltips, Optional.empty(), x, y);
         }
 
-        if (this.patrolButton.isHoveredOrFocused()) {
+        if (this.patrolButton.isHovered()) {
             List<Component> tooltips = new ArrayList<>();
             if (this.companion.isFollowing()) {
                 tooltips.add(Component.literal("Follow"));
@@ -226,27 +226,27 @@ public class CompanionScreen extends AbstractContainerScreen<CompanionContainer>
                 tooltips.add(Component.literal("Stands at its position ready for action").withStyle(ChatFormatting.GRAY).withStyle(ChatFormatting.ITALIC));
             }
 
-            this.renderTooltip(stack, tooltips, Optional.empty(), x, y);
+            pGuiGraphics.renderTooltip(this.font, tooltips, Optional.empty(), x, y);
         }
 
-        if (this.clearButton.isHoveredOrFocused()) {
+        if (this.clearButton.isHovered()) {
             List<Component> tooltips = new ArrayList<>();
             tooltips.add(Component.literal("Clear target"));
             tooltips.add(Component.literal("Useful if it gets stuck attacking").withStyle(ChatFormatting.GRAY).withStyle(ChatFormatting.ITALIC));
 
-            this.renderTooltip(stack, tooltips, Optional.empty(), x, y);
+            pGuiGraphics.renderTooltip(this.font, tooltips, Optional.empty(), x, y);
         }
 
-        if (this.releaseButton.isHoveredOrFocused()) {
+        if (this.releaseButton.isHovered()) {
             List<Component> tooltips = new ArrayList<>();
             tooltips.add(Component.literal("Release Companion"));
             tooltips.add(Component.literal("Releases companion from your command. It can be tamed again.").withStyle(ChatFormatting.GRAY).withStyle(ChatFormatting.ITALIC));
 
-            this.renderTooltip(stack, tooltips, Optional.empty(), x, y);
+            pGuiGraphics.renderTooltip(this.font, tooltips, Optional.empty(), x, y);
         }
 
         if (companion instanceof Archer || companion instanceof Arbalist) {
-            if (this.stationeryButton.isHoveredOrFocused()) {
+            if (this.stationeryButton.isHovered()) {
                 List<Component> tooltips = new ArrayList<>();
                 if (this.companion.isStationery()) {
                     tooltips.add(Component.literal("Stationery: On"));
@@ -255,7 +255,7 @@ public class CompanionScreen extends AbstractContainerScreen<CompanionContainer>
                 }
                 tooltips.add(Component.literal("Companion will not move while attacking in guard mode").withStyle(ChatFormatting.GRAY).withStyle(ChatFormatting.ITALIC));
 
-                this.renderTooltip(stack, tooltips, Optional.empty(), x, y);
+                pGuiGraphics.renderTooltip(this.font, tooltips, Optional.empty(), x, y);
             }
         }
     }
@@ -273,7 +273,7 @@ public class CompanionScreen extends AbstractContainerScreen<CompanionContainer>
         }
 
         @Override
-        public void renderButton(PoseStack p_94282_, int p_94283_, int p_94284_, float p_94285_) {
+        public void renderWidget(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
             if (this.name.equals("alert")) {
                 if (CompanionScreen.this.companion.isAlert()) {
                     this.xTexStart = 0;
@@ -302,7 +302,7 @@ public class CompanionScreen extends AbstractContainerScreen<CompanionContainer>
                 }
             }
             RenderSystem.enableBlend();
-            super.renderButton(p_94282_, p_94283_, p_94284_, p_94285_);
+            super.renderWidget(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
             RenderSystem.disableBlend();
         }
     }

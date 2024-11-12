@@ -43,7 +43,7 @@ public class PacketHandler {
     public static void openInventory(OpenInventoryPacket packet) {
         Player player = Minecraft.getInstance().player;
         if (player != null) {
-            Entity entity = player.level.getEntity(packet.getEntityId());
+            Entity entity = player.level().getEntity(packet.getEntityId());
             if (entity instanceof AbstractHumanCompanionEntity) {
                 AbstractHumanCompanionEntity companion = (AbstractHumanCompanionEntity) entity;
                 LocalPlayer clientplayerentity = Minecraft.getInstance().player;

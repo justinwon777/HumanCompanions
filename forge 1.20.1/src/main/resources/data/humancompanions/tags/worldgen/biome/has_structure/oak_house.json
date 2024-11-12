@@ -7,6 +7,9 @@
     "minecraft:meadow",
     "minecraft:jungle",
     "minecraft:sparse_jungle",
+    "minecraft:windswept_forest",
+    "minecraft:windswept_hills",
+    "minecraft:windswept_gravelley_hills",
     "minecraft:bamboo_jungle"
   ]
 }

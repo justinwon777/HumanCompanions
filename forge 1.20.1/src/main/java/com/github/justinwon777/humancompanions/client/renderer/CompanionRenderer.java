@@ -24,7 +24,9 @@ public class CompanionRenderer extends HumanoidMobRenderer<AbstractHumanCompanio
         super(context, new PlayerModel(context.bakeLayer(ModelLayers.PLAYER), false), 0.5f);
         this.addLayer(new HumanoidArmorLayer<>(this,
                 new HumanoidModel(context.bakeLayer(ModelLayers.PLAYER_INNER_ARMOR)),
-                new HumanoidModel(context.bakeLayer(ModelLayers.PLAYER_OUTER_ARMOR))));
+                new HumanoidModel(context.bakeLayer(ModelLayers.PLAYER_OUTER_ARMOR)),
+                context.getModelManager()
+        ));
     }
 
     public void render(AbstractHumanCompanionEntity companion, float companionYaw, float pPartialTicks, PoseStack pMatrixStack,

@@ -91,9 +91,9 @@ public class AbstractHumanCompanionEntity extends TamableAnimal {
     public int totalExperience;
     public float experienceProgress;
     private int lastLevelUpTime;
-    private final Map<String, Integer> foodRequirements = new HashMap<>();
-    private String food1;
-    private String food2;
+    private final Map<String, Integer> foodRequirements = new HashMap<>(Map.of("", 0));
+    private String food1 = "";
+    private String food2 = "";
 
     public AbstractHumanCompanionEntity(EntityType<? extends TamableAnimal> entityType, Level level) {
         super(entityType, level);

@@ -119,13 +119,16 @@ dependencies {
 //    implementation fg.deobf("curse.maven:epic-knights-armor-and-weapons-509041:4423962")
 //    implementation fg.deobf("curse.maven:architectury-api-419699:4521273")
 //    implementation fg.deobf("curse.maven:cloth-config-348521:3972423")
+//    implementation fg.deobf("curse.maven:monster-hunter-villager-936647:5562191")
+//    implementation fg.deobf("curse.maven:forbidden-arcanus-309858:5198323")
+//    implementation fg.deobf("curse.maven:valhelsia-core-416935:5189548")
 }
 
 // Example for how to get properties into the manifest for reading at runtime.
 jar {
     manifest {
         attributes([
-                "Specification-Title"     : "Human Commpanions",
+                "Specification-Title"     : "Human Companions",
                 "Specification-Vendor"    : "Penglen",
                 "Specification-Version"   : "1", // We are version 1 of ourselves
                 "Implementation-Title"    : project.name,
